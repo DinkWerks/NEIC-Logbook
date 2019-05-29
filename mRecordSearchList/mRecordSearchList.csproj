@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{8A31E9F7-1C5A-40F8-9D51-C75944B71073}</ProjectGuid>
+    <ProjectGuid>{485680D9-6A72-4817-8A49-3850E23AAD15}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>mClientList</RootNamespace>
-    <AssemblyName>mClientList</AssemblyName>
+    <RootNamespace>mRecordSearchList</RootNamespace>
+    <AssemblyName>mRecordSearchList</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -49,9 +49,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\ClientNameConverter.cs" />
-    <Compile Include="Converters\StandingToImageConverter.cs" />
-    <Compile Include="mClientListModule.cs" />
+    <Compile Include="mRecordSearchListModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -65,13 +63,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ViewModels\ClientEntryViewModel.cs" />
-    <Compile Include="ViewModels\ClientListViewModel.cs" />
-    <Compile Include="Views\ClientEntry.xaml.cs">
-      <DependentUpon>ClientEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ClientList.xaml.cs">
-      <DependentUpon>ClientList.xaml</DependentUpon>
+    <Compile Include="ViewModels\RSEntryViewModel.cs" />
+    <Compile Include="Views\RSEntry.xaml.cs">
+      <DependentUpon>RSEntry.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -84,11 +78,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\ClientEntry.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ClientList.xaml">
+    <Page Include="Views\RSEntry.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -98,12 +88,6 @@
       <Version>7.1.0.431</Version>
     </PackageReference>
     <PackageReference Include="Prism.Wpf" Version="7.1.0.431&#xD;" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Tracker.Core\Tracker.Core.csproj">
-      <Project>{91072ca4-6b1a-4a0d-bf41-1123e13c3ebc}</Project>
-      <Name>Tracker.Core</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

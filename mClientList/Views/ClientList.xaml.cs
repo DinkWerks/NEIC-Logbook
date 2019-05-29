@@ -1,5 +1,6 @@
 ﻿using Prism.Events;
 using System.Windows.Controls;
+using Tracker.Core.Events;
 
 namespace mClientList.Views
 {
@@ -17,7 +18,7 @@ namespace mClientList.Views
 
         private void ListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            _
+            _ea.GetEvent<ClientListSelectEvent>().Publish("ID Goes Here");
         }
     }
 }

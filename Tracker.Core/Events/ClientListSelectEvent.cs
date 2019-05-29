@@ -2,7 +2,7 @@
 
 namespace Tracker.Core.Events
 {
-    class ClientListSelectEvent : PubSubEvent<string>
+    public class ClientListSelectEvent : PubSubEvent<string>
     {
     }
 }

@@ -4,8 +4,23 @@
              xmlns:local="clr-namespace:mClientList.Views"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True">
-    <Grid>
-        <ListBox ItemsSource="{Binding ClientEntries}">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="ColumnTitle">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </UserControl.Resources>
+    <StackPanel Margin="5">
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="PEID" Style="{StaticResource ColumnTitle}"/>
+            <TextBlock Grid.Column="1" Text="Client" Style="{StaticResource ColumnTitle}"/>
+            <TextBlock Grid.Column="2" Text="Status" Style="{StaticResource ColumnTitle}"/>
+        </Grid>
+        <ListBox ItemsSource="{Binding ClientEntries}" HorizontalContentAlignment="Stretch">
             <ListBox.ItemContainerStyle>
                 <Style TargetType="ListBoxItem">
                     <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
@@ -17,5 +32,5 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-    </Grid>
+    </StackPanel>
 </UserControl>

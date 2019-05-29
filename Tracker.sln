@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracker.Core", "Tracker.Cor
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mClientList", "mClientList\mClientList.csproj", "{8A31E9F7-1C5A-40F8-9D51-C75944B71073}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mRecordSearchList", "mRecordSearchList\mRecordSearchList.csproj", "{485680D9-6A72-4817-8A49-3850E23AAD15}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{8A31E9F7-1C5A-40F8-9D51-C75944B71073}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8A31E9F7-1C5A-40F8-9D51-C75944B71073}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8A31E9F7-1C5A-40F8-9D51-C75944B71073}.Release|Any CPU.Build.0 = Release|Any CPU
+		{485680D9-6A72-4817-8A49-3850E23AAD15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{485680D9-6A72-4817-8A49-3850E23AAD15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{485680D9-6A72-4817-8A49-3850E23AAD15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{485680D9-6A72-4817-8A49-3850E23AAD15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

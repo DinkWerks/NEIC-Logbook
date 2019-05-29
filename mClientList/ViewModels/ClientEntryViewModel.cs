@@ -2,44 +2,75 @@
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using Tracker.Core;
+using Tracker.Core.StaticTypes;
+
 
 namespace mClientList.ViewModels
 {
     public class ClientEntryViewModel : BindableBase
     {
-        private string _rsID;
-        private string _rsName;
-        private string _rsRequestor;
-        
-        public string RecordSearchID
+        private string _peid;
+        private string _clientName;
+        private string _officeName;
+        private string _standing;
+
+        public string PEID
         {
-            get { return _rsID; }
-            set { SetProperty(ref _rsID, value); }
+            get { return _peid; }
+            set { SetProperty(ref _peid, value); }
         }
 
-        public string RecordSearchName
+        public string ClientName
         {
-            get { return _rsName; }
-            set { SetProperty(ref _rsName, value); }
+            get { return _clientName; }
+            set { SetProperty(ref _clientName, value); }
         }
 
-        public string RecordSearchRequestor
+        public string OfficeName
         {
-            get { return _rsRequestor; }
-            set { SetProperty(ref _rsRequestor, value); }
+            get { return _officeName; }
+            set { SetProperty(ref _officeName, value); }
+        }
+
+        public string Standing
+        {
+            get { return _standing; }
+            set { SetProperty(ref _standing, value); }
         }
 
         public ClientEntryViewModel()
         {
-            GenerateTestRecordSearches();
+            GenerateClient();
         }
 
-        public void GenerateTestRecordSearches()
+        public void GenerateClient()
         {
-            RecordSearchID = "A-19-123";
-            RecordSearchName = "Test Search";
-            RecordSearchRequestor = "Doe, John";
+            List<string> namePart1 = new List<string> { "Natural Resources", "Cultual Resources", "Historic", "CRM", "Western", "Shasta", "Butte", "California", "Archaeological" };
+            List<string> namePart2 = new List<string> { "Incorperated", "LLC", "Research", "Pacific", "Institute", "Research Program" };
+            List<string> office = new List<string> { "Sacramento", "Chico", "San Francisco", "Redding", "Siskiyous", "Butte County", "Sierra" };
+            Random ran = RandomProvider.GetThreadRandom();
+
+            PEID = ran.Next(10000).ToString("000000");
+
+            ClientName = namePart1[ran.Next(namePart1.Count)] + " " + namePart2[ran.Next(namePart2.Count)];
+
+            int officeRoll = ran.Next(10);
+            if (officeRoll >= 7)
+            {
+                OfficeName = office[ran.Next(office.Count)];
+            }
+
+            Standing = ClientStanding.GoodStanding;
+            int standingRoll = ran.Next(10);
+            if (standingRoll >= 9)
+            {
+                Standing = ClientStanding.OnHold;
+            }
+            else if (standingRoll == 8)
+            {
+                Standing = ClientStanding.Warning;
+            }
         }
     }
 }

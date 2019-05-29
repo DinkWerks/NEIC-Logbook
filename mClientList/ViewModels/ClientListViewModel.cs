@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Tracker.Core.StaticTypes;
 
 namespace mClientList.ViewModels
 {
@@ -19,8 +20,12 @@ namespace mClientList.ViewModels
 
         public ClientListViewModel()
         {
-            ClientEntries.Add(new ClientEntryViewModel());
-            ClientEntries.Add(new ClientEntryViewModel());
+            AddTestClients();
+        }
+
+        private void AddTestClients()
+        {
+            for (int i=0; i<11; i++)
             ClientEntries.Add(new ClientEntryViewModel());
         }
     }
