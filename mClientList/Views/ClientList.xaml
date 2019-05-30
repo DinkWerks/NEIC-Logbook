@@ -16,6 +16,15 @@
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding PEIDSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,2,0"/>
+            <TextBox Grid.Column="1" Text="{Binding ClientNameSearchText, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+        <Grid HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
             <TextBlock Text="PEID" Style="{StaticResource ColumnTitle}"/>
             <TextBlock Grid.Column="1" Text="Client" Style="{StaticResource ColumnTitle}"/>
             <TextBlock Grid.Column="2" Text="Status" Style="{StaticResource ColumnTitle}"/>
