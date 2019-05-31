@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Converters\ClientNameConverter.cs" />
     <Compile Include="Converters\StandingToImageConverter.cs" />
+    <Compile Include="Interfaces\IClientEntry.cs" />
     <Compile Include="mClientListModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

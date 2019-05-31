@@ -71,6 +71,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="RandomProvider.cs" />
+    <Compile Include="Services\DatabaseConnection.cs" />
+    <Compile Include="Services\IDatabaseConnection.cs" />
     <Compile Include="StaticTypes\ClientStanding.cs" />
     <Compile Include="Types\Standing.cs" />
   </ItemGroup>
@@ -92,6 +94,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\cancel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\RS_Backend.accdb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

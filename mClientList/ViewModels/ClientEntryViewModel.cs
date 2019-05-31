@@ -1,8 +1,10 @@
 ﻿using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
 using Tracker.Core;
+using Tracker.Core.Services;
 using Tracker.Core.StaticTypes;
 
 
@@ -39,9 +41,9 @@ namespace mClientList.ViewModels
             set { SetProperty(ref _standing, value); }
         }
 
-        public ClientEntryViewModel()
+        public ClientEntryViewModel(IEventAggregator eventAggregator)
         {
-            GenerateClient();
+            
         }
 
         public void GenerateClient()

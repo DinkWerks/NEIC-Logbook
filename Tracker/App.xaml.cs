@@ -2,6 +2,7 @@
 using Prism.Ioc;
 using Prism.Modularity;
 using System.Windows;
+using Tracker.Core.Services;
 
 namespace Tracker
 {
@@ -17,7 +18,7 @@ namespace Tracker
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
-
+            containerRegistry.RegisterSingleton<IDatabaseConnection, DatabaseConnection>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

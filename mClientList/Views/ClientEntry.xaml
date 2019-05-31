@@ -8,7 +8,7 @@
         <converters:ClientNameConverter x:Key="ClientNameConverter"/>
         <converters:StandingToImageConverter x:Key="StandingToImageConverter"/>
     </UserControl.Resources>
-    <Grid>
+    <Grid x:Name="Grid">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="100"/>
             <ColumnDefinition Width="1*"/>

@@ -13,7 +13,7 @@ namespace mClientList.ViewModels
     public class ClientListViewModel : BindableBase
     {
         private ObservableCollection<ClientEntryViewModel> _clientEntries = new ObservableCollection<ClientEntryViewModel>();
-        public CET = CollectionViewSource.GetDefaultView();
+
         private string _clientNameSearchText;
         private string _peidSearchText;
 
@@ -32,23 +32,48 @@ namespace mClientList.ViewModels
         public string ClientNameSearchText
         {
             get { return _clientNameSearchText; }
-            set { SetProperty(ref _clientNameSearchText, value); }
+            set
+            {
+                SetProperty(ref _clientNameSearchText, value);
+                ClientCollectionView.Refresh();
+            }
+        }
+        public ICollectionView ClientCollectionView
+        {
+            get { return CollectionViewSource.GetDefaultView(ClientEntries); }
         }
 
         public ClientListViewModel()
         {
             AddTestClients();
+            ClientCollectionView.Filter = ClientNameSearchFilter;
         }
 
-        private void FilterClientNames(object obj)
+        public bool ClientNameSearchFilter(object item)
         {
+            var ClientToTest = item as ClientEntryViewModel;
+            if (ClientToTest == null)
+            {
+                return false;
+            }
+            if (ClientNameSearchText == null)
+            {
+                return true;
+            }
+            if (ClientToTest.ClientName.ToLower().Contains(ClientNameSearchText.ToLower()))
+            {
+                return true;
+            }
 
+            return false;
         }
 
         private void AddTestClients()
         {
-            for (int i = 0; i < 11; i++)
-                ClientEntries.Add(new ClientEntryViewModel());
+            ClientEntries.Add(new ClientEntryViewModel());
+
+            //for (int i = 0; i < 10; i++)
+            //ClientEntries.Add(new ClientEntryViewModel());
         }
     }
 }
