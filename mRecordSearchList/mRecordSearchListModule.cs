@@ -15,7 +15,6 @@ namespace mRecordSearchList
         {
             containerRegistry.RegisterForNavigation<RSList>();
             containerRegistry.RegisterForNavigation<RSEntry>();
-            containerRegistry.RegisterForNavigation<CountySelectDialogContents>();
             containerRegistry.RegisterForNavigation<AddressEntry>();
         }
     }

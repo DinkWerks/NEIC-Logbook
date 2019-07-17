@@ -41,12 +41,12 @@ namespace Tracker.Core.Models
         private string _processor;
         // Location
         private string _mainCounty; //TODO make County type
-        private ObservableCollection<County> _additionalCounties = new ObservableCollection<County>();
+        private ObservableCollection<County> _additionalCounties = new ObservableCollection<County>() { Counties.BUTTE };
         private string _plss;
         private int _acres;
         private int _linearMiles;
         //Results
-        private string _resourcesInProject; //TODO make resource codes type
+        private bool _areResourcesInProject;
         private string _recommendation;
         private bool _isReportReceived;
         private string _encryptionPassword;
@@ -279,10 +279,10 @@ namespace Tracker.Core.Models
         #endregion
 
         #region Results
-        public string ResourcesInProject
+        public bool AreResourcesInProject
         {
-            get { return _resourcesInProject; }
-            set { SetProperty(ref _resourcesInProject, value); }
+            get { return _areResourcesInProject; }
+            set { SetProperty(ref _areResourcesInProject, value); }
         }
 
         public string Recommendation

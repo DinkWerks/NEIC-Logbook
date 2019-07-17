@@ -11,8 +11,8 @@
         <converters:ClientNameConverter x:Key="ClientNameConverter"/>
         <converters:StandingToImageConverter x:Key="StandingToImageConverter"/>
     </UserControl.Resources>
+
     <StackPanel Margin="5">
-		
         <Grid HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>

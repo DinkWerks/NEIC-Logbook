@@ -47,8 +47,8 @@ namespace Tracker.Core.Services
                         "DateReceived, DateEntered, DateOfResponse, DateBilled, DatePaid, LastUpdated, " +
                         "RequestorID, ClientID, MailingAddressID, IsMailingAddressSameAsBilling, BillingAddressID, " +
                         "ProjectName, RecordSearchType, IsSpecialCase, SpecialCaseDetails, " +
-                        "MainCounty, AdditionalCountiesID, PLSS, Acres, LinearMiles, " +
-                        "ResourcesInProject, Recommendation, IsReportReceived, " +
+                        "MainCounty, PLSS, Acres, LinearMiles, " +
+                        "AreResourcesInProject, Recommendation, IsReportReceived, " +
                         "FeeVersion, FeeID, DiscretionaryAdjustment, AdjustmentExplanation, " +
                         "ProjectNumber, InvoiceNumber, CheckName, CheckNumber, EncryptionPassword " +
                         "FROM tblRecordSearches " +
@@ -84,11 +84,11 @@ namespace Tracker.Core.Services
                         Special = reader.GetBooleanSafe(index++),
                         SpecialDetails = reader.GetStringSafe(index++), //20
                         MainCounty = reader.GetStringSafe(index++),
-                        AdditionalCounties = GetAdditionalCounties(reader.GetInt32Safe(index++)),
+                        //AdditionalCounties = GetAdditionalCounties(reader.GetInt32Safe(index++)),
                         PLSS = reader.GetStringSafe(index++),
                         Acres = reader.GetInt32Safe(index++),
                         LinearMiles = reader.GetInt32Safe(index++), //25
-                        ResourcesInProject = reader.GetStringSafe(index++),
+                        AreResourcesInProject = reader.GetBooleanSafe(index++),
                         Recommendation = reader.GetStringSafe(index++),
                         IsReportReceived = reader.GetBooleanSafe(index++),
                         FeeVersion = reader.GetStringSafe(index) ?? Properties.Settings.Default.FeeType,

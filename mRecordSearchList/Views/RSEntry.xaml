@@ -4,9 +4,11 @@
              xmlns:prism="http://prismlibrary.com/"
              xmlns:static="clr-namespace:Tracker.Core.StaticTypes;assembly=Tracker.Core"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:views="clr-namespace:mRecordSearchList.Views"
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:tc="clr-namespace:Tracker.Controls;assembly=Tracker.Controls"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="1280">
     <UserControl.Resources>
@@ -31,6 +33,9 @@
     <i:Interaction.Triggers>
         <prism:InteractionRequestTrigger SourceObject="{Binding CountySelectRequest}">
             <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
+                <prism:PopupWindowAction.WindowContent>
+                    <views:CountySelectDialog/>
+                </prism:PopupWindowAction.WindowContent>
             </prism:PopupWindowAction>
         </prism:InteractionRequestTrigger>
     </i:Interaction.Triggers>
@@ -93,11 +98,6 @@
                         <DockPanel LastChildFill="False">
                             <TextBlock Text="Record Search Type: " Style="{StaticResource Line Header}"/>
                             <ComboBox ItemsSource="{Binding Source={x:Static static:StaticData.RecordSearchTypes}}" Width="200"/>
-                        </DockPanel>
-
-                        <DockPanel Margin="0,2,0,0">
-                            <TextBlock Text="Processor: " Style="{StaticResource Line Header}" HorizontalAlignment="Right"/>
-                            <ComboBox ItemsSource="{Binding Source={x:Static static:StaticData.Staff}}" HorizontalAlignment="Right" Width="200"/>
                         </DockPanel>
                     </StackPanel>
                 </Grid>
@@ -281,24 +281,21 @@
 								IsEditable="True" ItemsSource="{Binding Source={x:Static static:Counties.regionCounties}}"/>
 
                                 <!--Complex UI for Additional Counties-->
-                                <StackPanel Grid.Row="1" Grid.ColumnSpan="4" Margin="0,10">
-                                    <ListBox ItemsSource="{Binding RecordSearch.AdditionalCounties}" Height="75">
-                                        <ListBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding Name}"/>
-                                            </DataTemplate>
-                                        </ListBox.ItemTemplate>
-                                    </ListBox>
 
-                                    <ToolBar HorizontalAlignment="Right">
-                                        <Span />
-                                        <Button>
-                                            <Image Height="16" Source="/Tracker.Core;component/Resources/Icons/delete.png"/>
-                                        </Button>
-                                        <Button Command="{Binding CountySelectPopupCommand}">
-                                            <Image Height="16" Source="/Tracker.Core;component/Resources/Icons/add.png"/>
-                                        </Button>
-                                    </ToolBar>
+                                <StackPanel Grid.Row="1" Grid.ColumnSpan="4" Margin="0,10">
+                                    <TextBlock Text="Additional Counties" FontSize="10"/>
+                                    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                                        <ListBox ItemsSource="{Binding RecordSearch.AdditionalCounties}" Height="75">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </ScrollViewer>
+                                    <Button HorizontalAlignment="Right" Width="22" BorderBrush="Beige">
+                                        <Image Source="/Tracker.Core;component/Resources/Icons/application_edit.png"/>
+                                    </Button>
                                 </StackPanel>
 
                                 <TextBlock Grid.Row="2" Text="PLSS:" Style="{StaticResource Line Header}"/>
@@ -319,22 +316,26 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Text="Resources Present:" Style="{StaticResource Line Header}"/>
-                                <TextBox Grid.Column="1" Text="{Binding RecordSearch.ResourcesInProject}"/>
+
+                                <TextBlock Text="Processor:" Style="{StaticResource Line Header}"/>
+                                <ComboBox Grid.Column="1" ItemsSource="{Binding Source={x:Static static:StaticData.Staff}}"/>
 
                                 <TextBlock Grid.Row="1" Text="Recommendation:" Style="{StaticResource Line Header}"/>
                                 <ComboBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordSearch.Recommendation}" IsEditable="True"
                                           ItemsSource="{Binding Source={x:Static static:StaticData.Recommendations}}"/>
 
-                                <CheckBox Grid.Row="2" Grid.Column="1" Content="Report Recieved" IsChecked="{Binding RecordSearch.IsReportReceived}" HorizontalAlignment="Right" Margin="0,0,0,5"/>
+                                <CheckBox Grid.Row="2" Grid.Column="1" Content="Resources Present in Project Area" IsChecked="{Binding RecordSearch.AreResourcesInProject}" Margin="0,0,0,5"/>
 
-                                <TextBlock Grid.Row="3" Text="Encryption Password:" Style="{StaticResource Line Header}"/>
-                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding RecordSearch.EncryptionPassword}"/>
+                                <CheckBox Grid.Row="3" Grid.Column="1" Content="Report Recieved" IsChecked="{Binding RecordSearch.IsReportReceived}" Margin="0,0,0,5"/>
+
+                                <TextBlock Grid.Row="4" Text="Encryption Password:" Style="{StaticResource Line Header}"/>
+                                <tc:LockableTextBox Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.EncryptionPassword}"/>
                             </Grid>
                         </GroupBox>
                     </Grid>
@@ -343,9 +344,13 @@
         </Grid>
 
         <!--Dates and Billing-->
-        <StackPanel Grid.Column="1" Margin="10,0">
+        <Grid Grid.Column="1" Margin="10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <!--Date Information-->
-            <Grid Grid.Column="2">
+            <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -375,8 +380,11 @@
             </Grid>
 
             <!--Fee/Billing-->
-            <ContentControl Grid.Row="1" Grid.RowSpan="3" Grid.Column="2" prism:RegionManager.RegionName="CalculatorRegion"/>
-
-        </StackPanel>
+            <Border Margin="0,20,0,0" Grid.Row="1" Background="Snow">
+                <ScrollViewer>
+                    <ContentControl prism:RegionManager.RegionName="CalculatorRegion"/>
+                </ScrollViewer>
+            </Border>
+        </Grid>
     </Grid>
 </UserControl>

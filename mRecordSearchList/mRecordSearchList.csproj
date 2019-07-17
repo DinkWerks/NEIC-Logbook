@@ -53,7 +53,9 @@
     <Compile Include="Converters\AdditionalCountyToBoolInitialConverter.cs" />
     <Compile Include="Converters\RSIDFormatter.cs" />
     <Compile Include="mRecordSearchListModule.cs" />
+    <Compile Include="Notifications\AdditionalCountyNotification.cs" />
     <Compile Include="Notifications\CreateNewRSNotification.cs" />
+    <Compile Include="Notifications\IAdditionalCountyNotification.cs" />
     <Compile Include="Notifications\ICreateNewRSNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -70,7 +72,6 @@
     </Compile>
     <Compile Include="Utils\ListBoxExtension.cs" />
     <Compile Include="ViewModels\AddressEntryViewModel.cs" />
-    <Compile Include="ViewModels\CountySelectDialogContentsViewModel.cs" />
     <Compile Include="ViewModels\CountySelectDialogViewModel.cs" />
     <Compile Include="ViewModels\CreateNewRSDialogViewModel.cs" />
     <Compile Include="ViewModels\RSEntryViewModel.cs" />
@@ -80,9 +81,6 @@
     </Compile>
     <Compile Include="Views\CountySelectDialog.xaml.cs">
       <DependentUpon>CountySelectDialog.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CountySelectDialogContents.xaml.cs">
-      <DependentUpon>CountySelectDialogContents.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CreateNewRSDialog.xaml.cs">
       <DependentUpon>CreateNewRSDialog.xaml</DependentUpon>
@@ -118,10 +116,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\CountySelectDialogContents.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\CreateNewRSDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -139,6 +133,10 @@
     <ProjectReference Include="..\mFeeCalculator\mFeeCalculator.csproj">
       <Project>{D3320477-199C-4427-A5A7-99A640544193}</Project>
       <Name>mFeeCalculator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tracker.Controls\Tracker.Controls.csproj">
+      <Project>{88d9ab74-f571-4338-946d-0f57de4b3a4e}</Project>
+      <Name>Tracker.Controls</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracker.Core\Tracker.Core.csproj">
       <Project>{91072ca4-6b1a-4a0d-bf41-1123e13c3ebc}</Project>

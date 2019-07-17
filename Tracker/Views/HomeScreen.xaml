@@ -17,7 +17,7 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TextBlock Text="NEIC Record Search Database" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,25" FontSize="36" FontWeight="SemiBold" Foreground="#8C2332"/>
+        <TextBlock Text="NEIC Logbook" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,25" FontSize="36" FontWeight="SemiBold" Foreground="#8C2332"/>
         <StackPanel  Grid.Row="1"  Width="300"  HorizontalAlignment="Center">
             <Button Content="Record Searches" Command="{Binding NavigateCommand}" CommandParameter="RSList"/>
             <Button Content="Clients" Command="{Binding NavigateCommand}" CommandParameter="ClientList"/>

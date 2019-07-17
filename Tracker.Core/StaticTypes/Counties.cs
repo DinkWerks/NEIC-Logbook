@@ -151,7 +151,7 @@ namespace Tracker.Core.StaticTypes
             ReportAbbr = reportAbbr;
             Number = number;
             ICCurator = icCurator;
-            IsChecked = true;
+            IsChecked = false;
         }
 
         public override string ToString()

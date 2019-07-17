@@ -7,7 +7,7 @@ namespace Tracker.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string _title = "NEIC Record Searc Database";
+        private string _title = "NEIC Logbook";
         private IRegionNavigationService _ns;
         private IRegionManager _rm;
 
@@ -23,7 +23,6 @@ namespace Tracker.ViewModels
         public MainWindowViewModel(IRegionManager regionManager)
         {
             _rm = regionManager;
-            //regionManager.RegisterViewWithRegion("ContentRegion", typeof(RSEntry));
             regionManager.RegisterViewWithRegion("ContentRegion", typeof(HomeScreen));
             NavigateCommand = new DelegateCommand<string>(Navigate);
             GoBackCommand = new DelegateCommand(GoBack);

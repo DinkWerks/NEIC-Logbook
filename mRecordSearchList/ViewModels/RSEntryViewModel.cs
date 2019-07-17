@@ -10,6 +10,9 @@ using Tracker.Core.Events;
 using Tracker.Core.Services;
 using mFeeCalculator.Views;
 using mRecordSearchList.Views;
+using mRecordSearchList.Notifications;
+using System.Collections.ObjectModel;
+using Tracker.Core.StaticTypes;
 
 namespace mRecordSearchList.ViewModels
 {
@@ -55,8 +58,9 @@ namespace mRecordSearchList.ViewModels
             }
         }
 
-        public InteractionRequest<INotification> CountySelectRequest { get; set; }
+        
         public DelegateCommand<string> NavigateCommand { get; private set; }
+        public InteractionRequest<IAdditionalCountyNotification> CountySelectRequest { get; set; }
         public DelegateCommand CountySelectPopupCommand { get; private set; }
         public DelegateCommand<string> CopyRequestorCommand { get; private set; }
         public DelegateCommand<string> CopyAffiliationCommand { get; private set; }
@@ -78,7 +82,7 @@ namespace mRecordSearchList.ViewModels
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
 
-            CountySelectRequest = new InteractionRequest<INotification>();
+            CountySelectRequest = new InteractionRequest<IAdditionalCountyNotification>();
             NavigateCommand = new DelegateCommand<string>(Navigate);
             CountySelectPopupCommand = new DelegateCommand(RaiseCountySelectPopup);
             CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
@@ -142,8 +146,13 @@ namespace mRecordSearchList.ViewModels
 
         private void RaiseCountySelectPopup()
         {
-            _ea.GetEvent<AdditionalCountySelectionOpenedEvent>().Publish(RecordSearch.AdditionalCounties);
-            CountySelectRequest.Raise(new Notification { Title = "Select Additional Counties", Content = new CountySelectDialog() });
+            CountySelectRequest.Raise(new AdditionalCountyNotification { Title = "Select Additional Counties" }, r =>
+            {
+                if (r.Confirmed)
+                {
+                    RecordSearch.AdditionalCounties = r.AdditionalCounties;
+                }
+            });
         }
 
         private void ChangeAdditionalCounties(AdditionalCountySelectionPayload payload)

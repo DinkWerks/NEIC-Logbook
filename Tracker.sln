@@ -23,6 +23,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{A8CA2701
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mFeeCalculator", "mFeeCalculator\mFeeCalculator.csproj", "{D3320477-199C-4427-A5A7-99A640544193}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tracker.Controls", "Tracker.Controls\Tracker.Controls.csproj", "{88D9AB74-F571-4338-946D-0F57DE4B3A4E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,6 +55,10 @@ Global
 		{D3320477-199C-4427-A5A7-99A640544193}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3320477-199C-4427-A5A7-99A640544193}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3320477-199C-4427-A5A7-99A640544193}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88D9AB74-F571-4338-946D-0F57DE4B3A4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88D9AB74-F571-4338-946D-0F57DE4B3A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88D9AB74-F571-4338-946D-0F57DE4B3A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88D9AB74-F571-4338-946D-0F57DE4B3A4E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

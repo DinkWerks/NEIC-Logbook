@@ -1,6 +1,4 @@
 ﻿using Prism.Interactivity.InteractionRequest;
-using System.Collections.Generic;
-using Tracker.Core.StaticTypes;
 
 namespace mRecordSearchList.Notifications
 {

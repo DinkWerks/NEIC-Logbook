@@ -60,7 +60,7 @@
         </DataTemplate>
     </UserControl.Resources>
 
-    <StackPanel HorizontalAlignment="Stretch">
+    <StackPanel HorizontalAlignment="Stretch" Margin="10">
         <TextBlock Text="Fee Calculator" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center"/>
 
         <TextBlock Text="Fee Structure Version:" Margin="10,20,10,0"/>
@@ -83,35 +83,33 @@
 
         <Rectangle Fill="Black" Height="1" Margin="0,10"/>
 
-        <ScrollViewer>
-            <ItemsControl ItemsSource="{Binding Charges}" HorizontalContentAlignment="Stretch">
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate>
-                        <ContentControl Content="{Binding}">
-                            <ContentControl.Style>
-                                <Style TargetType="ContentControl">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding Type}" Value="separator">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource FeeSeparator}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="variable">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource VariableChargeTemplate}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="boolean">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource BooleanChargeTemplate}"/>
-                                        </DataTrigger>
-                                        <DataTrigger Binding="{Binding Type}" Value="categorical">
-                                            <Setter Property="ContentTemplate" Value="{StaticResource CategoricalChargeTemplate}"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ContentControl.Style>
-                        </ContentControl>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-        
+        <ItemsControl ItemsSource="{Binding Charges}" HorizontalContentAlignment="Stretch">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ContentControl Content="{Binding}">
+                        <ContentControl.Style>
+                            <Style TargetType="ContentControl">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding Type}" Value="separator">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource FeeSeparator}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="variable">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource VariableChargeTemplate}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="boolean">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource BooleanChargeTemplate}"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding Type}" Value="categorical">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource CategoricalChargeTemplate}"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentControl.Style>
+                    </ContentControl>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
         <Rectangle Fill="Black" Height="1" Margin="0,10"/>
         <TextBlock Text="{Binding Fee.TotalProjectCost, StringFormat={}Total: ${0}, FallbackValue=Total: $0}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Right"/>
     </StackPanel>
