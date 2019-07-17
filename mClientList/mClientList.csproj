@@ -51,7 +51,6 @@
   <ItemGroup>
     <Compile Include="Converters\ClientNameConverter.cs" />
     <Compile Include="Converters\StandingToImageConverter.cs" />
-    <Compile Include="Interfaces\IClientEntry.cs" />
     <Compile Include="mClientListModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -105,6 +104,9 @@
       <Project>{91072ca4-6b1a-4a0d-bf41-1123e13c3ebc}</Project>
       <Name>Tracker.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>County Instantiation</Title>
+      <Author>Kyle Deutsch</Author>
+      <Description>Hyperspecifc county snippet</Description>
+      <Shortcut>county</Shortcut>
+      <SnippetType>Expansion</SnippetType>
+    </Header>
+    <Snippet>
+      <Code Language="csharp">
+        <![CDATA[public static readonly County $NAME$ = new County("$p1$", "$p2$", "$p3$", $p4$, "$p5$");$end$]]>
+      </Code>
+      <Declarations>
+        <Literal>
+          <ID>NAME</ID>
+          <Tooltip>County name, all caps</Tooltip>
+          <Default>ALAMEDA</Default>
+        </Literal>
+        <Literal>
+          <ID>p1</ID>
+          <Tooltip>County name</Tooltip>
+          <Default>Alameda</Default>
+        </Literal>
+        <Literal>
+          <ID>p2</ID>
+          <Tooltip>3 letter code</Tooltip>
+          <Default>ALA</Default>
+        </Literal>
+        <Literal>
+          <ID>p3</ID>
+          <Tooltip>2 letter code</Tooltip>
+          <Default>AL</Default>
+        </Literal>
+        <Literal>
+          <ID>p4</ID>
+          <Tooltip>ordinal</Tooltip>
+          <Default>1</Default>
+        </Literal>
+        <Literal>
+          <ID>p5</ID>
+          <Tooltip>Info Center</Tooltip>
+          <Default>NWIC</Default>
+        </Literal>
+      </Declarations>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

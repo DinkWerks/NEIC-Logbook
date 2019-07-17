@@ -56,6 +56,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Views\HomeScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -64,7 +68,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ViewModels\HomeScreenViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\HomeScreen.xaml.cs">
+      <DependentUpon>HomeScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -100,6 +108,18 @@
     <ProjectReference Include="..\mClientList\mClientList.csproj">
       <Project>{8a31e9f7-1c5a-40f8-9d51-c75944b71073}</Project>
       <Name>mClientList</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mFeeCalculator\mFeeCalculator.csproj">
+      <Project>{d3320477-199c-4427-a5a7-99a640544193}</Project>
+      <Name>mFeeCalculator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mPersonList\mPersonList.csproj">
+      <Project>{b528106f-db13-418a-be1c-b1836cc2e0bc}</Project>
+      <Name>mPersonList</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mRecordSearchList\mRecordSearchList.csproj">
+      <Project>{485680d9-6a72-4817-8a49-3850e23aad15}</Project>
+      <Name>mRecordSearchList</Name>
     </ProjectReference>
     <ProjectReference Include="..\Tracker.Core\Tracker.Core.csproj">
       <Project>{91072ca4-6b1a-4a0d-bf41-1123e13c3ebc}</Project>

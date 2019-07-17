@@ -1,0 +1,185 @@
+﻿using mRecordSearchList.Notifications;
+using Prism.Commands;
+using Prism.Events;
+using Prism.Interactivity.InteractionRequest;
+using Prism.Mvvm;
+using Prism.Regions;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Data;
+using Tracker.Core.Events;
+using Tracker.Core.Models;
+using Tracker.Core.Services;
+using Tracker.Core.StaticTypes;
+
+namespace mRecordSearchList.ViewModels
+{
+    public class RSListViewModel : BindableBase, IRegionMemberLifetime
+    {
+        private IRecordSearchService _rss;
+        private IRegionManager _rm;
+        private List<RecordSearch> _recordSearches = new List<RecordSearch>();
+        private string _rsidPrefixSearch;
+        private string _rsidYearSearch;
+        private string _rsidEnumerationSearch;
+        private string _projectNameSearchText;
+
+        public List<RecordSearch> RecordSearches
+        {
+            get { return _recordSearches; }
+            set { SetProperty(ref _recordSearches, value); }
+        }
+        public List<Prefix> PrefixChoices { get; private set; }
+        public ICollectionView RecordSearchesView
+        {
+            get { return CollectionViewSource.GetDefaultView(RecordSearches); }
+        }
+
+        public string RSIDPrefixSearch
+        {
+            get { return _rsidPrefixSearch; }
+            set
+            {
+                SetProperty(ref _rsidPrefixSearch, value);
+                RecordSearchesView.Refresh();
+            }
+        }
+
+        public string RSIDYearSearch
+        {
+            get { return _rsidYearSearch; }
+            set
+            {
+                SetProperty(ref _rsidYearSearch, value);
+                RecordSearchesView.Refresh();
+            }
+        }
+
+        public string RSIDEnumerationSearch
+        {
+            get { return _rsidEnumerationSearch; }
+            set
+            {
+                SetProperty(ref _rsidEnumerationSearch, value);
+                RecordSearchesView.Refresh();
+            }
+        }
+
+        public string ProjectNameSearchText
+        {
+            get { return _projectNameSearchText; }
+            set
+            {
+                SetProperty(ref _projectNameSearchText, value);
+                RecordSearchesView.Refresh();
+            }
+        }
+
+        public InteractionRequest<ICreateNewRSNotification> NewRSRequest { get; private set; }
+        public DelegateCommand CreateNewRSCommand { get; private set; }
+        public bool KeepAlive => false;
+
+        //Constructor
+        public RSListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IRecordSearchService recordSearchService)
+        {
+            _rm = regionManager;
+            _rss = recordSearchService;
+            PrefixChoices = new List<Prefix>(RecordSearchPrefixes.Values);
+
+            RecordSearches = _rss.GetAllPartialRecordSearches();
+
+            RecordSearchesView.Filter = RecordSearchViewFilter;
+            NewRSRequest = new InteractionRequest<ICreateNewRSNotification>();
+            CreateNewRSCommand = new DelegateCommand(CreateNewRecordSearch);
+
+            eventAggregator.GetEvent<RecordSearchListSelectEvent>().Subscribe(NavigateToRecordSearchEntry);
+        }
+
+        //Methods
+        public void NavigateToRecordSearchEntry(int navTargetID)
+        {
+            var parameters = new NavigationParameters
+            {
+                { "id", navTargetID }
+            };
+
+            if (navTargetID >= 0)
+                _rm.RequestNavigate("ContentRegion", "RSEntry", parameters);
+        }
+
+        public void CreateNewRecordSearch()
+        {
+            object[] newRSData = new object[7];
+            NewRSRequest.Raise(new CreateNewRSNotification { Title = "Create a New Record Search" }, r =>
+             {
+                 if (r.Confirmed)
+                 {
+                     newRSData[0] = r.Prefix;
+                     newRSData[1] = r.Year;
+                     newRSData[2] = r.Enumeration;
+                     newRSData[3] = r.Suffix;
+                     newRSData[4] = r.ProjectName;
+                     newRSData[5] = DateTime.Now.Date;
+                     newRSData[6] = DateTime.Now.Date;
+                     int lastEntryID = _rss.AddNewRecordSearch(newRSData);
+                     NavigateToRecordSearchEntry(lastEntryID);
+                 }
+             }
+            );
+        }
+
+        public bool RecordSearchViewFilter(object filterable)
+        {
+            RecordSearch recordSearch = filterable as RecordSearch;
+            if (recordSearch == null)
+            {
+                return false;
+            }
+
+            int passedTests = 0;
+
+            if (ProjectNameSearchText != null)
+            {
+                if (recordSearch.ProjectName.ToLower().Contains(ProjectNameSearchText.ToLower()))
+                {
+                    passedTests++;
+                }
+                else return false;
+            }
+            else passedTests++;
+
+            if (RSIDPrefixSearch != null)
+            {
+                if (recordSearch.RSTypePrefix.ToUpper() == RSIDPrefixSearch)
+                {
+                    passedTests++;
+                }
+                else return false;
+            }
+            else passedTests++;
+
+            if (RSIDYearSearch != null)
+            {
+                if (recordSearch.RSYear.ToLower().Contains(RSIDYearSearch))
+                {
+                    passedTests++;
+                }
+                else return false;
+            }
+            else passedTests++;
+
+            if (RSIDEnumerationSearch != null)
+            {
+                if (recordSearch.RSEnumeration.ToString().Contains(RSIDEnumerationSearch))
+                {
+                    passedTests++;
+                }
+                else return false;
+            }
+            else passedTests++;
+
+            return passedTests >= 4;
+        }
+    }
+}

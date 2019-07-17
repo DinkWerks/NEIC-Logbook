@@ -1,0 +1,68 @@
+﻿<UserControl x:Class="mPersonList.Views.PersonList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280">
+	<UserControl.Resources>
+		<Style TargetType="TextBlock" x:Key="ColumnTitle">
+			<Setter Property="FontWeight" Value="Bold"/>
+		</Style>
+	</UserControl.Resources>
+	<StackPanel Margin="10">
+
+		<!--Column Headers and Search Bars-->
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="3*"/>
+				<ColumnDefinition Width="2*"/>
+				<ColumnDefinition Width="100"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+
+			<TextBox Text="{Binding PersonNameSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,2,0"/>
+			<TextBox Grid.Column="1" Text="{Binding AffiliationSearchText, UpdateSourceTrigger=PropertyChanged}"/>
+
+			<TextBlock Grid.Row="1" Text="Name" Style="{StaticResource ColumnTitle}"/>
+			<TextBlock Grid.Row="1" Grid.Column="1" Text="Affiliation" Style="{StaticResource ColumnTitle}"/>
+			<TextBlock Grid.Row="1" Grid.Column="2" Text="Last Contact" Style="{StaticResource ColumnTitle}"/>
+		</Grid>
+
+		<!--List Box-->
+		<ListBox x:Name="PersonListBox" ItemsSource="{Binding PeopleView}" HorizontalContentAlignment="Stretch">
+			<ListBox.ItemContainerStyle>
+				<Style TargetType="ListBoxItem">
+					<EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+				</Style>
+			</ListBox.ItemContainerStyle>
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="3*"/>
+							<ColumnDefinition Width="2*"/>
+							<ColumnDefinition Width="100"/>
+						</Grid.ColumnDefinitions>
+
+						<TextBlock>
+							<TextBlock.Text>
+								<MultiBinding StringFormat=" {0} {1}">
+									<Binding Path="FirstName"/>
+									<Binding Path="LastName"/>
+								</MultiBinding>
+							</TextBlock.Text>
+						</TextBlock>
+						<TextBlock Grid.Column="1" Text="{Binding CurrentAssociation}"/>
+						<TextBlock Grid.Column="2" Text="{Binding LastContactedDate}"/>
+					</Grid>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</StackPanel>
+</UserControl>

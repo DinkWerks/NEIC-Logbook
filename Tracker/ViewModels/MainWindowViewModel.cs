@@ -1,12 +1,19 @@
 ﻿using Prism.Mvvm;
 using Prism.Regions;
-using mClientList.Views;
+using Prism.Commands;
+using Tracker.Views;
 
 namespace Tracker.ViewModels
 {
     public class MainWindowViewModel : BindableBase
     {
-        private string _title = "Prism Application";
+        private string _title = "NEIC Record Searc Database";
+        private IRegionNavigationService _ns;
+        private IRegionManager _rm;
+
+        public DelegateCommand<string> NavigateCommand { get; private set; }
+        public DelegateCommand GoBackCommand { get; private set; }
+
         public string Title
         {
             get { return _title; }
@@ -15,7 +22,21 @@ namespace Tracker.ViewModels
 
         public MainWindowViewModel(IRegionManager regionManager)
         {
-            regionManager.RegisterViewWithRegion("ContentRegion", typeof(ClientList));
+            _rm = regionManager;
+            //regionManager.RegisterViewWithRegion("ContentRegion", typeof(RSEntry));
+            regionManager.RegisterViewWithRegion("ContentRegion", typeof(HomeScreen));
+            NavigateCommand = new DelegateCommand<string>(Navigate);
+            GoBackCommand = new DelegateCommand(GoBack);
+        }
+
+        private void GoBack()
+        {
+            _ns.Journal.GoBack();
+        }
+
+        private void Navigate(string navigationTarget)
+        {
+            _rm.RequestNavigate("ContentRegion", navigationTarget);
         }
     }
 }

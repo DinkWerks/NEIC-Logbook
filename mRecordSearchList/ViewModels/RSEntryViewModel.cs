@@ -1,45 +1,186 @@
-﻿using Prism.Commands;
+﻿using System.Collections.Generic;
 using Prism.Mvvm;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using Prism.Interactivity.InteractionRequest;
+using Prism.Commands;
+using Prism.Events;
+using Prism.Regions;
+using Tracker.Core.Models;
+using Tracker.Core.Events.CustomPayloads;
+using Tracker.Core.Events;
+using Tracker.Core.Services;
+using mFeeCalculator.Views;
+using mRecordSearchList.Views;
 
 namespace mRecordSearchList.ViewModels
 {
-    public class RSEntryViewModel : BindableBase
+    public class RSEntryViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
     {
-        private string _rsID;
-        private string _rsName;
-        private string _rsRequestor;
+        private IRegionManager _rm;
+        private IEventAggregator _ea;
+        private IRecordSearchService _rss;
+        private IPersonService _ps;
+        private IClientService _cs;
+        private RecordSearch _recordSearch;
+        private int _selectedRequestor;
+        private int _selectedClient;
+        private bool _isLoaded = false;
+        
 
-        public string RecordSearchID
+        public List<Person> PeopleList { get; set; }
+        public List<Client> ClientList { get; set; }
+
+        public RecordSearch RecordSearch
         {
-            get { return _rsID; }
-            set { SetProperty(ref _rsID, value); }
+            get { return _recordSearch; }
+            set { SetProperty(ref _recordSearch, value); }
         }
 
-        public string RecordSearchName
+        public int SelectedRequestor
         {
-            get { return _rsName; }
-            set { SetProperty(ref _rsName, value); }
+            get { return _selectedRequestor; }
+            set
+            {
+                LoadNewRequestor(value);
+                SetProperty(ref _selectedRequestor, value);
+            }
         }
 
-        public string RecordSearchRequestor
+        public int SelectedClient
         {
-            get { return _rsRequestor; }
-            set { SetProperty(ref _rsRequestor, value); }
+            get { return _selectedClient; }
+            set
+            {
+                LoadNewClient(value);
+                SetProperty(ref _selectedClient, value);
+            }
         }
 
-        public RSEntryViewModel()
+        public InteractionRequest<INotification> CountySelectRequest { get; set; }
+        public DelegateCommand<string> NavigateCommand { get; private set; }
+        public DelegateCommand CountySelectPopupCommand { get; private set; }
+        public DelegateCommand<string> CopyRequestorCommand { get; private set; }
+        public DelegateCommand<string> CopyAffiliationCommand { get; private set; }
+        public bool KeepAlive => false;
+
+        // Constructor
+        public RSEntryViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IPersonService personService, IClientService clientService,
+            IRecordSearchService recordSearchService)
         {
-            GenerateTestRecordSearches();
+            _rm = regionManager;
+            _ea = eventAggregator;
+            _rss = recordSearchService;
+            _ps = personService;
+            _cs = clientService;
+            PeopleList = personService.CompletePeopleList;
+            ClientList = clientService.CompleteClientList;
+
+            regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
+            regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
+            regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
+
+            CountySelectRequest = new InteractionRequest<INotification>();
+            NavigateCommand = new DelegateCommand<string>(Navigate);
+            CountySelectPopupCommand = new DelegateCommand(RaiseCountySelectPopup);
+            CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
+            CopyAffiliationCommand = new DelegateCommand<string>(CopyAffiliation);
+            eventAggregator.GetEvent<AdditionalCountySelectionEvent>().Subscribe(ChangeAdditionalCounties);
         }
 
-        public void GenerateTestRecordSearches()
+        // Methods
+        private void Navigate(string destination)
         {
-            RecordSearchID = "A-19-123";
-            RecordSearchName = "Test Search";
-            RecordSearchRequestor = "Doe, John";
+            if (destination == "Requestor")
+            {
+                NavigationParameters parameters = new NavigationParameters();
+                parameters.Add("id", SelectedRequestor);
+                if (SelectedClient > 0)
+                    _rm.RequestNavigate("ContentRegion", "PersonEntry", parameters);
+            }
+            else if (destination == "Client")
+            {
+                NavigationParameters parameters = new NavigationParameters();
+                parameters.Add("id", SelectedClient);
+                if (SelectedClient > 0)
+                    _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
+            }
+        }
+
+        private void CopyRequestor(string destination)
+        {
+            if (destination == "Mailing")
+                RecordSearch.MailingAddress = RecordSearch.Requestor.AddressModel;
+            else if (destination == "Billing")
+                RecordSearch.BillingAddress = RecordSearch.Requestor.AddressModel;
+        }
+
+        private void CopyAffiliation(string destination)
+        {
+            if (destination == "Mailing")
+                RecordSearch.MailingAddress = RecordSearch.ClientModel.AddressModel;
+            else if (destination == "Billing")
+                RecordSearch.BillingAddress = RecordSearch.ClientModel.AddressModel;
+        }
+
+        private void LoadNewRequestor(int value)
+        {
+            if (value > 0 && _isLoaded)
+            {
+                RecordSearch.Requestor = _ps.GetPersonByID(value);
+                RecordSearch.RequestorID = RecordSearch.Requestor.ID;
+                SelectedClient = RecordSearch.Requestor.CurrentAssociationID;
+            }
+        }
+
+        private void LoadNewClient(int value)
+        {
+            if (value > 0 && _isLoaded)
+            {
+                RecordSearch.ClientModel = _cs.GetClientByID(value);
+                RecordSearch.ClientID = RecordSearch.ClientModel.ID;
+            }
+        }
+
+        private void RaiseCountySelectPopup()
+        {
+            _ea.GetEvent<AdditionalCountySelectionOpenedEvent>().Publish(RecordSearch.AdditionalCounties);
+            CountySelectRequest.Raise(new Notification { Title = "Select Additional Counties", Content = new CountySelectDialog() });
+        }
+
+        private void ChangeAdditionalCounties(AdditionalCountySelectionPayload payload)
+        {
+            if (payload.IsAdded is true)
+            {
+                if (RecordSearch.AdditionalCounties.Contains(payload.CountyPayload))
+                    RecordSearch.AdditionalCounties.Add(payload.CountyPayload);
+            }
+            if (payload.IsAdded is false)
+            {
+                if (!RecordSearch.AdditionalCounties.Contains(payload.CountyPayload))
+                    RecordSearch.AdditionalCounties.Remove(payload.CountyPayload);
+            }
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            int rsID = (int)navigationContext.Parameters["id"];
+            if (rsID > 0)
+            {
+                _rss.GetRecordSearchByID(rsID, true);
+                RecordSearch = _rss.CurrentRecordSearch;
+                SelectedRequestor = RecordSearch.RequestorID;
+                SelectedClient = RecordSearch.ClientID;
+                _isLoaded = true;
+            }
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            //Catch for unsaved work. Maybe store copy of original record search and compare them before navigating from?
         }
     }
 }

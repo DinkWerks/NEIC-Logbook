@@ -1,7 +1,6 @@
 ﻿using mRecordSearchList.Views;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
 
 namespace mRecordSearchList
 {
@@ -9,12 +8,15 @@ namespace mRecordSearchList
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
- 
+
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            
+            containerRegistry.RegisterForNavigation<RSList>();
+            containerRegistry.RegisterForNavigation<RSEntry>();
+            containerRegistry.RegisterForNavigation<CountySelectDialogContents>();
+            containerRegistry.RegisterForNavigation<AddressEntry>();
         }
     }
 }

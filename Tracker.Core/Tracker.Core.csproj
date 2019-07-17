@@ -63,21 +63,62 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Events\AdditionalCountySelectionEvent.cs" />
+    <Compile Include="Events\AdditionalCountySelectionOpenedEvent.cs" />
+    <Compile Include="Events\CalculatorCostChangedEvent.cs" />
     <Compile Include="Events\ClientListSelectEvent.cs" />
+    <Compile Include="Events\CustomPayloads\AdditionalCountySelectionPayload.cs" />
+    <Compile Include="Events\PersonListSelectEvent.cs" />
+    <Compile Include="Events\RecordSearchListSelectEvent.cs" />
+    <Compile Include="Extensions\OleDbDataReaderExtensions.cs" />
+    <Compile Include="Models\Address.cs" />
+    <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\Fees\BooleanCharge.cs" />
+    <Compile Include="Models\Fees\CategoricalCharge.cs" />
+    <Compile Include="Models\Fees\CategorySubcharge.cs" />
+    <Compile Include="Models\Fees\FeeSeparator.cs" />
+    <Compile Include="Models\Fees\HybridSubcharge.cs" />
+    <Compile Include="Models\Fees\ICharge.cs" />
+    <Compile Include="Models\Fees\ISubcharge.cs" />
+    <Compile Include="Models\Fees\VariableCharge.cs" />
+    <Compile Include="Models\Fees\Fee.cs" />
+    <Compile Include="Models\Fees\VariableCategorySubcharge.cs" />
+    <Compile Include="Models\Person.cs" />
+    <Compile Include="Models\RecordSearch.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="RandomProvider.cs" />
-    <Compile Include="Services\DatabaseConnection.cs" />
-    <Compile Include="Services\IDatabaseConnection.cs" />
+    <Compile Include="Services\AddressService.cs" />
+    <Compile Include="Services\ClientService.cs" />
+    <Compile Include="Services\IAddressService.cs" />
+    <Compile Include="Services\IClientService.cs" />
+    <Compile Include="Services\IPersonService.cs" />
+    <Compile Include="Services\PersonService.cs" />
+    <Compile Include="Services\RecordSearchService.cs" />
+    <Compile Include="Services\IRecordSearchService.cs" />
     <Compile Include="StaticTypes\ClientStanding.cs" />
+    <Compile Include="StaticTypes\Counties.cs" />
+    <Compile Include="StaticTypes\DisclosureLevels.cs" />
+    <Compile Include="StaticTypes\StaticData.cs" />
+    <Compile Include="StaticTypes\RecordSearchPrefixes.cs" />
     <Compile Include="Types\Standing.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\bullet_orange.png" />
@@ -96,9 +137,22 @@
     <Resource Include="Resources\Icons\cancel.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Icons\house.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Icons\link_go.png" />
+    <Resource Include="Resources\Icons\add.png" />
+    <Resource Include="Resources\Icons\delete.png" />
+    <Content Include="Resources\FeeStructures\v2017.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Resources\Icons\ReferenceFormat.txt" />
     <Content Include="Resources\RS_Backend.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Utils\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

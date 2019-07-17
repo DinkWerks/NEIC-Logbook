@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Partial Prism Property</Title>
+      <Author>Kyle Deutsch</Author>
+      <Description>A basic Prism compatible property without a backing field.</Description>
+      <Shortcut>ppp</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="csharp">
+        <![CDATA[public $Type$ $PropName$
+        {
+            get { return $Backing$; }
+            set { SetProperty(ref $Backing$, value); }
+        }
+        ]]>
+      </Code>
+      <Declarations>
+        <Literal>
+          <ID>Type</ID>
+          <Tooltip>Property's type</Tooltip>
+          <Default>string</Default>
+        </Literal>
+        <Literal>
+          <ID>PropName</ID>
+          <Tooltip>Name of the Property</Tooltip>
+          <Default>PropName</Default>
+        </Literal>
+        <Literal>
+          <ID>Backing</ID>
+          <Tooltip>Private backing field of the property.</Tooltip>
+          <Default>_backing</Default>
+        </Literal>
+      </Declarations>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

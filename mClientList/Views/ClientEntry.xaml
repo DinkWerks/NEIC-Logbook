@@ -3,26 +3,170 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:mClientList.Converters"
              xmlns:prism="http://prismlibrary.com/"             
-             prism:ViewModelLocator.AutoWireViewModel="True">
-    <UserControl.Resources>
-        <converters:ClientNameConverter x:Key="ClientNameConverter"/>
-        <converters:StandingToImageConverter x:Key="StandingToImageConverter"/>
-    </UserControl.Resources>
-    <Grid x:Name="Grid">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Text="{Binding PEID}"/>
-        <TextBlock Grid.Column="1">
-            <TextBlock.Text>
-                <MultiBinding Converter="{StaticResource ClientNameConverter}">
-                    <Binding Path="ClientName"/>
-                    <Binding Path="OfficeName"/>
-                </MultiBinding>
-            </TextBlock.Text>
-        </TextBlock>
-        <Image Grid.Column="2" Width="16" Source="{Binding Standing, Converter={StaticResource StandingToImageConverter}}"/>
-    </Grid>
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280">
+
+	<UserControl.Resources>
+		<Style TargetType="TextBlock" x:Key="Line Header">
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="Width" Value="Auto"/>
+			<Setter Property="Margin" Value="0,0,10,10"/>
+			<Setter Property="VerticalAlignment" Value="Top"/>
+		</Style>
+		<Style TargetType="TextBox">
+			<Setter Property="VerticalAlignment" Value="Top"/>
+		</Style>
+		<converters:ClientNameConverter x:Key="ClientNameConverter"/>
+		<converters:StandingToImageConverter x:Key="StandingToImageConverter"/>
+	</UserControl.Resources>
+    <StackPanel Margin="10">
+        <TextBlock Text="Client Entry Form" HorizontalAlignment="Center" FontSize="36" FontWeight="SemiBold" Margin="0,0,0,25"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Indentifier Information -->
+            <GroupBox Header="Organziation Info" Margin="0,5,0,20" Grid.ColumnSpan="3">
+                <Grid Margin="0,5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="150"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Text="Organization Name:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Column="1" Text="{Binding ClientModel.ClientName}"/>
+
+                    <TextBlock Grid.Row="1" Text="Office Name:" Style="{StaticResource Line Header}" Margin="0"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ClientModel.OfficeName}" />
+
+                    <TextBlock Grid.Column="2" Text="NewPEID:" Width="Auto" Style="{StaticResource Line Header}" HorizontalAlignment="Right"/>
+                    <TextBox Grid.Column="3" Text="{Binding ClientModel.NewPEID, StringFormat={}{0:D6}}" Width="100" HorizontalAlignment="Right"/>
+                    
+                    <TextBlock Grid.Column="2" Grid.Row="1" Text="Old PEID:" Width="Auto" Style="{StaticResource Line Header}" HorizontalAlignment="Right"/>
+                    <TextBox Grid.Column="3" Grid.Row="1" Text="{Binding ClientModel.OldPEID, StringFormat={}{0:D6}}" Width="100" HorizontalAlignment="Right"/>
+                </Grid>
+            </GroupBox>
+
+            <!--Contact Information-->
+            <GroupBox Grid.Row="1" Header="Contact" Margin="0,5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Phone:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Column="1" Text="{Binding ClientModel.Phone}"/>
+
+                    <TextBlock Grid.Row="1" Text="Email:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ClientModel.Email}"/>
+
+                    <TextBlock Grid.Row="2" Text="Website:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ClientModel.Website}"/>
+                </Grid>
+            </GroupBox>
+
+            <!-- Address Information -->
+            <GroupBox Grid.Row="2" Header="Address" Margin="0,5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Address Line 1:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding ClientModel.AddressModel.AddressLine1}"/>
+
+                    <TextBlock Grid.Row="1" Text="Address Line 2:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding ClientModel.AddressModel.AddressLine2}"/>
+
+                    <TextBlock Grid.Row="2" Text="City:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,10,0" Text="{Binding ClientModel.AddressModel.City}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="2" Text="State:" Style="{StaticResource Line Header}"/>
+                    <TextBox  Grid.Row="2" Grid.Column="3" Margin="0,0,10,0" Text="{Binding ClientModel.AddressModel.State}"/>
+                    <TextBlock Grid.Row="2" Grid.Column="4" Text="Zip:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="2" Grid.Column="5" Text="{Binding ClientModel.AddressModel.ZIP}"/>
+
+                    <TextBlock Grid.Row="3" Text="Special Billing Procedure:" TextWrapping="Wrap" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" MinLines="5" Text="{Binding ClientModel.AddressModel.Notes}"/>
+                </Grid>
+            </GroupBox>
+
+            <!-- Affiliated People -->
+            <GroupBox Grid.Row="1" Grid.Column="2" Header="Associated People" Margin="0,5">
+                <ListBox x:Name="PersonListBox" ItemsSource="{Binding Associates}" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="4*"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat=" {0} {1}">
+                                            <Binding Path="FirstName"/>
+                                            <Binding Path="LastName"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+
+                                <TextBlock Grid.Column="1" Text="{Binding CurrentAssociation}"/>
+                                <TextBlock Grid.Column="2" Text="{Binding LastContactedDate, StringFormat=d}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox>
+
+            <!--Notes-->
+            <DockPanel Grid.Row="3">
+                <TextBlock Text="Notes:" Style="{StaticResource Line Header}"/>
+                <TextBox Text="{Binding ClientModel.Notes}" MinLines="10" MaxLines="10"
+					 HorizontalAlignment="Stretch"/>
+            </DockPanel>
+        </Grid>
+    </StackPanel>
 </UserControl>

@@ -1,0 +1,72 @@
+RSID
+	Prefix
+	Year
+	Enumeration
+	Suffix (A, B, ...  Means that two RS can have the same enumeration)
+
+Date
+	Recieved
+	Entered
+	Response
+	Billed
+	Paid
+	Last Updated
+
+Requestor
+	<PersonModel>
+
+Affilliation
+	<ClientModel>
+
+BillTo
+	<Address Info> (May be different, usually the same as Affil.)
+
+SecondRequestor
+	<ClientModel> (Optional)
+
+Meta
+	Project Name
+	Record Search Type
+	Is Priority
+	Is Emergency
+	Is Inhouse
+	Is Special
+	Special Explination
+
+Location Info
+	MainCounty
+	AdditionalCounties
+	PLSS Legals
+	Acres
+	Linear Miles
+
+Results
+	Resources in Project (Specifically OHP Resource codes, AH01, HP04)
+	Reccomendations
+	Report Recieved
+
+Fees
+	Is PrePaid
+	Staff Time
+	InHouse Time
+	Staff Assistance Time ($40)
+	# GIS Features
+	Has Address Mapped Shapes Fee
+	# of Database Records
+	# PDF Pages
+	# of Photocopies
+	# of Quads Crossed Into
+	# of Pages Faxed
+	Discresionary Adjustment
+	Adjustment Note
+	Cancellation Fee (Only for failure to notify 24 hours in advance)
+	Total Fee
+
+Billing
+	Project #
+	Invoice
+	Check Name
+	Check #
+
+Utility
+	Is Selected

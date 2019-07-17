@@ -1,78 +1,89 @@
 ﻿using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
+using Prism.Regions;
 using System;
-using System.Collections.Generic;
-using Tracker.Core;
+using System.Collections.ObjectModel;
+using Tracker.Core.Events;
+using Tracker.Core.Models;
 using Tracker.Core.Services;
-using Tracker.Core.StaticTypes;
-
 
 namespace mClientList.ViewModels
 {
-    public class ClientEntryViewModel : BindableBase
+    public class ClientEntryViewModel : BindableBase, INavigationAware
     {
-        private string _peid;
-        private string _clientName;
-        private string _officeName;
-        private string _standing;
+        private IRegionManager _rm;
+        private IClientService _cs;
+        private IPersonService _ps;
+        private ObservableCollection<Person> _associates = new ObservableCollection<Person>();
+        private Client _client;
 
-        public string PEID
+        public ObservableCollection<Person> Associates
         {
-            get { return _peid; }
-            set { SetProperty(ref _peid, value); }
+            get { return _associates; }
+            set { SetProperty(ref _associates, value);  }
         }
 
-        public string ClientName
+        public Client ClientModel
         {
-            get { return _clientName; }
-            set { SetProperty(ref _clientName, value); }
+            get { return _client; }
+            set { SetProperty(ref _client, value); }
         }
 
-        public string OfficeName
+        public DelegateCommand<string> NavigateCommand { get; private set; }
+
+        public ClientEntryViewModel(IRegionManager regionManager, IEventAggregator eventAggregator, IClientService clientService, IPersonService personService)
         {
-            get { return _officeName; }
-            set { SetProperty(ref _officeName, value); }
+            _rm = regionManager;
+            _cs = clientService;
+            _ps = personService;
+            
+            NavigateCommand = new DelegateCommand<string>(Navigate);
+
+            eventAggregator.GetEvent<PersonListSelectEvent>().Subscribe(NavigateToPersonEntry);
         }
 
-        public string Standing
+        public void Navigate(string navTarget)
         {
-            get { return _standing; }
-            set { SetProperty(ref _standing, value); }
+            _rm.RequestNavigate("ContentRegion", "ClientList");
         }
 
-        public ClientEntryViewModel(IEventAggregator eventAggregator)
+        public void NavigateToPersonEntry(int navTargetID)
+        {
+            var parameters = new NavigationParameters
+            {
+                { "id", navTargetID }
+            };
+
+            if (navTargetID > 0 )
+                _rm.RequestNavigate("ContentRegion", "PersonEntry", parameters);
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            //TODO What is this for? Yoinked from the Passing Parameters sample.
+            Client client = navigationContext.Parameters["client"] as Client;
+            if (client != null)
+            {
+                return ClientModel != null && ClientModel.ClientName == client.ClientName;
+            }
+            else
+                return true;
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            int clientID = (int)navigationContext.Parameters["id"];
+            if (clientID > 0)
+            {
+                ClientModel = _cs.GetClientByID(clientID);
+                Associates = new ObservableCollection<Person>(_ps.GetPartialPeopleByCriteria("WHERE CurrentAssociationID = " + clientID));
+            }
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
         {
             
-        }
-
-        public void GenerateClient()
-        {
-            List<string> namePart1 = new List<string> { "Natural Resources", "Cultual Resources", "Historic", "CRM", "Western", "Shasta", "Butte", "California", "Archaeological" };
-            List<string> namePart2 = new List<string> { "Incorperated", "LLC", "Research", "Pacific", "Institute", "Research Program" };
-            List<string> office = new List<string> { "Sacramento", "Chico", "San Francisco", "Redding", "Siskiyous", "Butte County", "Sierra" };
-            Random ran = RandomProvider.GetThreadRandom();
-
-            PEID = ran.Next(10000).ToString("000000");
-
-            ClientName = namePart1[ran.Next(namePart1.Count)] + " " + namePart2[ran.Next(namePart2.Count)];
-
-            int officeRoll = ran.Next(10);
-            if (officeRoll >= 7)
-            {
-                OfficeName = office[ran.Next(office.Count)];
-            }
-
-            Standing = ClientStanding.GoodStanding;
-            int standingRoll = ran.Next(10);
-            if (standingRoll >= 9)
-            {
-                Standing = ClientStanding.OnHold;
-            }
-            else if (standingRoll == 8)
-            {
-                Standing = ClientStanding.Warning;
-            }
         }
     }
 }

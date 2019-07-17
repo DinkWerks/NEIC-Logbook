@@ -1,32 +1,43 @@
-﻿using Prism.Commands;
+﻿using Prism.Events;
 using Prism.Mvvm;
-using System;
+using Prism.Regions;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Data;
+using Tracker.Core.Events;
 using Tracker.Core.StaticTypes;
+using Tracker.Core.Models;
+using Tracker.Core.Services;
 
 namespace mClientList.ViewModels
 {
     public class ClientListViewModel : BindableBase
     {
-        private ObservableCollection<ClientEntryViewModel> _clientEntries = new ObservableCollection<ClientEntryViewModel>();
-
+        private IRegionManager _rm;
+        private IClientService _cs;
+        private List<Client> _clients = new List<Client>();
         private string _clientNameSearchText;
         private string _peidSearchText;
 
-        public ObservableCollection<ClientEntryViewModel> ClientEntries
+        public List<Client> Clients
         {
-            get { return _clientEntries; }
-            set { SetProperty(ref _clientEntries, value); }
+            get { return _clients; }
+            set { SetProperty(ref _clients, value); }
+        }
+
+        public ICollectionView ClientView
+        {
+            get { return CollectionViewSource.GetDefaultView(Clients); }
         }
 
         public string PEIDSearchText
         {
             get { return _peidSearchText; }
-            set { SetProperty(ref _peidSearchText, value); }
+            set
+            {
+                SetProperty(ref _peidSearchText, value);
+                ClientView.Refresh();
+            }
         }
 
         public string ClientNameSearchText
@@ -35,45 +46,64 @@ namespace mClientList.ViewModels
             set
             {
                 SetProperty(ref _clientNameSearchText, value);
-                ClientCollectionView.Refresh();
+                ClientView.Refresh();
             }
         }
-        public ICollectionView ClientCollectionView
+
+        public ClientListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IClientService clientService)
         {
-            get { return CollectionViewSource.GetDefaultView(ClientEntries); }
+            _rm = regionManager;
+            _cs = clientService;
+
+            Clients = _cs.GetAllPartialClients();
+            ClientView.Filter=ClientNameSearchFilter;
+
+            eventAggregator.GetEvent<ClientListSelectEvent>().Subscribe(NavigateToClientEntry);
         }
 
-        public ClientListViewModel()
+        public void NavigateToClientEntry(int navTargetID)
         {
-            AddTestClients();
-            ClientCollectionView.Filter = ClientNameSearchFilter;
+            var parameters = new NavigationParameters
+            {
+                { "id", navTargetID }
+            };
+
+            if (navTargetID >= 0)
+                _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
         }
 
         public bool ClientNameSearchFilter(object item)
         {
-            var ClientToTest = item as ClientEntryViewModel;
-            if (ClientToTest == null)
+            Client client = item as Client;
+            if (client == null)
             {
                 return false;
             }
-            if (ClientNameSearchText == null)
+            if (ClientNameSearchText != null && PEIDSearchText != null)
             {
-                return true;
+                if (client.ClientName.ToLower().Contains(ClientNameSearchText.ToLower()) && client.OldPEID.ToString().Contains(PEIDSearchText.ToLower()))
+                {
+                    return true;
+                }
+                return false;
             }
-            if (ClientToTest.ClientName.ToLower().Contains(ClientNameSearchText.ToLower()))
+            else if (ClientNameSearchText != null && PEIDSearchText == null)
             {
-                return true;
+                if (client.ClientName.ToLower().Contains(ClientNameSearchText.ToLower()))
+                {
+                    return true;
+                }
+                return false;
             }
-
-            return false;
-        }
-
-        private void AddTestClients()
-        {
-            ClientEntries.Add(new ClientEntryViewModel());
-
-            //for (int i = 0; i < 10; i++)
-            //ClientEntries.Add(new ClientEntryViewModel());
+            else if (ClientNameSearchText == null && PEIDSearchText != null)
+            {
+                if (client.OldPEID.ToString().Contains(PEIDSearchText.ToLower()))
+                {
+                    return true;
+                }
+                return false;
+            }
+            return true;
         }
     }
 }

@@ -1,0 +1,118 @@
+﻿<UserControl x:Class="mFeeCalculator.Views.Calculator"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+			 xmlns:models="clr-namespace:Tracker.Core.Models.Fees;assembly=Tracker.Core"
+             x:Name="Calc">
+    <UserControl.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+        </Style>
+
+        <DataTemplate x:Key="FeeSeparator" DataType="{x:Type models:FeeSeparator}">
+            <Separator Margin="10"/>
+        </DataTemplate>
+        <DataTemplate x:Key="VariableChargeTemplate" DataType="{x:Type models:VariableCharge}">
+            <Grid Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding Name, StringFormat={}{0}:}" TextWrapping="Wrap"/>
+                <TextBox Grid.Column="1" Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}" TextChanged="CostChangedEvent"/>
+                <TextBlock Grid.Column="2" Text="{Binding Cost, StringFormat={}x ${0}}"/>
+                <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0}}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="BooleanChargeTemplate" DataType="{x:Type models:BooleanCharge}">
+            <Grid Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <CheckBox IsChecked="{Binding IsIncurred}" Checked="CostChangedEvent" Unchecked="CostChangedEvent">
+                    <TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
+                </CheckBox>
+                <TextBlock Grid.Column="2" Text="{Binding Cost, StringFormat={}${0}}"/>
+                <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0}}" HorizontalAlignment="Right"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate x:Key="CategoricalChargeTemplate" DataType="{x:Type models:CategoricalCharge}">
+            <Grid Margin="0,4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="{Binding Name, StringFormat={}{0}:}" TextWrapping="Wrap"/>
+                <TextBox Grid.Column="1" Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}" TextChanged="CostChangedEvent"/>
+                <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0}}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+            </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <StackPanel HorizontalAlignment="Stretch">
+        <TextBlock Text="Fee Calculator" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+
+        <TextBlock Text="Fee Structure Version:" Margin="10,20,10,0"/>
+        <ComboBox ItemsSource="{Binding Versions}" SelectedItem="{Binding SelectedVersion}" Margin="10,0"/>
+
+        <Separator Margin="10"/>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Fee" FontWeight="Bold"/>
+            <TextBlock Grid.Column="1" Text="Units" FontWeight="Bold"/>
+            <TextBlock Grid.Column="2" Text="Cost" FontWeight="Bold"/>
+            <TextBlock Grid.Column="3" Text="Subtotal" FontWeight="Bold" HorizontalAlignment="Right"/>
+        </Grid>
+
+        <Rectangle Fill="Black" Height="1" Margin="0,10"/>
+
+        <ScrollViewer>
+            <ItemsControl ItemsSource="{Binding Charges}" HorizontalContentAlignment="Stretch">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <ContentControl Content="{Binding}">
+                            <ContentControl.Style>
+                                <Style TargetType="ContentControl">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Type}" Value="separator">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource FeeSeparator}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="variable">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource VariableChargeTemplate}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="boolean">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource BooleanChargeTemplate}"/>
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding Type}" Value="categorical">
+                                            <Setter Property="ContentTemplate" Value="{StaticResource CategoricalChargeTemplate}"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ContentControl.Style>
+                        </ContentControl>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+        
+        <Rectangle Fill="Black" Height="1" Margin="0,10"/>
+        <TextBlock Text="{Binding Fee.TotalProjectCost, StringFormat={}Total: ${0}, FallbackValue=Total: $0}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Right"/>
+    </StackPanel>
+</UserControl>

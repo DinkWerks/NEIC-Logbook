@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace mClientList.Interfaces
 {
-    public interface IClientEntry
+    class ClientEntryFactory : IClientEntryFactory
     {
-
     }
 }

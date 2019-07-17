@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="Tracker.Views.HomeScreen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280">
+    <UserControl.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="0,5"/>
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <TextBlock Text="NEIC Record Search Database" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,25" FontSize="36" FontWeight="SemiBold" Foreground="#8C2332"/>
+        <StackPanel  Grid.Row="1"  Width="300"  HorizontalAlignment="Center">
+            <Button Content="Record Searches" Command="{Binding NavigateCommand}" CommandParameter="RSList"/>
+            <Button Content="Clients" Command="{Binding NavigateCommand}" CommandParameter="ClientList"/>
+            <Button Content="Rolodex" Command="{Binding NavigateCommand}" CommandParameter="PersonList"/>
+            <Button Content="Staff Listing" Command="{Binding NavigateCommand}" CommandParameter="StaffList"/>
+            <Button Content="Reporting"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Data;
 
 namespace mClientList.Converters
@@ -38,7 +34,7 @@ namespace mClientList.Converters
                 case "/Tracker.Core;component/Resources/Icons/bullet_green.png":
                     return "Good Standing";
                 case "/Tracker.Core;component/Resources/Icons/bullet_orange.png":
-                    return "On Hold";
+                    return "Warning";
                 case "/Tracker.Core;component/Resources/Icons/bullet_red.png":
                     return "On Hold";
                 default:

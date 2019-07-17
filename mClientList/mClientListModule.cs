@@ -1,6 +1,5 @@
 ﻿using mClientList.Views;
 using mClientList.ViewModels;
-using mClientList.Interfaces;
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
@@ -16,7 +15,7 @@ namespace mClientList
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<ClientList>();
-            containerRegistry.Register<ClientEntry>();
+            containerRegistry.RegisterForNavigation<ClientEntry>();
         }
     }
 }

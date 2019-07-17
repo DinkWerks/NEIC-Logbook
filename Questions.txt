@@ -1,0 +1,9 @@
+Do we utilize the Main County differently than the Additional Counties? If not, could we collapse the fields into one?
+I think I can collapse this into a single collection.
+
+Are there situations where a RS can be an Emergenency and priority at the same time?
+Emergency is different, not sure if Priority is the same or only related to .
+Standard, Rapid Response, Project Review, Ownership Wide are all likely one category, but mostly relevant to THPs.
+
+When did the Fee Schedule Change?
+Fee Schedule that I am working on is out of date, going to get all of them.

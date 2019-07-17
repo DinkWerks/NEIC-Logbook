@@ -1,0 +1,221 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<FeeStructure version="v2017">
+  <Fee type="variable">
+    <Index>1</Index>
+    <Name>Staff Time</Name>
+    <UnitName>hour(s)</UnitName>
+    <Description>How many hours it took for staff to complete the record search.</Description>
+    <Cost>150</Cost>
+  </Fee>
+
+  <Fee type="variable">
+    <Index>1</Index>
+    <Name>Project Review Hours Time</Name>
+    <UnitName>hour(s)</UnitName>
+    <Description>How many hours it took for staff to complete the record search.</Description>
+    <Cost>75</Cost>
+  </Fee>
+  
+  <Fee type="variable">
+    <Index>2</Index>
+    <Name>Inhouse Time</Name>
+    <UnitName>hour(s)</UnitName>
+    <Description>How many hours it took for the client to perform the record search in house.</Description>
+    <Cost>100</Cost>
+  </Fee>
+  
+  <Fee type="categorical">
+    <Index>3</Index>
+    <Name>Custom Map Charges</Name>
+    <UnitName>features</UnitName>
+    <Description>Per feature fee for customers asking for customized maps of features.</Description>
+    <CostCategories>
+      <Category type ="category">
+        <Minimum>1</Minimum>
+        <Maximum>4</Maximum>
+        <Cost>25</Cost>
+      </Category>
+      <Category type ="category">
+        <Minimum>5</Minimum>
+        <Maximum>14</Maximum>
+        <Cost>75</Cost>
+      </Category>
+      <Category type ="category">
+        <Minimum>15</Minimum>
+        <Maximum>34</Maximum>
+        <Cost>150</Cost>
+      </Category>
+      <Category type ="category">
+        <Minimum>35</Minimum>
+        <Maximum>49</Maximum>
+        <Cost>300</Cost>
+      </Category>
+      <Category type ="category">
+        <Minimum>50</Minimum>
+        <Maximum>99</Maximum>
+        <Cost>450</Cost>
+      </Category>
+      <Category type ="category">
+        <Minimum>100</Minimum>
+        <Maximum>149</Maximum>
+        <Cost>650</Cost>
+      </Category>
+      <Category type ="category">
+        <Minimum>150</Minimum>
+        <Maximum>199</Maximum>
+        <Cost>850</Cost>
+      </Category>
+      <Category type ="category">
+        <Minimum>200</Minimum>
+        <Maximum>249</Maximum>
+        <Cost>1150</Cost>
+      </Category>
+      <Category type ="category">
+        <Minimum>250</Minimum>
+        <Maximum>299</Maximum>
+        <Cost>1450</Cost>
+      </Category>
+      <Category type ="category">
+        <Minimum>300</Minimum>
+        <Maximum>349</Maximum>
+        <Cost>1850</Cost>
+      </Category>
+      <Category type ="hybrid">
+        <Minimum>300</Minimum>
+        <Maximum>1000000000</Maximum>
+        <Cost>400</Cost>
+        <GroupSize>50</GroupSize>
+        <FlatCost>1850</FlatCost>
+      </Category>
+    </CostCategories>
+  </Fee>
+  
+  <Fee type="boolean">
+    <Index>4</Index>
+    <Name>Address Mapped Shape Fee Fee</Name>
+    <Description>Inccured flat fee for projects that require digital data.</Description>
+    <Cost>25</Cost>
+  </Fee>
+  
+  <Fee type="categorical">
+    <Index>5</Index>
+    <Name>Digital Database Record Fee</Name>
+    <UnitName>row(s)</UnitName>
+    <Description>Per database row fee for record data exported from the ICDB.</Description>
+    <CostCategories>
+      <Category type="variable">
+        <Minimum>1</Minimum>
+        <Maximum>999</Maximum>
+        <Cost>.25</Cost>
+        <FlatCost>0</FlatCost>
+      </Category>
+      <Category type="variable">
+        <Minimum>1000</Minimum>
+        <Maximum>9999</Maximum>
+        <Cost>.15</Cost>
+        <FlatCost>249.75</FlatCost>
+      </Category>
+    </CostCategories>
+  </Fee>
+
+  <Fee type="categorical">
+    <Index>6</Index>
+    <Name>Quads Crossed Into</Name>
+    <UnitName>Quads</UnitName>
+    <Description>Categorical fee based on how many quads a project spans.</Description>
+    <CostCategories>
+      <Category type="category">
+        <Minimum>3</Minimum>
+        <Maximum>4</Maximum>
+        <Cost>200</Cost>
+      </Category>
+      <Category type="category">
+        <Minimum>5</Minimum>
+        <Maximum>6</Maximum>
+        <Cost>400</Cost>
+      </Category>
+      <Category type="category">
+        <Minimum>7</Minimum>
+        <Maximum>7</Maximum>
+        <Cost>500</Cost>
+      </Category>
+      <Category type="category">
+        <Minimum>8</Minimum>
+        <Maximum>8</Maximum>
+        <Cost>600</Cost>
+      </Category>
+      <Category type="category">
+        <Minimum>9</Minimum>
+        <Maximum>9</Maximum>
+        <Cost>700</Cost>
+      </Category>
+      <Category type="category">
+        <Minimum>10</Minimum>
+        <Maximum>10</Maximum>
+        <Cost>800</Cost>
+      </Category>
+      <Category type="category">
+        <Minimum>11</Minimum>
+        <Maximum>11</Maximum>
+        <Cost>900</Cost>
+      </Category>
+      <Category type="category">
+        <Minimum>12</Minimum>
+        <Maximum>12</Maximum>
+        <Cost>1000</Cost>
+      </Category>
+      <Category type="category">
+        <Minimum>13</Minimum>
+        <Maximum>1000000000</Maximum>
+        <Cost>1000</Cost>
+      </Category>
+    </CostCategories>
+  </Fee>
+
+  
+  
+  <Fee type="separator">
+    <Index>7</Index>
+  </Fee>
+
+  <Fee type="boolean">
+    <Index>8</Index>
+    <Name>PDF Flat Fee</Name>
+    <Cost>25</Cost>
+  </Fee>
+
+  <Fee type="categorical">
+    <Index>9</Index>
+    <Name>PDF Pages</Name>
+    <UnitName>page(s)</UnitName>
+    <CostCategories>
+      <Category type="variable">
+        <Minimum>1</Minimum>
+        <Maximum>4999</Maximum>
+        <Cost>0.15</Cost>
+        <FlatCost>0</FlatCost>
+      </Category>
+      <Category type="variable">
+        <Minimum>5000</Minimum>
+        <Maximum>100000</Maximum>
+        <Cost>0.10</Cost>
+        <FlatCost>749.85</FlatCost>
+      </Category>
+    </CostCategories>
+  </Fee>
+  
+  
+  
+  <Fee type="separator">
+    <Index>10</Index>
+  </Fee>
+  
+  <Fee type="variable">
+    <Index>11</Index>
+    <Name>Staff Assistance Time</Name>
+    <UnitName>hour(s)</UnitName>
+    <Description>How many hours spent by staff to perform related work such as copying and printing.</Description>
+    <Cost>40</Cost>
+  </Fee>
+  
+</FeeStructure>

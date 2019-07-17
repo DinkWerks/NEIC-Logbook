@@ -49,7 +49,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\AdditionalCountyToBoolConverter.cs" />
+    <Compile Include="Converters\AdditionalCountyToBoolInitialConverter.cs" />
+    <Compile Include="Converters\RSIDFormatter.cs" />
     <Compile Include="mRecordSearchListModule.cs" />
+    <Compile Include="Notifications\CreateNewRSNotification.cs" />
+    <Compile Include="Notifications\ICreateNewRSNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -63,9 +68,30 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="Utils\ListBoxExtension.cs" />
+    <Compile Include="ViewModels\AddressEntryViewModel.cs" />
+    <Compile Include="ViewModels\CountySelectDialogContentsViewModel.cs" />
+    <Compile Include="ViewModels\CountySelectDialogViewModel.cs" />
+    <Compile Include="ViewModels\CreateNewRSDialogViewModel.cs" />
     <Compile Include="ViewModels\RSEntryViewModel.cs" />
+    <Compile Include="ViewModels\RSListViewModel.cs" />
+    <Compile Include="Views\AddressEntry.xaml.cs">
+      <DependentUpon>AddressEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CountySelectDialog.xaml.cs">
+      <DependentUpon>CountySelectDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CountySelectDialogContents.xaml.cs">
+      <DependentUpon>CountySelectDialogContents.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CreateNewRSDialog.xaml.cs">
+      <DependentUpon>CreateNewRSDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\RSEntry.xaml.cs">
       <DependentUpon>RSEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\RSList.xaml.cs">
+      <DependentUpon>RSList.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -78,16 +104,46 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Prism.Unity">
+      <Version>7.1.0.431</Version>
+    </PackageReference>
+    <PackageReference Include="Prism.Wpf" Version="7.1.0.431&#xD;" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Views\AddressEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CountySelectDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CountySelectDialogContents.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CreateNewRSDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\RSEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\RSList.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Prism.Unity">
-      <Version>7.1.0.431</Version>
-    </PackageReference>
-    <PackageReference Include="Prism.Wpf" Version="7.1.0.431&#xD;" />
+    <ProjectReference Include="..\mFeeCalculator\mFeeCalculator.csproj">
+      <Project>{D3320477-199C-4427-A5A7-99A640544193}</Project>
+      <Name>mFeeCalculator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Tracker.Core\Tracker.Core.csproj">
+      <Project>{91072ca4-6b1a-4a0d-bf41-1123e13c3ebc}</Project>
+      <Name>Tracker.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -5,6 +5,18 @@
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="{Binding Title}" Height="720" Width="1280">
     <Grid>
-        <ContentControl prism:RegionManager.RegionName="ContentRegion" />
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <DockPanel LastChildFill="False">
+            <Button Command="{Binding NavigateCommand}" CommandParameter="HomeScreen">
+                <Image Source="/Tracker.Core;component/Resources/Icons/house.png" Width="16" Height="16"/>
+            </Button>
+            <Button IsEnabled="False" Content="Back" Command="{Binding GoBackCommand}"/>
+            <Button IsEnabled="False" Content="Forward"/>
+
+        </DockPanel>
+        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="ContentRegion"/>
     </Grid>
 </Window>

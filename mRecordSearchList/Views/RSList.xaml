@@ -1,0 +1,88 @@
+﻿<UserControl x:Class="mRecordSearchList.Views.RSList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converters="clr-namespace:mRecordSearchList.Converters"
+             xmlns:prism="http://prismlibrary.com/"         
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:views="clr-namespace:mRecordSearchList.Views"
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="ColumnTitle">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <converters:RSIDFormatter x:Key="RSIDFormatter"/>
+    </UserControl.Resources>
+
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding NewRSRequest}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
+                <prism:PopupWindowAction.WindowContent>
+                    <views:CreateNewRSDialog/>
+                </prism:PopupWindowAction.WindowContent>
+            </prism:PopupWindowAction>
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
+    
+    <StackPanel Margin="10">
+        <ToolBar Margin="0,0,0,10" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
+            <Button Content="Add New" Command="{Binding CreateNewRSCommand}"/>
+        </ToolBar>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+
+            <DockPanel Margin="0,0,4,0">
+                <ComboBox x:Name="RSIDPrefix" SelectedValue="{Binding RSIDPrefixSearch}" ItemsSource="{Binding PrefixChoices}" SelectedValuePath="Code" IsEditable="True" Width="40" Margin="0,0,2,0" PreviewKeyDown="RSIDPrefix_PreviewKeyDown" KeyUp="RSIDPrefix_KeyUp"/>
+                <TextBox x:Name="RSIDYear" Text="{Binding RSIDYearSearch, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="30" Margin="0,0,2,0" KeyUp="RSIDYear_KeyUp"/>
+                <TextBox x:Name="RSIDEnum" Text="{Binding RSIDEnumerationSearch, UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left"/>
+            </DockPanel>
+            <TextBox Grid.Column="1" Text="{Binding ProjectNameSearchText, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="1" Text="RS ID" Style="{StaticResource ColumnTitle}"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Project Name" Style="{StaticResource ColumnTitle}"/>
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="Status" HorizontalAlignment="Center" Style="{StaticResource ColumnTitle}"/>
+            <TextBlock Grid.Row="1" Grid.Column="3" Text="Last Updated" HorizontalAlignment="Right" Style="{StaticResource ColumnTitle}"/>
+        </Grid>
+        
+        <ListBox x:Name="RSListBox" ItemsSource="{Binding RecordSearchesView}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="200"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource RSIDFormatter}">
+                                    <Binding Path="RSTypePrefix"/>
+                                    <Binding Path="RSYear"/>
+                                    <Binding Path="RSEnumeration"/>
+                                    <Binding Path="RSSuffix"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Grid.Column="1" Text="{Binding ProjectName}"/>
+                        <Image Grid.Column="3"/>
+                        <TextBlock Grid.Column="3" Text="{Binding LastUpdated, StringFormat=d}" HorizontalAlignment="Right"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </StackPanel>
+</UserControl>
