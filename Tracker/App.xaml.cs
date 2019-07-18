@@ -3,6 +3,7 @@ using Prism.Ioc;
 using Prism.Modularity;
 using System.Windows;
 using Tracker.Core.Services;
+using mReporting.Reporting;
 
 namespace Tracker
 {
@@ -36,6 +37,7 @@ namespace Tracker
             moduleCatalog.AddModule<mPersonList.mPersonListModule>();
             moduleCatalog.AddModule<mRecordSearchList.mRecordSearchListModule>();
             moduleCatalog.AddModule<mFeeCalculator.mFeeCalculatorModule>();
+            moduleCatalog.AddModule<mReporting.mReportingModule>();
         }
     }
 }

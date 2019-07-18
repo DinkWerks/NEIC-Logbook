@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="mReporting.Views.ReportingHomeScreen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="720" d:DesignWidth="1280">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        
+        <TreeView>
+            <Button Content="Test" Command="{Binding TestReportCommand}"/>
+            <TreeViewItem Header="Billing">
+                <TextBlock Text="bleh"/>
+                <TextBlock Text="bleh"/>
+                <TextBlock Text="bleh"/>
+                <TextBlock Text="bleh"/>
+            </TreeViewItem>
+            <TreeViewItem Header="Reporting">
+                <TextBlock Text="blah"/>
+                <TextBlock Text="blah"/>
+                <TextBlock Text="blah"/>
+                <TextBlock Text="blah"/>
+            </TreeViewItem>
+        </TreeView>
+
+        <TextBlock Grid.Column="1" Text="{Binding SelectedReport}"/>
+    </Grid>
+</UserControl>
