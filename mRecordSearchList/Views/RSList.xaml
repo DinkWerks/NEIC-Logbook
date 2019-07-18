@@ -70,10 +70,10 @@
                         <TextBlock>
                             <TextBlock.Text>
                                 <MultiBinding Converter="{StaticResource RSIDFormatter}">
-                                    <Binding Path="RSTypePrefix"/>
-                                    <Binding Path="RSYear"/>
-                                    <Binding Path="RSEnumeration"/>
-                                    <Binding Path="RSSuffix"/>
+                                    <Binding Path="ICTypePrefix"/>
+                                    <Binding Path="ICYear"/>
+                                    <Binding Path="ICEnumeration"/>
+                                    <Binding Path="ICSuffix"/>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>

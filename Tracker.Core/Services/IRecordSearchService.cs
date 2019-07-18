@@ -9,6 +9,7 @@ namespace Tracker.Core.Services
         string ConnectionString { get; set; }
         void SetConnectionString();
         RecordSearch GetRecordSearchByID(int id, bool loadAsCurrentSearch = true);
+        List<RecordSearch> GetRecordSearchesByCriteria(string criteria);
         List<RecordSearch> GetAllPartialRecordSearches();
         List<RecordSearch> GetPartialRecordSearchesByCriteria(string criteria);
         int AddNewRecordSearch(object[] array);

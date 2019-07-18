@@ -70,6 +70,7 @@
     <Compile Include="Events\CustomPayloads\AdditionalCountySelectionPayload.cs" />
     <Compile Include="Events\PersonListSelectEvent.cs" />
     <Compile Include="Events\RecordSearchListSelectEvent.cs" />
+    <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\OleDbDataReaderExtensions.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Client.cs" />

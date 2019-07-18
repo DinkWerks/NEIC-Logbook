@@ -31,7 +31,6 @@ namespace mReporting.ViewModels
         private void TestReport()
         {
             BillingExport report = new BillingExport(_rss);
-
         }
     }
 }

@@ -37,22 +37,21 @@ namespace Tracker.Core.Services
             ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dir + @"\Resources\RS_Backend.accdb";
         }
 
-        public RecordSearch GetRecordSearchByID(int ID, bool loadAsCurrentSearch = true)
+        public RecordSearch GetRecordSearchByID(int id, bool loadAsCurrentSearch = true)
         {
             using (OleDbConnection connection = new OleDbConnection(ConnectionString))
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = @"SELECT ID, RSPrefix, RSYear, RSEnumeration, RSSuffix," +
+                    sqlCommand.CommandText = "SELECT ID, ICPrefix, ICYear, ICEnumeration, ICSuffix, " +
                         "DateReceived, DateEntered, DateOfResponse, DateBilled, DatePaid, LastUpdated, " +
-                        "RequestorID, ClientID, MailingAddressID, IsMailingAddressSameAsBilling, BillingAddressID, " +
-                        "ProjectName, RecordSearchType, IsSpecialCase, SpecialCaseDetails, " +
-                        "MainCounty, PLSS, Acres, LinearMiles, " +
-                        "AreResourcesInProject, Recommendation, IsReportReceived, " +
-                        "FeeVersion, FeeID, DiscretionaryAdjustment, AdjustmentExplanation, " +
-                        "ProjectNumber, InvoiceNumber, CheckName, CheckNumber, EncryptionPassword " +
-                        "FROM tblRecordSearches " +
-                        "WHERE ID = " + ID;
+                        "RequestorID, AdditionalRequestors, ClientID, MailingAddressID, IsMailingAddressSameAsBilling, BillingAddressID, " +
+                        "ProjectName, RecordSearchType, Status, SpecialCaseDetails, " +
+                        "MainCounty, AdditionalCountiesID, PLSS, Acres, LinearMiles, " +
+                        "AreResourcesInProject, Recommendation, IsReportReceived, Processor, EncryptionPassword, " +
+                        "FeeVersion, FeeID, TotalCost, DiscretionaryAdjustment, AdjustmentExplanation, " +
+                        "ProjectNumber, InvoiceNumber, CheckName, CheckNumber, IsPrePaid, IsSelected, Notes " +
+                        "from tblRecordSearches WHERE ID = " + id;
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -62,44 +61,51 @@ namespace Tracker.Core.Services
                     RecordSearch returnValue = new RecordSearch()
                     {
                         ID = reader.GetInt32Safe(index++), //0
-                        RSTypePrefix = reader.GetStringSafe(index++),
-                        RSYear = reader.GetStringSafe(index++),
-                        RSEnumeration = reader.GetInt32Safe(index++),
-                        RSSuffix = reader.GetStringSafe(index++), 
+                        ICTypePrefix = reader.GetStringSafe(index++),
+                        ICYear = reader.GetStringSafe(index++),
+                        ICEnumeration = reader.GetInt32Safe(index++),
+                        ICSuffix = reader.GetStringSafe(index++),
                         DateReceived = reader.GetDateTimeSafe(index++), //5
                         DateEntered = reader.GetDateTimeSafe(index++),
                         DateOfResponse = reader.GetDateTimeSafe(index++),
                         DateBilled = reader.GetDateTimeSafe(index++),
                         DatePaid = reader.GetDateTimeSafe(index++),
-                        LastUpdated = reader.GetDateTimeSafe(index++),  //10
+                        LastUpdated = reader.GetDateTimeSafe(index++), //10
                         RequestorID = reader.GetInt32Safe(index),
-                        Requestor = _ps.GetPersonByID(reader.GetInt32Safe(index++), false),
+                        Requestor = _ps.GetPersonByID(reader.GetInt32Safe(index++)),
+                        AdditionalRequestors = reader.GetStringSafe(index++),
                         ClientID = reader.GetInt32Safe(index),
-                        ClientModel = _cs.GetClientByID(reader.GetInt32Safe(index++), false),
+                        ClientModel = _cs.GetClientByID(reader.GetInt32Safe(index++)), //15
                         MailingAddress = _as.GetAddressByID(reader.GetInt32Safe(index++)),
-                        IsMailingSameAsBilling = reader.GetBooleanSafe(index++), //15
+                        IsMailingSameAsBilling = reader.GetBooleanSafe(index++),
                         BillingAddress = _as.GetAddressByID(reader.GetInt32Safe(index++)),
                         ProjectName = reader.GetStringSafe(index++),
-                        RSType = reader.GetStringSafe(index++),
-                        Special = reader.GetBooleanSafe(index++),
-                        SpecialDetails = reader.GetStringSafe(index++), //20
+                        RSType = reader.GetStringSafe(index++), //20
+                        Status = reader.GetStringSafe(index++),
+                        SpecialDetails = reader.GetStringSafe(index++),
                         MainCounty = reader.GetStringSafe(index++),
-                        //AdditionalCounties = GetAdditionalCounties(reader.GetInt32Safe(index++)),
-                        PLSS = reader.GetStringSafe(index++),
+                        AdditionalCounties = GetAdditionalCounties(reader.GetInt32Safe(index++)),
+                        PLSS = reader.GetStringSafe(index++), //25
                         Acres = reader.GetInt32Safe(index++),
-                        LinearMiles = reader.GetInt32Safe(index++), //25
+                        LinearMiles = reader.GetInt32Safe(index++),
                         AreResourcesInProject = reader.GetBooleanSafe(index++),
                         Recommendation = reader.GetStringSafe(index++),
-                        IsReportReceived = reader.GetBooleanSafe(index++),
-                        FeeVersion = reader.GetStringSafe(index) ?? Properties.Settings.Default.FeeType,
-                        Fee = GetFeeData(reader.GetStringSpecial(index++), reader.GetInt32Safe(index++)), //30
+                        IsReportReceived = reader.GetBooleanSafe(index++), //30
+                        Processor = reader.GetStringSafe(index++),
+                        EncryptionPassword = reader.GetStringSafe(index++),
+                        FeeVersion = reader.GetStringSafe(index++),
+                        FeeID = reader.GetInt32Safe(index),
+                        Fee = GetFeeData("v2017", reader.GetInt32Safe(index++)),
+                        TotalFee = reader.GetDecimalSafe(index++),
                         DiscretionaryAdjustment = reader.GetDecimalSafe(index++),
                         AdjustmentExplanation = reader.GetStringSafe(index++),
-                        ProjectNumber = reader.GetStringSafe(index++), 
+                        ProjectNumber = reader.GetStringSafe(index++),
                         InvoiceNumber = reader.GetStringSafe(index++),
-                        CheckName = reader.GetStringSafe(index++), //35
+                        CheckName = reader.GetStringSafe(index++), 
                         CheckNumber = reader.GetStringSafe(index++),
-                        EncryptionPassword = reader.GetStringSafe(index++)
+                        IsPrePaid = reader.GetBooleanSafe(index++),
+                        IsSelected = reader.GetBooleanSafe(index++),
+                        Notes = reader.GetStringSafe(index++),
                     };
 
                     // TODO Load Fee info
@@ -114,13 +120,93 @@ namespace Tracker.Core.Services
             }
         }
 
+        public List<RecordSearch> GetRecordSearchesByCriteria(string criteria)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "SELECT ID, ICPrefix, ICYear, ICEnumeration, ICSuffix, " +
+                        "DateReceived, DateEntered, DateOfResponse, DateBilled, DatePaid, LastUpdated, " +
+                        "RequestorID, AdditionalRequestors, ClientID, MailingAddressID, IsMailingAddressSameAsBilling, BillingAddressID, " +
+                        "ProjectName, RecordSearchType, Status, SpecialCaseDetails, " +
+                        "MainCounty, AdditionalCountiesID, PLSS, Acres, LinearMiles, " +
+                        "AreResourcesInProject, Recommendation, IsReportReceived, Processor, EncryptionPassword, " +
+                        "FeeVersion, FeeID, TotalCost, DiscretionaryAdjustment, AdjustmentExplanation, " +
+                        "ProjectNumber, InvoiceNumber, CheckName, CheckNumber, IsPrePaid, IsSelected, Notes " +
+                        "FROM tblRecordSearches WHERE" + criteria;
+                    connection.Open();
+
+                    OleDbDataReader reader = sqlCommand.ExecuteReader();
+
+                    List<RecordSearch> returnCollection = new List<RecordSearch>();
+
+                    while (reader.Read())
+                    {
+                        int index = 0;
+                        RecordSearch returnValue = new RecordSearch()
+                        {
+                            ID = reader.GetInt32Safe(index++), //0
+                            ICTypePrefix = reader.GetStringSafe(index++),
+                            ICYear = reader.GetStringSafe(index++),
+                            ICEnumeration = reader.GetInt32Safe(index++),
+                            ICSuffix = reader.GetStringSafe(index++),
+                            DateReceived = reader.GetDateTimeSafe(index++), //5
+                            DateEntered = reader.GetDateTimeSafe(index++),
+                            DateOfResponse = reader.GetDateTimeSafe(index++),
+                            DateBilled = reader.GetDateTimeSafe(index++),
+                            DatePaid = reader.GetDateTimeSafe(index++),
+                            LastUpdated = reader.GetDateTimeSafe(index++), //10
+                            RequestorID = reader.GetInt32Safe(index),
+                            Requestor = _ps.GetPersonByID(reader.GetInt32Safe(index++)),
+                            AdditionalRequestors = reader.GetStringSafe(index++),
+                            ClientID = reader.GetInt32Safe(index),
+                            ClientModel = _cs.GetClientByID(reader.GetInt32Safe(index++)), //15
+                            MailingAddress = _as.GetAddressByID(reader.GetInt32Safe(index++)),
+                            IsMailingSameAsBilling = reader.GetBooleanSafe(index++),
+                            BillingAddress = _as.GetAddressByID(reader.GetInt32Safe(index++)),
+                            ProjectName = reader.GetStringSafe(index++),
+                            RSType = reader.GetStringSafe(index++), //20
+                            Status = reader.GetStringSafe(index++),
+                            SpecialDetails = reader.GetStringSafe(index++),
+                            MainCounty = reader.GetStringSafe(index++),
+                            AdditionalCounties = GetAdditionalCounties(reader.GetInt32Safe(index++)),
+                            PLSS = reader.GetStringSafe(index++), //25
+                            Acres = reader.GetInt32Safe(index++),
+                            LinearMiles = reader.GetInt32Safe(index++),
+                            AreResourcesInProject = reader.GetBooleanSafe(index++),
+                            Recommendation = reader.GetStringSafe(index++),
+                            IsReportReceived = reader.GetBooleanSafe(index++), //30
+                            Processor = reader.GetStringSafe(index++),
+                            EncryptionPassword = reader.GetStringSafe(index++),
+                            FeeVersion = reader.GetStringSafe(index++),
+                            FeeID = reader.GetInt32Safe(index),
+                            Fee = GetFeeData("v2017", reader.GetInt32Safe(index++)),
+                            TotalFee = reader.GetDecimalSafe(index++),
+                            DiscretionaryAdjustment = reader.GetDecimalSafe(index++),
+                            AdjustmentExplanation = reader.GetStringSafe(index++),
+                            ProjectNumber = reader.GetStringSafe(index++),
+                            InvoiceNumber = reader.GetStringSafe(index++),
+                            CheckName = reader.GetStringSafe(index++),
+                            CheckNumber = reader.GetStringSafe(index++),
+                            IsPrePaid = reader.GetBooleanSafe(index++),
+                            IsSelected = reader.GetBooleanSafe(index++),
+                            Notes = reader.GetStringSafe(index++),
+                        };
+                    }
+
+                    return returnCollection;
+                }
+            }
+        }
+
         public List<RecordSearch> GetAllPartialRecordSearches()
         {
             using (OleDbConnection connection = new OleDbConnection(ConnectionString))
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = @"Select ID, RSPrefix, RSYear, RSEnumeration, RSSuffix, ProjectName, LastUpdated from tblRecordSearches";
+                    sqlCommand.CommandText = @"SELECT ID, ICPrefix, ICYear, ICEnumeration, ICSuffix, ProjectName, LastUpdated FROM tblRecordSearches";
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -133,16 +219,16 @@ namespace Tracker.Core.Services
                         RecordSearch returnValue = new RecordSearch()
                         {
                             ID = reader.GetInt32Safe(index++),
-                            RSTypePrefix = reader.GetStringSafe(index++),
-                            RSYear = reader.GetStringSafe(index++),
-                            RSEnumeration = reader.GetInt32Safe(index++),
-                            RSSuffix = reader.GetStringSafe(index++),
+                            ICTypePrefix = reader.GetStringSafe(index++),
+                            ICYear = reader.GetStringSafe(index++),
+                            ICEnumeration = reader.GetInt32Safe(index++),
+                            ICSuffix = reader.GetStringSafe(index++),
                             ProjectName = reader.GetStringSafe(index++),
                             LastUpdated = reader.GetDateTimeSafe(index++)
                         };
                         returnCollection.Add(returnValue);
                     }
-                    
+
                     return returnCollection;
                 }
             }
@@ -154,7 +240,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = @"Select ID, RSPrefix, RSYear, RSEnumeration, RSSuffix, ProjectName, LastUpdated, RequestorID from tblRecordSearches " + criteria;
+                    sqlCommand.CommandText = @"SELECT ID, ICPrefix, ICYear, ICEnumeration, ICSuffix, ProjectName, LastUpdated, RequestorID FROM tblRecordSearches " + criteria;
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -167,10 +253,10 @@ namespace Tracker.Core.Services
                         RecordSearch returnValue = new RecordSearch()
                         {
                             ID = reader.GetInt32Safe(index++),
-                            RSTypePrefix = reader.GetStringSafe(index++),
-                            RSYear = reader.GetStringSafe(index++),
-                            RSEnumeration = reader.GetInt32Safe(index++),
-                            RSSuffix = reader.GetStringSafe(index++),
+                            ICTypePrefix = reader.GetStringSafe(index++),
+                            ICYear = reader.GetStringSafe(index++),
+                            ICEnumeration = reader.GetInt32Safe(index++),
+                            ICSuffix = reader.GetStringSafe(index++),
                             ProjectName = reader.GetStringSafe(index++),
                             LastUpdated = reader.GetDateTimeSafe(index++)
                         };
@@ -188,7 +274,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "INSERT INTO tblRecordSearches (RSPrefix, RSYear, RSEnumeration, RSSuffix, ProjectName, DateEntered, LastUpdated) " +
+                    sqlCommand.CommandText = "INSERT INTO tblRecordSearches (ICPrefix, ICYear, ICEnumeration, ICSuffix, ProjectName, DateEntered, LastUpdated) " +
                         "VALUES (?,?,?,?,?,?,?)";
                     sqlCommand.Parameters.AddWithValue("RSPrefix", array[0]);
                     sqlCommand.Parameters.AddWithValue("RSYear", array[1]);
@@ -222,7 +308,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "SELECT MAX(RSEnumeration) FROM tblRecordSearches WHERE RSPrefix = @prefix AND RSYear = @year";
+                    sqlCommand.CommandText = "SELECT MAX(RSEnumeration) FROM tblRecordSearches WHERE ICPrefix = @prefix AND ICYear = @year";
                     sqlCommand.Parameters.Add(new OleDbParameter("@prefix", prefix));
                     sqlCommand.Parameters.Add(new OleDbParameter("@year", year));
 
@@ -245,26 +331,26 @@ namespace Tracker.Core.Services
                 {
                     if (string.IsNullOrWhiteSpace(suffix))
                     {
-                        sqlCommand.CommandText = "SELECT ID FROM tblRecordSearches WHERE RSPrefix = @prefix AND RSYear = @year AND RSEnumeration = @enumeration";
+                        sqlCommand.CommandText = "SELECT ID FROM tblRecordSearches WHERE ICPrefix = @prefix AND ICYear = @year AND ICEnumeration = @enumeration";
                         sqlCommand.Parameters.Add(new OleDbParameter("@prefix", prefix));
                         sqlCommand.Parameters.Add(new OleDbParameter("@year", year));
                         sqlCommand.Parameters.Add(new OleDbParameter("@enumeration", enumeration));
                     }
                     else
                     {
-                        sqlCommand.CommandText = "SELECT ID FROM tblRecordSearches WHERE RSPrefix = @prefix AND RSYear = @year AND RSEnumeration = @enumeration AND RSSuffix = @suffix";
+                        sqlCommand.CommandText = "SELECT ID FROM tblRecordSearches WHERE ICPrefix = @prefix AND ICYear = @year AND ICEnumeration = @enumeration AND ICSuffix = @suffix";
                         sqlCommand.Parameters.Add(new OleDbParameter("@prefix", prefix));
                         sqlCommand.Parameters.Add(new OleDbParameter("@year", year));
                         sqlCommand.Parameters.Add(new OleDbParameter("@enumeration", enumeration));
                         sqlCommand.Parameters.Add(new OleDbParameter("@suffix", suffix));
                     }
-                    
+
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
                     reader.Read();
 
-                    if(reader.HasRows)
+                    if (reader.HasRows)
                         return false;
                     return true;
                 }

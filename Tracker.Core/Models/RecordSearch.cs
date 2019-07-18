@@ -7,14 +7,12 @@ namespace Tracker.Core.Models
 {
     public class RecordSearch : BindableBase
     {
-        //TODO Handle the AdditionalRequestorDBField
-        //TODO Create Processor field for employees
-        //RSID Info
         private int _id;
-        private string _rsTypePrefix;
-        private string _rsYear;
-        private int _rsEnumeration;
-        private string _rsSuffix;
+        //IC FileNumber
+        private string _icTypePrefix;
+        private string _icYear;
+        private int _icEnumeration;
+        private string _icSuffix;
         //Dates
         private DateTime? _dateReceived = null;
         private DateTime? _dateEntered = null;
@@ -25,6 +23,7 @@ namespace Tracker.Core.Models
         // Requestor
         private int _requestorID;
         private Person _requestor;
+        private string _additionalRequestors;
         private int _clientID;
         private Client _client;
         private Address _mailingAddress;
@@ -33,12 +32,8 @@ namespace Tracker.Core.Models
         // Meta
         private string _projectName;
         private string _rsType; //TODO make RSType type
-        private bool _isPriority;
-        private bool _isEmergency;
-        private bool _isInHouse;
-        private bool _isSpecial;
+        private string _status;
         private string _specialDetails;
-        private string _processor;
         // Location
         private string _mainCounty; //TODO make County type
         private ObservableCollection<County> _additionalCounties = new ObservableCollection<County>() { Counties.BUTTE };
@@ -49,6 +44,7 @@ namespace Tracker.Core.Models
         private bool _areResourcesInProject;
         private string _recommendation;
         private bool _isReportReceived;
+        private string _processor;
         private string _encryptionPassword;
         //Fees
         private string _feeVersion;
@@ -65,6 +61,7 @@ namespace Tracker.Core.Models
         private string _checkNumber;
         //Utility
         private bool _isSelected;
+        private string _notes;
         
 
         public int ID
@@ -73,29 +70,29 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _id, value); }
         }
 
-        #region RSID Info
-        public string RSTypePrefix
+        #region IC File Number Info
+        public string ICTypePrefix
         {
-            get { return _rsTypePrefix; }
-            set { SetProperty(ref _rsTypePrefix, value); }
+            get { return _icTypePrefix; }
+            set { SetProperty(ref _icTypePrefix, value); }
         }
 
-        public string RSYear
+        public string ICYear
         {
-            get { return _rsYear; }
-            set { SetProperty(ref _rsYear, value); }
+            get { return _icYear; }
+            set { SetProperty(ref _icYear, value); }
         }
 
-        public int RSEnumeration
+        public int ICEnumeration
         {
-            get { return _rsEnumeration; }
-            set { SetProperty(ref _rsEnumeration, value); }
+            get { return _icEnumeration; }
+            set { SetProperty(ref _icEnumeration, value); }
         }
 
-        public string RSSuffix
+        public string ICSuffix
         {
-            get { return _rsSuffix; }
-            set { SetProperty(ref _rsSuffix, value); }
+            get { return _icSuffix; }
+            set { SetProperty(ref _icSuffix, value); }
         }
 
         #endregion
@@ -153,6 +150,13 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _requestor, value); }
         }
 
+        public string AdditionalRequestors
+        {
+            get { return _additionalRequestors; }
+            set { SetProperty(ref _additionalRequestors, value); }
+        }
+
+
         public int ClientID
         {
             get { return _clientID; }
@@ -207,34 +211,10 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _rsType, value); }
         }
 
-        public string Processor
+        public string Status
         {
-            get { return _processor; }
-            set { SetProperty(ref _processor, value); }
-        }
-
-        public bool IsPriority
-        {
-            get { return _isPriority; }
-            set { SetProperty(ref _isPriority, value); }
-        }
-
-        public bool IsEmergency
-        {
-            get { return _isEmergency; }
-            set { SetProperty(ref _isEmergency, value); }
-        }
-
-        public bool IsInHouse
-        {
-            get { return _isInHouse; }
-            set { SetProperty(ref _isInHouse, value); }
-        }
-
-        public bool Special
-        {
-            get { return _isSpecial; }
-            set { SetProperty(ref _isSpecial, value); }
+            get { return _status; }
+            set { SetProperty(ref _status, value); }
         }
 
         public string SpecialDetails
@@ -296,6 +276,16 @@ namespace Tracker.Core.Models
             get { return _isReportReceived; }
             set { SetProperty(ref _isReportReceived, value); }
         }
+        public string EncryptionPassword
+        {
+            get { return _encryptionPassword; }
+            set { SetProperty(ref _encryptionPassword, value); }
+        }
+        public string Processor
+        {
+            get { return _processor; }
+            set { SetProperty(ref _processor, value); }
+        }
         #endregion
 
         #region Fees
@@ -309,6 +299,12 @@ namespace Tracker.Core.Models
         {
             get { return _feeID; }
             set { SetProperty(ref _feeID, value); }
+        }
+
+        public Fees.Fee Fee
+        {
+            get { return _fee; }
+            set { SetProperty(ref _fee, value); }
         }
 
         public bool IsPrePaid
@@ -363,22 +359,16 @@ namespace Tracker.Core.Models
         }
         #endregion
 
-        public string EncryptionPassword
-        {
-            get { return _encryptionPassword; }
-            set { SetProperty(ref _encryptionPassword, value); }
-        }
-
         public bool IsSelected
         {
             get { return _isSelected; }
             set { SetProperty(ref _isSelected, value); }
         }
 
-        public Fees.Fee Fee
+        public string Notes
         {
-            get { return _fee; }
-            set { SetProperty(ref _fee, value); }
+            get { return _notes; }
+            set { SetProperty(ref _notes, value); }
         }
 
         public RecordSearch()

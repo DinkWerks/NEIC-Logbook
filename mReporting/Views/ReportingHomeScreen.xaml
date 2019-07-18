@@ -30,6 +30,6 @@
             </TreeViewItem>
         </TreeView>
 
-        <TextBlock Grid.Column="1" Text="{Binding SelectedReport}"/>
+        <Button Grid.Column="1" Content="Test Report"  Width="100" Height="25" Command="{Binding TestReportCommand}"/>
     </Grid>
 </UserControl>

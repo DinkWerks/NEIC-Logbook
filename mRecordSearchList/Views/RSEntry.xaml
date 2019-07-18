@@ -69,10 +69,10 @@
                     <TextBlock FontSize="36" FontWeight="SemiBold" >
                         <TextBlock.Text>
                             <MultiBinding StringFormat="{}{0}-{1}-{2}{3}">
-                                <Binding Path="RecordSearch.RSTypePrefix"/>
-                                <Binding Path="RecordSearch.RSYear"/>
-                                <Binding Path="RecordSearch.RSEnumeration"/>
-                                <Binding Path="RecordSearch.RSSuffix" FallbackValue=""/>
+                                <Binding Path="RecordSearch.ICTypePrefix"/>
+                                <Binding Path="RecordSearch.ICYear"/>
+                                <Binding Path="RecordSearch.ICEnumeration"/>
+                                <Binding Path="RecordSearch.ICSuffix" FallbackValue=""/>
                             </MultiBinding>
                         </TextBlock.Text>
                     </TextBlock>

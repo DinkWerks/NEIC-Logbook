@@ -151,7 +151,7 @@ namespace mRecordSearchList.ViewModels
 
             if (RSIDPrefixSearch != null)
             {
-                if (recordSearch.RSTypePrefix.ToUpper() == RSIDPrefixSearch)
+                if (recordSearch.ICTypePrefix.ToUpper() == RSIDPrefixSearch)
                 {
                     passedTests++;
                 }
@@ -161,7 +161,7 @@ namespace mRecordSearchList.ViewModels
 
             if (RSIDYearSearch != null)
             {
-                if (recordSearch.RSYear.ToLower().Contains(RSIDYearSearch))
+                if (recordSearch.ICYear.ToLower().Contains(RSIDYearSearch))
                 {
                     passedTests++;
                 }
@@ -171,7 +171,7 @@ namespace mRecordSearchList.ViewModels
 
             if (RSIDEnumerationSearch != null)
             {
-                if (recordSearch.RSEnumeration.ToString().Contains(RSIDEnumerationSearch))
+                if (recordSearch.ICEnumeration.ToString().Contains(RSIDEnumerationSearch))
                 {
                     passedTests++;
                 }
