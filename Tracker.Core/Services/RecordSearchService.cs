@@ -134,7 +134,7 @@ namespace Tracker.Core.Services
                         "AreResourcesInProject, Recommendation, IsReportReceived, Processor, EncryptionPassword, " +
                         "FeeVersion, FeeID, TotalCost, DiscretionaryAdjustment, AdjustmentExplanation, " +
                         "ProjectNumber, InvoiceNumber, CheckName, CheckNumber, IsPrePaid, IsSelected, Notes " +
-                        "FROM tblRecordSearches WHERE" + criteria;
+                        "FROM tblRecordSearches " + criteria;
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -193,6 +193,7 @@ namespace Tracker.Core.Services
                             IsSelected = reader.GetBooleanSafe(index++),
                             Notes = reader.GetStringSafe(index++),
                         };
+                        returnCollection.Add(returnValue);
                     }
 
                     return returnCollection;
