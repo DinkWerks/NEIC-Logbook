@@ -8,9 +8,17 @@ namespace Tracker.Core.Models.Fees
 {
     public class Fee : BindableBase
     {
+        private int _id;
         private string _feeVersion;
         private ObservableCollection<ICharge> _charges = new ObservableCollection<ICharge>();
         private decimal _totalProjectCost;
+        private decimal _adjustment = 0;
+
+        public int ID
+        {
+            get { return _id; }
+            set { SetProperty(ref _id, value); }
+        }
 
         public string FeeVersion
         {
@@ -22,6 +30,12 @@ namespace Tracker.Core.Models.Fees
         {
             get { return _charges; }
             set { SetProperty(ref _charges, value); }
+        }
+
+        public decimal Adjustment
+        {
+            get { return _adjustment; }
+            set { SetProperty(ref _adjustment, value); }
         }
 
         public decimal TotalProjectCost
@@ -41,6 +55,7 @@ namespace Tracker.Core.Models.Fees
 
         public void LoadFeeData(string fileName)
         {
+            //TODO make resistant to unlocated filenames, try and default
             XElement xmlFile = XElement.Load($"{@"Resources\FeeStructures\" + fileName + ".xml"}");
 
             //Gather list of charges for DB
@@ -56,8 +71,10 @@ namespace Tracker.Core.Models.Fees
                                                           {
                                                               Index = (int)item.Element("Index"),
                                                               Name = (string)item.Element("Name"),
+                                                              DBField = (string)item.Element("DBField"),
                                                               Description = (string)item.Element("Description"),
                                                               UnitName = (string)item.Element("UnitName"),
+                                                              UnitNamePlural = (string)item.Element("UnitNamePlural"),
                                                               Cost = (decimal)item.Element("Cost")
                                                           };
             IEnumerable<BooleanCharge> booleanCharges = from item in xmlFile.Descendants("Fee")
@@ -66,6 +83,7 @@ namespace Tracker.Core.Models.Fees
                                                         {
                                                             Index = (int)item.Element("Index"),
                                                             Name = (string)item.Element("Name"),
+                                                            DBField = (string)item.Element("DBField"),
                                                             Description = (string)item.Element("Description"),
                                                             Cost = (decimal)item.Element("Cost")
                                                         };
@@ -75,7 +93,10 @@ namespace Tracker.Core.Models.Fees
                                                                 {
                                                                     Index = (int)item.Element("Index"),
                                                                     Name = (string)item.Element("Name"),
-                                                                    Description = (string)item.Element("Description")
+                                                                    DBField = (string)item.Element("DBField"),
+                                                                    Description = (string)item.Element("Description"),
+                                                                    UnitName = (string)item.Element("UnitName"),
+                                                                    UnitNamePlural = (string)item.Element("UnitNamePlural"),
                                                                 };
             //Foreach charge add to Charges
             ObservableCollection<ICharge> sortedCharges = new ObservableCollection<ICharge>();
@@ -93,7 +114,7 @@ namespace Tracker.Core.Models.Fees
             {
                 runningTotal += charge.TotalCost;
             }
-            TotalProjectCost = runningTotal;
+            TotalProjectCost = runningTotal + Adjustment;
         }
     }
 }

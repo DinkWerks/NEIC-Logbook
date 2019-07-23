@@ -133,26 +133,27 @@ namespace mReporting.Reporting
             foreach (ICharge charge in record.Fee.Charges)
             {
                 if (charge.TotalCost <= 0)
-                    break;
+                    continue;
                 switch (charge.Type)
                 {
                     case "variable":
                         VariableCharge vCharge = (VariableCharge)charge;
-                        chargeInformation += string.Format("\n  {0} - {1} @ {2} per {3}", vCharge.Name, vCharge.Count, vCharge.Cost, vCharge.UnitName);
+                        chargeInformation += string.Format("  {0} - {1} {2} @ ${3} per {4}\n", 
+                            vCharge.Name, vCharge.Count, vCharge.UnitNamePlural, vCharge.Cost, vCharge.UnitName);
                         break;
                     case "boolean":
                         BooleanCharge bCharge = (BooleanCharge)charge;
-                        chargeInformation += string.Format("\n  {0} - ${1}", bCharge.Name, bCharge.TotalCost);
+                        chargeInformation += string.Format("  {0} - ${1}\n", bCharge.Name, bCharge.TotalCost);
                         break;
                     case "categorical":
                         CategoricalCharge cCharge = (CategoricalCharge)charge;
-                        chargeInformation += string.Format("\n  {0} {1} - {2}", cCharge.Count, cCharge.UnitNamePlural, cCharge.TotalCost);
+                        chargeInformation += string.Format("  {0} - {1} {2} - ${3}\n", cCharge.Name, cCharge.Count, cCharge.UnitNamePlural, cCharge.TotalCost);
                         break;
                     default:
                         break;
                 }
             }
-            bTable.Rows[1].Cells[2].Range.Text = "Information\n" + chargeInformation + "\nPlease include the invoice number on your remittance";
+            bTable.Rows[1].Cells[2].Range.Text = "Information\n" + chargeInformation + "Please include the invoice number on your remittance";
             bTable.Range.InsertParagraphAfter();
 
             //Finish with line

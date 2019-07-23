@@ -10,6 +10,7 @@ namespace Tracker.Core.Models.Fees
     {
         int Index { get; set; }
         string Name { get; set; }
+        string DBField { get; set; }
         string Type { get; }
         string Description { get; set; }
         decimal Cost { get; set; }

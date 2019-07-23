@@ -13,8 +13,8 @@ namespace mFeeCalculator.Views
         IEventAggregator _ea;
         public Calculator(IEventAggregator eventAggregator)
         {
-            InitializeComponent();
             _ea = eventAggregator;
+            InitializeComponent();
         }
 
         private void CostChangedEvent(object sender, RoutedEventArgs e)

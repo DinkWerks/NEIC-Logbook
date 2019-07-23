@@ -15,6 +15,7 @@ namespace mFeeCalculator.ViewModels
         private ObservableCollection<ICharge> _charges = new ObservableCollection<ICharge>();
         private Fee _fee;
         private string _selectedVersion;
+        private string _adjustmentExplanation;
 
         public ObservableCollection<string> Versions
         {
@@ -28,7 +29,7 @@ namespace mFeeCalculator.ViewModels
             set
             {
                 SetProperty(ref _selectedVersion, value);
-                Fee = new Fee(value);
+                FeeModel = new Fee(value);
             }
         }
 
@@ -38,10 +39,16 @@ namespace mFeeCalculator.ViewModels
             set { SetProperty(ref _charges, value); }
         }
 
-        public Fee Fee
+        public Fee FeeModel
         {
             get { return _fee; }
             set { SetProperty(ref _fee, value); }
+        }
+
+        public string AdjustmentExplanation
+        {
+            get { return _adjustmentExplanation; }
+            set { SetProperty(ref _adjustmentExplanation, value); }
         }
 
         public bool KeepAlive => false;
@@ -54,8 +61,9 @@ namespace mFeeCalculator.ViewModels
                 SelectedVersion = recordSearchService.CurrentRecordSearch.FeeVersion;
                 if (recordSearchService.CurrentRecordSearch != null && recordSearchService.CurrentRecordSearch.Fee != null)
                 {
-                    Fee = recordSearchService.CurrentRecordSearch.Fee;
+                    FeeModel = recordSearchService.CurrentRecordSearch.Fee;
                     Charges = recordSearchService.CurrentRecordSearch.Fee.Charges;
+                    AdjustmentExplanation = recordSearchService.CurrentRecordSearch.AdjustmentExplanation;
                 }
             }
 
@@ -64,7 +72,7 @@ namespace mFeeCalculator.ViewModels
 
         public void UpdateTotalCost()
         {
-            Fee.CalculateProjectCost();
+            FeeModel.CalculateProjectCost();
         }
 
         public void LoadFeeStructures()

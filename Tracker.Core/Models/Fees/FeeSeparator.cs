@@ -23,6 +23,8 @@ namespace Tracker.Core.Models.Fees
             set { SetProperty(ref _name, value); }
         }
 
+        public string DBField { get; set; }
+
         public string Type
         {
             get { return _type; }

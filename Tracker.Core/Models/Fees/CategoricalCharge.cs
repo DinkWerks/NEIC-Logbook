@@ -13,10 +13,11 @@ namespace Tracker.Core.Models.Fees
         private string _description;
         private string _unitName;
         private string _unitNamePlural;
-        private int _count;
+        private decimal _count;
         private List<ISubcharge> _costCategories;
         private decimal _cost;
         private decimal _totalCost;
+        private string _dbField;
 
         public int Index
         {
@@ -33,6 +34,12 @@ namespace Tracker.Core.Models.Fees
         public string Type
         {
             get { return _type; }
+        }
+
+        public string DBField
+        {
+            get { return _dbField; }
+            set { SetProperty(ref _dbField, value); }
         }
 
         public string Description
@@ -53,7 +60,7 @@ namespace Tracker.Core.Models.Fees
             set { SetProperty(ref _unitNamePlural, value); }
         }
 
-        public int Count
+        public decimal Count
         {
             get { return _count; }
             set {
@@ -118,7 +125,7 @@ namespace Tracker.Core.Models.Fees
             return processedSubcharges;
         }
 
-        private decimal FindCost(int count)
+        private decimal FindCost(decimal count)
         {
             foreach (ISubcharge charge in CostCategories)
             {

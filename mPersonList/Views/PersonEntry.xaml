@@ -4,13 +4,15 @@
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:static="clr-namespace:Tracker.Core.StaticTypes;assembly=Tracker.Core"
+             xmlns:converter="clr-namespace:mPersonList.Converters"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
 	
 	<UserControl.Resources>
-		<Style TargetType="TextBlock" x:Key="Line Header">
+        <converter:ICFileNumberConverter x:Key="ICFileNumberConverter"/>
+        <Style TargetType="TextBlock" x:Key="Line Header">
 			<Setter Property="FontWeight" Value="Bold"/>
 			<Setter Property="HorizontalAlignment" Value="Left"/>
 			<Setter Property="Width" Value="Auto"/>
@@ -104,16 +106,16 @@
 								</Grid.ColumnDefinitions>
                                 <TextBlock>
                                     <TextBlock.Text>
-                                        <MultiBinding StringFormat=" {0}-{1}-{2}-{3}">
-                                            <Binding Path="RSTypePrefix"/>
-                                            <Binding Path="RSYear"/>
-                                            <Binding Path="RSEnumeration"/>
-                                            <Binding Path="RSSuffix"/>
+                                        <MultiBinding Converter="{StaticResource ICFileNumberConverter}">
+                                            <Binding Path="ICTypePrefix"/>
+                                            <Binding Path="ICYear"/>
+                                            <Binding Path="ICEnumeration"/>
+                                            <Binding Path="ICSuffix"/>
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
 								<TextBlock Grid.Column="1" Text="{Binding ProjectName}"/>
-								<TextBlock Grid.Column="2" Text="{Binding LastUpdated}"/>
+								<TextBlock Grid.Column="2" Text="{Binding LastUpdated, StringFormat=d}"/>
 							</Grid>
 						</DataTemplate>
 					</ListBox.ItemTemplate>

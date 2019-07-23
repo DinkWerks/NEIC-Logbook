@@ -28,7 +28,7 @@ namespace Tracker.Core.Models.Fees
             Cost = cost;
         }
 
-        public bool CheckValue(int value)
+        public bool CheckValue(decimal value)
         {
             if (value >= Minimum && value <= Maximum)
             {
@@ -37,7 +37,7 @@ namespace Tracker.Core.Models.Fees
             return false;
         }
 
-        public decimal GetCost(int count)
+        public decimal GetCost(decimal count)
         {
             return Cost;
         }

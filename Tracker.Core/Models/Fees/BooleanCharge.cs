@@ -12,6 +12,7 @@ namespace Tracker.Core.Models.Fees
         private bool _isIncurred;
         private decimal _cost;
         private decimal _totalCost;
+        private string _dbField;
 
         public int Index
         {
@@ -23,6 +24,12 @@ namespace Tracker.Core.Models.Fees
         {
             get { return _name; }
             set { SetProperty(ref _name, value); }
+        }
+
+        public string DBField
+        {
+            get { return _dbField; }
+            set { SetProperty(ref _dbField, value); }
         }
 
         public string Type

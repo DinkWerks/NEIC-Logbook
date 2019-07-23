@@ -15,17 +15,19 @@ namespace Tracker.Core.Services
         private IClientService _cs;
         private IPersonService _ps;
         private IAddressService _as;
+        private IFeeService _fs;
 
         public RecordSearch CurrentRecordSearch { get; set; }
 
         public string ConnectionString { get; set; }
 
         //Constructor
-        public RecordSearchService(IClientService clientService, IPersonService personService, IAddressService addressService)
+        public RecordSearchService(IClientService clientService, IPersonService personService, IAddressService addressService, IFeeService feeService)
         {
             _cs = clientService;
             _ps = personService;
             _as = addressService;
+            _fs = feeService;
             SetConnectionString();
         }
 
@@ -101,7 +103,7 @@ namespace Tracker.Core.Services
                         AdjustmentExplanation = reader.GetStringSafe(index++),
                         ProjectNumber = reader.GetStringSafe(index++),
                         InvoiceNumber = reader.GetStringSafe(index++),
-                        CheckName = reader.GetStringSafe(index++), 
+                        CheckName = reader.GetStringSafe(index++),
                         CheckNumber = reader.GetStringSafe(index++),
                         IsPrePaid = reader.GetBooleanSafe(index++),
                         IsSelected = reader.GetBooleanSafe(index++),
@@ -109,6 +111,7 @@ namespace Tracker.Core.Services
                     };
 
                     // TODO Load Fee info
+                    returnValue.Fee.Adjustment = returnValue.DiscretionaryAdjustment;
                     if (returnValue.IsMailingSameAsBilling)
                         returnValue.BillingAddress = returnValue.MailingAddress;
                     if (loadAsCurrentSearch)
@@ -300,7 +303,12 @@ namespace Tracker.Core.Services
 
         public Fee GetFeeData(string version, int id)
         {
-            return new Fee(version);
+            Fee newFee = new Fee(version)
+            {
+                ID = id
+            };
+            _fs.GetFeeData(newFee);
+            return newFee;
         }
 
         public int GetNextEnumeration(string prefix, string year)

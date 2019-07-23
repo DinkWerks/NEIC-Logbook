@@ -156,7 +156,6 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _additionalRequestors, value); }
         }
 
-
         public int ClientID
         {
             get { return _clientID; }
