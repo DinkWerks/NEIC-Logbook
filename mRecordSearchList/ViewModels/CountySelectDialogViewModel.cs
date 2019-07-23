@@ -52,7 +52,7 @@ namespace mRecordSearchList.ViewModels
                 RecordSearch = _rss.CurrentRecordSearch;
                 foreach (County county in SelectableCounties)
                 {
-                    if (RecordSearch.AdditionalCounties.Contains(county))
+                    if (RecordSearch.AdditionalCounties != null && RecordSearch.AdditionalCounties.Contains(county))
                         county.IsChecked = true;
                 }
             }

@@ -51,7 +51,7 @@ namespace Tracker.Core.Services
                         "AreResourcesInProject, Recommendation, IsReportReceived, Processor, EncryptionPassword, " +
                         "FeeVersion, FeeID, TotalCost, DiscretionaryAdjustment, AdjustmentExplanation, " +
                         "ProjectNumber, InvoiceNumber, CheckName, CheckNumber, IsPrePaid, IsSelected, Notes " +
-                        "from tblRecordSearches WHERE ID = " + id;
+                        "FROM tblRecordSearches WHERE ID = " + id;
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -277,10 +277,10 @@ namespace Tracker.Core.Services
                 {
                     sqlCommand.CommandText = "INSERT INTO tblRecordSearches (ICPrefix, ICYear, ICEnumeration, ICSuffix, ProjectName, DateEntered, LastUpdated) " +
                         "VALUES (?,?,?,?,?,?,?)";
-                    sqlCommand.Parameters.AddWithValue("RSPrefix", array[0]);
-                    sqlCommand.Parameters.AddWithValue("RSYear", array[1]);
-                    sqlCommand.Parameters.AddWithValue("RSEnumeration", array[2]);
-                    sqlCommand.Parameters.AddWithValue("RSSuffix", array[3] ?? DBNull.Value);
+                    sqlCommand.Parameters.AddWithValue("ICPrefix", array[0]);
+                    sqlCommand.Parameters.AddWithValue("ICYear", array[1]);
+                    sqlCommand.Parameters.AddWithValue("ICEnumeration", array[2]);
+                    sqlCommand.Parameters.AddWithValue("ICSuffix", array[3] ?? DBNull.Value);
                     sqlCommand.Parameters.AddWithValue("ProjectName", array[4]);
                     sqlCommand.Parameters.AddWithValue("DateEntered", array[5]);
                     sqlCommand.Parameters.AddWithValue("LastUpdated", array[6]);
@@ -309,7 +309,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "SELECT MAX(RSEnumeration) FROM tblRecordSearches WHERE ICPrefix = @prefix AND ICYear = @year";
+                    sqlCommand.CommandText = "SELECT MAX(ICEnumeration) FROM tblRecordSearches WHERE ICPrefix = @prefix AND ICYear = @year";
                     sqlCommand.Parameters.Add(new OleDbParameter("@prefix", prefix));
                     sqlCommand.Parameters.Add(new OleDbParameter("@year", year));
 

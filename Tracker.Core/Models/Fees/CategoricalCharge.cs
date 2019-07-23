@@ -12,6 +12,7 @@ namespace Tracker.Core.Models.Fees
         private string _type = "categorical";
         private string _description;
         private string _unitName;
+        private string _unitNamePlural;
         private int _count;
         private List<ISubcharge> _costCategories;
         private decimal _cost;
@@ -44,6 +45,12 @@ namespace Tracker.Core.Models.Fees
         {
             get { return _unitName; }
             set { SetProperty(ref _unitName, value); }
+        }
+
+        public string UnitNamePlural
+        {
+            get { return _unitNamePlural; }
+            set { SetProperty(ref _unitNamePlural, value); }
         }
 
         public int Count

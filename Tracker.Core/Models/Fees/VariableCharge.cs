@@ -9,6 +9,7 @@ namespace Tracker.Core.Models.Fees
         private string _type = "variable";
         private string _description;
         private string _unitName;
+        private string _unitNamePlural;
         private decimal _count;
         private decimal _cost;
         private decimal _totalCost;
@@ -40,6 +41,12 @@ namespace Tracker.Core.Models.Fees
         {
             get { return _unitName; }
             set { SetProperty(ref _unitName, value); }
+        }
+
+        public string UnitNamePlural
+        {
+            get { return _unitNamePlural; }
+            set { SetProperty(ref _unitNamePlural, value); }
         }
 
         public decimal Count

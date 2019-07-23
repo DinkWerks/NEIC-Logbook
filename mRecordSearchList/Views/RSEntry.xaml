@@ -293,7 +293,7 @@
                                             </ListBox.ItemTemplate>
                                         </ListBox>
                                     </ScrollViewer>
-                                    <Button HorizontalAlignment="Right" Width="22" BorderBrush="Beige">
+									<Button Command="{Binding CountySelectPopupCommand}" HorizontalAlignment="Right" Width="22" BorderBrush="Beige">
                                         <Image Source="/Tracker.Core;component/Resources/Icons/application_edit.png"/>
                                     </Button>
                                 </StackPanel>
