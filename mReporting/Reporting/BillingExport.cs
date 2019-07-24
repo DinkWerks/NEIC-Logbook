@@ -70,7 +70,7 @@ namespace mReporting.Reporting
             //Date
             Word.Paragraph dateHeader = document.Content.Paragraphs.Add(ref missing);
             dateHeader.Range.Paragraphs.SpaceAfter = 0;
-            dateHeader.Range.Text = DateTime.Now.ToDateString() + Environment.NewLine + Environment.NewLine;
+            dateHeader.Range.Text = record.DateOfResponse.ToDateString() + "\n";
             dateHeader.Range.InsertParagraphAfter();
 
 
@@ -83,11 +83,11 @@ namespace mReporting.Reporting
 
             //TODO Determine Name Field's source
             if (string.IsNullOrWhiteSpace(record.BillingAddress.AddressLine2))
-                iTable.Rows[1].Cells[1].Range.Text = String.Format("Client Name\r\n{0}\r\n{1}, {2} {3}",
-                    record.BillingAddress.AddressLine1, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
+                iTable.Rows[1].Cells[1].Range.Text = String.Format("{0}\r\n{1}\r\n{2}, {3} {4}",
+                   record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
             else
-                iTable.Rows[1].Cells[1].Range.Text = String.Format("Client Name\r\n{0}\r\n{1}\r\n{2}, {3} {4}",
-                    record.BillingAddress.AddressLine1, record.BillingAddress.AddressLine2, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
+                iTable.Rows[1].Cells[1].Range.Text = String.Format("{0}\r\n{1}\r\n{2}\r\n{3}, {4} {5}",
+                   record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.AddressLine2, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
 
             iTable.Rows[1].Cells[2].Range.Text = string.Format("PEID # " + record.ClientModel.OldPEID.PadLeft(6, '0'));
             iTable.Rows[1].Cells[2].Range.Bold = 1;

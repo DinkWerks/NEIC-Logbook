@@ -28,7 +28,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "SELECT ID, AttentionTo, Line1, Line2, City, " +
+                    sqlCommand.CommandText = "SELECT ID, AddressName, AttentionTo, Line1, Line2, City, " +
                         "State, Zip, Notes " +
                         "FROM tblAddresses WHERE ID = ?";
                     sqlCommand.Parameters.AddWithValue("ID", id);
@@ -44,6 +44,7 @@ namespace Tracker.Core.Services
                     Address returnValue = new Address()
                     {
                         AddressID = reader.GetInt32Safe(index++),
+                        AddressName = reader.GetStringSafe(index++),
                         AttentionTo = reader.GetStringSafe(index++),
                         AddressLine1 = reader.GetStringSafe(index++),
                         AddressLine2 = reader.GetStringSafe(index++),
@@ -64,8 +65,9 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "INSERT INTO tblAddresses (AttentionTo, Line1, Line2, City, State, Zip, Notes) " +
-                        "VALUES (@AttentionTo, @Line1, @Line2, @City, @State, @Zip, @Notes)";
+                    sqlCommand.CommandText = "INSERT INTO tblAddresses (AddressName, AttentionTo, Line1, Line2, City, State, Zip, Notes) " +
+                        "VALUES (@AddressName @AttentionTo, @Line1, @Line2, @City, @State, @Zip, @Notes)";
+                    sqlCommand.Parameters.AddWithValue("@AddressName", a.AddressName ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@AttentionTo", a.AttentionTo ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@Line1", a.AddressLine1 ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@Line2", a.AddressLine2 ?? Convert.DBNull);
@@ -99,9 +101,10 @@ namespace Tracker.Core.Services
                         {
                             using (OleDbCommand updateCommand = connection2.CreateCommand())
                             {
-                                updateCommand.CommandText = "UPDATE tblAddresses SET AttentionTo = @attnTo, Line1 = @line1, Line2 = @line2, " +
+                                updateCommand.CommandText = "UPDATE tblAddresses SET AddressName = @addressname, AttentionTo = @attnTo, Line1 = @line1, Line2 = @line2, " +
                                     "City = @city, State = @state, Zip = @zip, Notes = @notes " +
                                     "WHERE ID = @id";
+                                updateCommand.Parameters.AddWithValue("@addressname", a.AddressName ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@attnTo", a.AttentionTo ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@line1", a.AddressLine1 ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@line2", a.AddressLine2 ?? Convert.DBNull);

@@ -61,10 +61,8 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
 				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="200"/>
-				<RowDefinition Height="Auto"/>
-				<RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
 			</Grid.RowDefinitions>
 
 			<TextBlock Text="Affiliation:" Margin="0,0,10,0" Style="{StaticResource Line Header}"/>
@@ -88,22 +86,22 @@
 			
 			<TextBlock Grid.Row="5" Text="Disclosure Level:" Style="{StaticResource Line Header}"/>
             <ComboBox Grid.Row="5" Grid.Column="1" Text="{Binding PersonModel.DisclosureLevel}" ItemsSource="{Binding Source={x:Static static:StaticData.DisclosureLevels}}" Margin="0,10,0,0" />
-			
-			<GroupBox Grid.Row="2" Grid.Column="3" Grid.RowSpan="6" Grid.ColumnSpan="2" Header="Previous Record Searches" Height="200" VerticalAlignment="Top">
-				<ListBox x:Name="RSListBox" ItemsSource="{Binding RecordSearches}" HorizontalContentAlignment="Stretch">
+
+            <GroupBox Grid.Row="2" Grid.Column="3" Grid.RowSpan="6" Grid.ColumnSpan="2" Header="Previous Record Searches" Height="200" VerticalAlignment="Top">
+                <ListBox x:Name="RSListBox" ItemsSource="{Binding RecordSearches}" HorizontalContentAlignment="Stretch">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
                         </Style>
                     </ListBox.ItemContainerStyle>
                     <ListBox.ItemTemplate>
-						<DataTemplate>
-							<Grid>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="100"/>
-									<ColumnDefinition/>
-									<ColumnDefinition Width="Auto"/>
-								</Grid.ColumnDefinitions>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
                                 <TextBlock>
                                     <TextBlock.Text>
                                         <MultiBinding Converter="{StaticResource ICFileNumberConverter}">
@@ -114,15 +112,54 @@
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
-								<TextBlock Grid.Column="1" Text="{Binding ProjectName}"/>
-								<TextBlock Grid.Column="2" Text="{Binding LastUpdated, StringFormat=d}"/>
-							</Grid>
-						</DataTemplate>
-					</ListBox.ItemTemplate>
-				</ListBox>
-			</GroupBox>
-			
-		</Grid>
+                                <TextBlock Grid.Column="1" Text="{Binding ProjectName}"/>
+                                <TextBlock Grid.Column="2" Text="{Binding LastUpdated, StringFormat=d}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox>
+
+            <!--Address-->
+            <GroupBox Grid.Row="6" Grid.ColumnSpan="2" Header="Address" Margin="0,5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Name of Address:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding PersonModel.AddressModel.AddressName}"/>
+
+                    <TextBlock Grid.Row="1" Text="Address Line 1:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding PersonModel.AddressModel.AddressLine1}"/>
+
+                    <TextBlock Grid.Row="2" Text="Address Line 2:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding PersonModel.AddressModel.AddressLine2}"/>
+
+                    <TextBlock Grid.Row="3" Text="City:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,10,0" Text="{Binding PersonModel.AddressModel.City}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="2" Text="State:" Style="{StaticResource Line Header}"/>
+                    <TextBox  Grid.Row="3" Grid.Column="3" Margin="0,0,10,0" Text="{Binding PersonModel.AddressModel.State}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="4" Text="Zip:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="3" Grid.Column="5" Text="{Binding PersonModel.AddressModel.ZIP}"/>
+
+                    <TextBlock Grid.Row="4" Text="Special Billing Procedure:" TextWrapping="Wrap" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="5" Margin="0,10,0,0" MinLines="5" Text="{Binding PersonModel.AddressModel.Notes}"/>
+                </Grid>
+            </GroupBox>
+        </Grid>
 	</StackPanel>
 
 </UserControl>

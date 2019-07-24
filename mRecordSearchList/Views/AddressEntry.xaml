@@ -34,6 +34,9 @@
 			<RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
+        <TextBlock Text="Name of Address:" Style="{StaticResource Line Header}"/>
+        <TextBox Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Address.AddressName}"/>
+        
 		<TextBlock Grid.Row="1" Text="Attention To:" Style="{StaticResource Line Header}"/>
         <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Address.AttentionTo}"/>
 

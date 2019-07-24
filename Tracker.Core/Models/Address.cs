@@ -6,6 +6,7 @@ namespace Tracker.Core.Models
     public class Address : BindableBase
     {
         private int _addressID;
+        private string _addressName;
         private string _attentionTo;
         private string _addressLine1;
         private string _addressLine2;
@@ -18,6 +19,12 @@ namespace Tracker.Core.Models
         {
             get { return _addressID; }
             set { SetProperty(ref _addressID, value); }
+        }
+
+        public string AddressName
+        {
+            get { return _addressName; }
+            set { SetProperty(ref _addressName, value); }
         }
 
         public string AttentionTo

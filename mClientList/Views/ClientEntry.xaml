@@ -107,23 +107,27 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <TextBlock Text="Address Line 1:" Style="{StaticResource Line Header}"/>
-                    <TextBox Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding ClientModel.AddressModel.AddressLine1}"/>
+                    <TextBlock Text="Name of Address:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding ClientModel.AddressModel.AddressName}"/>
 
-                    <TextBlock Grid.Row="1" Text="Address Line 2:" Style="{StaticResource Line Header}"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding ClientModel.AddressModel.AddressLine2}"/>
+                    <TextBlock Grid.Row="1" Text="Address Line 1:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding ClientModel.AddressModel.AddressLine1}"/>
 
-                    <TextBlock Grid.Row="2" Text="City:" Style="{StaticResource Line Header}"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Margin="0,0,10,0" Text="{Binding ClientModel.AddressModel.City}"/>
-                    <TextBlock Grid.Row="2" Grid.Column="2" Text="State:" Style="{StaticResource Line Header}"/>
-                    <TextBox  Grid.Row="2" Grid.Column="3" Margin="0,0,10,0" Text="{Binding ClientModel.AddressModel.State}"/>
-                    <TextBlock Grid.Row="2" Grid.Column="4" Text="Zip:" Style="{StaticResource Line Header}"/>
-                    <TextBox Grid.Row="2" Grid.Column="5" Text="{Binding ClientModel.AddressModel.ZIP}"/>
+                    <TextBlock Grid.Row="2" Text="Address Line 2:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding ClientModel.AddressModel.AddressLine2}"/>
 
-                    <TextBlock Grid.Row="3" Text="Special Billing Procedure:" TextWrapping="Wrap" Style="{StaticResource Line Header}"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" MinLines="5" Text="{Binding ClientModel.AddressModel.Notes}"/>
+                    <TextBlock Grid.Row="3" Text="City:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,10,0" Text="{Binding ClientModel.AddressModel.City}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="2" Text="State:" Style="{StaticResource Line Header}"/>
+                    <TextBox  Grid.Row="3" Grid.Column="3" Margin="0,0,10,0" Text="{Binding ClientModel.AddressModel.State}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="4" Text="Zip:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="3" Grid.Column="5" Text="{Binding ClientModel.AddressModel.ZIP}"/>
+
+                    <TextBlock Grid.Row="4" Text="Special Billing Procedure:" TextWrapping="Wrap" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="5" MinLines="5" Text="{Binding ClientModel.AddressModel.Notes}"/>
                 </Grid>
             </GroupBox>
 
@@ -162,7 +166,7 @@
             </GroupBox>
 
             <!--Notes-->
-            <DockPanel Grid.Row="3">
+            <DockPanel Grid.Row="2" Grid.Column="2">
                 <TextBlock Text="Notes:" Style="{StaticResource Line Header}"/>
                 <TextBox Text="{Binding ClientModel.Notes}" MinLines="10" MaxLines="10"
 					 HorizontalAlignment="Stretch"/>
