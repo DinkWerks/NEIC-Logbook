@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CodeSnippets>
+  <CodeSnippet Format="1.0.0">
+    <Header>
+      <Title>Parameter With Value</Title>
+      <Author>Kyle Deutsch</Author>
+      <Description>Easy way of adding an OleDb parameter</Description>
+      <Shortcut>pwv</Shortcut>
+    </Header>
+    <Snippet>
+      <Code Language="csharp">
+        <![CDATA[sqlCommand.Parameters.AddWithValue("$ValueName$", $Data$ ?? Convert.DBNull);$end$]]>
+      </Code>
+      <Declarations>
+        <Literal>
+          <ID>ValueName</ID>
+          <Tooltip>Name of the field being replaced.</Tooltip>
+          <Default>field</Default>
+        </Literal>
+        <Literal>
+          <ID>Data</ID>
+          <Tooltip>Value to be inserted into parameter.</Tooltip>
+          <Default>data</Default>
+        </Literal>
+      </Declarations>
+    </Snippet>
+  </CodeSnippet>
+</CodeSnippets>

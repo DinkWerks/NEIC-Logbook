@@ -58,7 +58,7 @@ namespace mRecordSearchList.ViewModels
             }
         }
 
-        
+        public DelegateCommand SaveCommand { get; private set; }
         public DelegateCommand<string> NavigateCommand { get; private set; }
         public InteractionRequest<IAdditionalCountyNotification> CountySelectRequest { get; set; }
         public DelegateCommand CountySelectPopupCommand { get; private set; }
@@ -82,6 +82,7 @@ namespace mRecordSearchList.ViewModels
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
 
+            SaveCommand = new DelegateCommand(SaveRS);
             CountySelectRequest = new InteractionRequest<IAdditionalCountyNotification>();
             NavigateCommand = new DelegateCommand<string>(Navigate);
             CountySelectPopupCommand = new DelegateCommand(RaiseCountySelectPopup);
@@ -91,6 +92,12 @@ namespace mRecordSearchList.ViewModels
         }
 
         // Methods
+
+        private void SaveRS()
+        {
+            _rss.UpdateRecordSearch(RecordSearch);
+        }
+
         private void Navigate(string destination)
         {
             if (destination == "Requestor")

@@ -296,6 +296,80 @@ namespace Tracker.Core.Services
             }
         }
 
+        public void UpdateRecordSearch(RecordSearch rs)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "UPDATE tblRecordSearches SET " +
+                        "ICPrefix = @ICPrefix, ICYear = @ICYear, ICEnumeration = @ICEnumeration, ICSuffix = ?," +
+                        "DateReceived = @DateReceived, DateEntered = @DateEntered, DateOfResponse = @DateOfResponse, DateBilled = @DateBilled, DatePaid = @DatePaid, LastUpdated = @LastUpdated, " +
+                        "RequestorID = @RequestorID, AdditionalRequestors = @AdditionalRequestors, ClientID = @ClientID, MailingAddressID = @MailingAddressID, IsMailingAddressSameAsBilling = @IsMailingAddressSameAsBilling, BillingAddressID = @BillingAddressID, " +
+                        "ProjectName = @ProjectName, RecordSearchType = @RecordSearchType, Status = @Status, SpecialCaseDetails = @SpecialCaseDetails, " +
+                        "MainCounty = @MainCounty, AdditionalCountiesID = @AdditionalCountiesID, PLSS = @PLSS, Acres = @Acres, LinearMiles = @LinearMiles, " +
+                        "AreResourcesInProject = @AreResourcesInProject, Recommendation = @Recommendation, IsReportReceived = @IsReportReceived, Processor = @Processor, EncryptionPassword = @EncryptionPassword, " +
+                        "FeeVersion = @FeeVersion, FeeID = @FeeID, TotalCost = @TotalCost, DiscretionaryAdjustment = @DiscretionaryAdjustment, AdjustmentExplanation = @AdjustmentExplanation, " +
+                        "ProjectNumber = @ProjectNumber, InvoiceNumber = @InvoiceNumber, CheckName = @CheckName, CheckNumber = @CheckNumber, IsPrePaid = @IsPrePaid, IsSelected = @IsSelected, Notes = @Notes " +
+                        "WHERE ID = ?";
+                    sqlCommand.Parameters.AddWithValue("@ICPrefix", rs.ICTypePrefix ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@ICYear", rs.ICYear ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@ICEnumeration", rs.ICEnumeration);
+                    sqlCommand.Parameters.AddWithValue("@ICSuffix", rs.ICSuffix ?? Convert.DBNull);
+
+                    sqlCommand.Parameters.AddWithValue("@DateReceived", rs.DateReceived ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@DateEntered", rs.DateEntered ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@DateOfResponse", rs.DateOfResponse ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@DateBilled", rs.DateBilled ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@DatePaid", rs.DatePaid ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@LastUpdated", rs.LastUpdated ?? Convert.DBNull);
+
+                    sqlCommand.Parameters.AddWithValue("@RequestorID", rs.RequestorID); //??
+                    sqlCommand.Parameters.AddWithValue("@AdditionalRequestors", rs.AdditionalRequestors ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@ClientID", rs.ClientID); //??
+                    sqlCommand.Parameters.AddWithValue("@MailingAddressID", rs.MailingAddress.AddressID);
+                    sqlCommand.Parameters.AddWithValue("@IsMailingAddressSameAsBilling", rs.IsMailingSameAsBilling);
+                    sqlCommand.Parameters.AddWithValue("@BillingAddressID", rs.BillingAddress.AddressID);
+
+                    sqlCommand.Parameters.AddWithValue("@ProjectName", rs.ProjectName ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@RecordSearchType", rs.RSType ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@Status", rs.Status ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@SpecialCaseDetails", rs.SpecialDetails ?? Convert.DBNull);
+
+                    sqlCommand.Parameters.AddWithValue("@MainCounty", rs.MainCounty ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@AdditionalCountiesID", 0); // TODO figure out additional counties field
+                    sqlCommand.Parameters.AddWithValue("@PLSS", rs.PLSS ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@Acres", rs.Acres);
+                    sqlCommand.Parameters.AddWithValue("@LinearMiles", rs.LinearMiles);
+
+                    sqlCommand.Parameters.AddWithValue("@AreResourcesInProject", rs.AreResourcesInProject);
+                    sqlCommand.Parameters.AddWithValue("@Recommendation", rs.Recommendation ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@IsReportReceived", rs.IsReportReceived);
+                    sqlCommand.Parameters.AddWithValue("@Processor", rs.Processor ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@EncryptionPassword", rs.EncryptionPassword ?? Convert.DBNull);
+
+                    sqlCommand.Parameters.AddWithValue("@FeeVersion", rs.FeeVersion ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@FeeID", rs.FeeID); //??
+                    sqlCommand.Parameters.AddWithValue("@TotalCost", rs.TotalFee);
+                    sqlCommand.Parameters.AddWithValue("@DiscretionaryAdjustment", rs.DiscretionaryAdjustment);
+                    sqlCommand.Parameters.AddWithValue("@AdjustmentExplanation", rs.AdjustmentExplanation ?? Convert.DBNull);
+                    
+                    sqlCommand.Parameters.AddWithValue("@ProjectNumber", rs.ProjectNumber ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@InvoiceNumber", rs.InvoiceNumber ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@CheckName", rs.CheckName ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@CheckNumber", rs.CheckNumber ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@IsPrePaid", rs.IsPrePaid);
+                    sqlCommand.Parameters.AddWithValue("@IsSelected", rs.IsSelected);
+                    sqlCommand.Parameters.AddWithValue("@Notes", rs.Notes ?? Convert.DBNull);
+
+                    sqlCommand.Parameters.AddWithValue("ID", rs.ID);
+
+                    connection.Open();
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
         public ObservableCollection<County> GetAdditionalCounties(int id)
         {
             return null;

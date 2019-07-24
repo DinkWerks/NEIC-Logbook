@@ -16,6 +16,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Notes", "Notes", "{A8CA2701-B14E-4B4E-9CC5-D66E50094FA4}"
 	ProjectSection(SolutionItems) = preProject
 		CountyInstance.snippet = CountyInstance.snippet
+		ParameterWValue.snippet = ParameterWValue.snippet
 		pprop.snippet = pprop.snippet
 		Questions.txt = Questions.txt
 		RecordSearchModelDesign.txt = RecordSearchModelDesign.txt

@@ -13,8 +13,8 @@ namespace Tracker.Core.Services
         List<RecordSearch> GetAllPartialRecordSearches();
         List<RecordSearch> GetPartialRecordSearchesByCriteria(string criteria);
         int AddNewRecordSearch(object[] array);
+        void UpdateRecordSearch(RecordSearch rs);
         int GetNextEnumeration(string prefix, string year);
         bool ConfirmDistinct(string prefix, string year, int enumeration, string suffix);
-        
     }
 }
