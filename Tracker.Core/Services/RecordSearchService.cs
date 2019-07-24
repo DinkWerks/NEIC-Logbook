@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using Tracker.Core.Extensions;
 using Tracker.Core.Models;
 using Tracker.Core.Models.Fees;
@@ -49,7 +50,7 @@ namespace Tracker.Core.Services
                         "DateReceived, DateEntered, DateOfResponse, DateBilled, DatePaid, LastUpdated, " +
                         "RequestorID, AdditionalRequestors, ClientID, MailingAddressID, IsMailingAddressSameAsBilling, BillingAddressID, " +
                         "ProjectName, RecordSearchType, Status, SpecialCaseDetails, " +
-                        "MainCounty, AdditionalCountiesID, PLSS, Acres, LinearMiles, " +
+                        "MainCounty, AdditionalCounties, PLSS, Acres, LinearMiles, " +
                         "AreResourcesInProject, Recommendation, IsReportReceived, Processor, EncryptionPassword, " +
                         "FeeVersion, FeeID, TotalCost, DiscretionaryAdjustment, AdjustmentExplanation, " +
                         "ProjectNumber, InvoiceNumber, CheckName, CheckNumber, IsPrePaid, IsSelected, Notes " +
@@ -86,7 +87,7 @@ namespace Tracker.Core.Services
                         Status = reader.GetStringSafe(index++),
                         SpecialDetails = reader.GetStringSafe(index++),
                         MainCounty = reader.GetStringSafe(index++),
-                        AdditionalCounties = GetAdditionalCounties(reader.GetInt32Safe(index++)),
+                        AdditionalCounties = ParseAdditionalCounties(reader.GetStringSafe(index++)),
                         PLSS = reader.GetStringSafe(index++), //25
                         Acres = reader.GetInt32Safe(index++),
                         LinearMiles = reader.GetInt32Safe(index++),
@@ -133,7 +134,7 @@ namespace Tracker.Core.Services
                         "DateReceived, DateEntered, DateOfResponse, DateBilled, DatePaid, LastUpdated, " +
                         "RequestorID, AdditionalRequestors, ClientID, MailingAddressID, IsMailingAddressSameAsBilling, BillingAddressID, " +
                         "ProjectName, RecordSearchType, Status, SpecialCaseDetails, " +
-                        "MainCounty, AdditionalCountiesID, PLSS, Acres, LinearMiles, " +
+                        "MainCounty, AdditionalCounties, PLSS, Acres, LinearMiles, " +
                         "AreResourcesInProject, Recommendation, IsReportReceived, Processor, EncryptionPassword, " +
                         "FeeVersion, FeeID, TotalCost, DiscretionaryAdjustment, AdjustmentExplanation, " +
                         "ProjectNumber, InvoiceNumber, CheckName, CheckNumber, IsPrePaid, IsSelected, Notes " +
@@ -173,7 +174,7 @@ namespace Tracker.Core.Services
                             Status = reader.GetStringSafe(index++),
                             SpecialDetails = reader.GetStringSafe(index++),
                             MainCounty = reader.GetStringSafe(index++),
-                            AdditionalCounties = GetAdditionalCounties(reader.GetInt32Safe(index++)),
+                            AdditionalCounties = ParseAdditionalCounties(reader.GetStringSafe(index++)),
                             PLSS = reader.GetStringSafe(index++), //25
                             Acres = reader.GetInt32Safe(index++),
                             LinearMiles = reader.GetInt32Safe(index++),
@@ -307,7 +308,7 @@ namespace Tracker.Core.Services
                         "DateReceived = @DateReceived, DateEntered = @DateEntered, DateOfResponse = @DateOfResponse, DateBilled = @DateBilled, DatePaid = @DatePaid, LastUpdated = @LastUpdated, " +
                         "RequestorID = @RequestorID, AdditionalRequestors = @AdditionalRequestors, ClientID = @ClientID, MailingAddressID = @MailingAddressID, IsMailingAddressSameAsBilling = @IsMailingAddressSameAsBilling, BillingAddressID = @BillingAddressID, " +
                         "ProjectName = @ProjectName, RecordSearchType = @RecordSearchType, Status = @Status, SpecialCaseDetails = @SpecialCaseDetails, " +
-                        "MainCounty = @MainCounty, AdditionalCountiesID = @AdditionalCountiesID, PLSS = @PLSS, Acres = @Acres, LinearMiles = @LinearMiles, " +
+                        "MainCounty = @MainCounty, AdditionalCounties = @AdditionalCountiesID, PLSS = @PLSS, Acres = @Acres, LinearMiles = @LinearMiles, " +
                         "AreResourcesInProject = @AreResourcesInProject, Recommendation = @Recommendation, IsReportReceived = @IsReportReceived, Processor = @Processor, EncryptionPassword = @EncryptionPassword, " +
                         "FeeVersion = @FeeVersion, FeeID = @FeeID, TotalCost = @TotalCost, DiscretionaryAdjustment = @DiscretionaryAdjustment, AdjustmentExplanation = @AdjustmentExplanation, " +
                         "ProjectNumber = @ProjectNumber, InvoiceNumber = @InvoiceNumber, CheckName = @CheckName, CheckNumber = @CheckNumber, IsPrePaid = @IsPrePaid, IsSelected = @IsSelected, Notes = @Notes " +
@@ -337,7 +338,7 @@ namespace Tracker.Core.Services
                     sqlCommand.Parameters.AddWithValue("@SpecialCaseDetails", rs.SpecialDetails ?? Convert.DBNull);
 
                     sqlCommand.Parameters.AddWithValue("@MainCounty", rs.MainCounty ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("@AdditionalCountiesID", 0); // TODO figure out additional counties field
+                    sqlCommand.Parameters.AddWithValue("@AdditionalCounties", WriteAdditionalCounties(rs.AdditionalCounties)); // TODO figure out additional counties field
                     sqlCommand.Parameters.AddWithValue("@PLSS", rs.PLSS ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@Acres", rs.Acres);
                     sqlCommand.Parameters.AddWithValue("@LinearMiles", rs.LinearMiles);
@@ -370,9 +371,27 @@ namespace Tracker.Core.Services
             }
         }
 
-        public ObservableCollection<County> GetAdditionalCounties(int id)
+        private ObservableCollection<County> ParseAdditionalCounties(string additionalCounties)
         {
-            return null;
+            ObservableCollection<County> returnCollection = new ObservableCollection<County>();
+            if (!string.IsNullOrWhiteSpace(additionalCounties))
+            {
+                foreach (string individualCounty in additionalCounties.Split(','))
+                {
+                    returnCollection.Add(Counties.Values.First(c => c.Name == individualCounty));
+                }
+            }
+            return returnCollection;
+        }
+
+        private string WriteAdditionalCounties(ObservableCollection<County> additionalCounties)
+        {
+            string returnValue = "";
+            foreach (County county in additionalCounties)
+            {
+                returnValue += county.Name + ",";
+            }
+            return returnValue.TrimEnd(',');
         }
 
         public Fee GetFeeData(string version, int id)
