@@ -1,8 +1,8 @@
 ﻿using Prism.Commands;
 using Prism.Events;
+using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 using Prism.Regions;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Tracker.Core.Events;
@@ -28,7 +28,6 @@ namespace mPersonList.ViewModels
             get { return _selectedClient; }
             set
             {
-                //LoadNewClient(value);
                 SetProperty(ref _selectedClient, value);
             }
         }
@@ -36,21 +35,28 @@ namespace mPersonList.ViewModels
         public Person PersonModel
         {
             get { return _person; }
-            set { SetProperty(ref _person, value); }
+            set
+            {
+                SetProperty(ref _person, value);
+            }
         }
 
         public ObservableCollection<RecordSearch> RecordSearches
         {
             get { return _recordSearches; }
-            set { SetProperty(ref _recordSearches, value); }
+            set
+            {
+                SetProperty(ref _recordSearches, value);
+            }
         }
 
         public DelegateCommand SaveCommand { get; private set; }
+        public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
         public DelegateCommand NavigateToClientCommand { get; private set; }
 
         public bool KeepAlive => false;
 
-        public PersonEntryViewModel(IRegionManager regionManager, IEventAggregator eventAggregator, IPersonService personService, 
+        public PersonEntryViewModel(IRegionManager regionManager, IEventAggregator eventAggregator, IPersonService personService,
             IAddressService addressService, IRecordSearchService recordSearchService, IClientService clientService)
         {
             _rm = regionManager;
@@ -60,8 +66,8 @@ namespace mPersonList.ViewModels
 
             ClientList = clientService.CompleteClientList;
             SaveCommand = new DelegateCommand(SavePerson);
+            ConfirmationRequest = new InteractionRequest<IConfirmation>();
             NavigateToClientCommand = new DelegateCommand(NavigateToClient);
-            //eventAggregator.GetEvent<ClientListSelectEvent>().Subscribe(NavigateToClient);
             eventAggregator.GetEvent<RecordSearchListSelectEvent>().Subscribe(NavigateToRecordSearch);
         }
 
@@ -117,7 +123,7 @@ namespace mPersonList.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-
+            SavePerson();
         }
     }
 }

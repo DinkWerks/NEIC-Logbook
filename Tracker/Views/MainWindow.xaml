@@ -13,7 +13,7 @@
             <Button Command="{Binding NavigateCommand}" CommandParameter="HomeScreen">
                 <Image Source="/Tracker.Core;component/Resources/Icons/house.png" Width="16" Height="16"/>
             </Button>
-            <Button IsEnabled="False" Content="Back" Command="{Binding GoBackCommand}"/>
+            <Button Content="Back" Command="{Binding GoBackCommand}"/>
             <Button IsEnabled="False" Content="Forward"/>
 
         </DockPanel>

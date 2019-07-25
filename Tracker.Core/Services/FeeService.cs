@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 using Tracker.Core.Extensions;
@@ -24,31 +25,15 @@ namespace Tracker.Core.Services
             ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dir + @"\Resources\RS_Backend.accdb";
         }
 
-        public Fee GetFeeData(Fee returnValue, bool loadAsCurrentSearch = true)
+        public Fee GetFeeData(Fee returnValue)
         {
             using (OleDbConnection connection = new OleDbConnection(ConnectionString))
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    string fields = "";
-                    List<FieldTypes> fieldTypes = new List<FieldTypes>();
+                    string fields = returnValue.GetFieldNames();
 
-                    //Parse each charge in returnValue, pull count/isChecked from DB, update costs if needed.
-                    foreach (ICharge charge in returnValue.Charges)
-                    {
-                        if (charge.Type == "variable" || charge.Type == "categorical")
-                        {
-                            fields += charge.DBField + ", ";
-                            fieldTypes.Add(FieldTypes.numerical);
-                        }
-                        else if (charge.Type == "boolean")
-                        {
-                            fields += charge.DBField + ", ";
-                            fieldTypes.Add(FieldTypes.boolean);
-                        }
-                    }
-
-                    sqlCommand.CommandText = "SELECT " + fields.Substring(0, fields.Length - 2) + " FROM tblFees WHERE ID = " + returnValue.ID;
+                    sqlCommand.CommandText = "SELECT " + fields + ", Adjustment, AdjustmentExplanation FROM tblFees WHERE ID = " + returnValue.ID;
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -73,9 +58,84 @@ namespace Tracker.Core.Services
                                 break;
                         }
                     }
+                    returnValue.Adjustment = reader.GetDecimalSafe(index++);
+                    returnValue.AdjustmentExplanation = reader.GetStringSafe(index++);
 
                     returnValue.CalculateProjectCost();
                     return returnValue;
+                }
+            }
+        }
+
+        public int AddNewFee(Fee f)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    string fields = "";
+                    string values = "";
+                    sqlCommand.CommandText = "INSERT INTO tblAddresses () " +
+                        "VALUES ()";
+
+                    connection.Open();
+                    sqlCommand.ExecuteNonQuery();
+                    sqlCommand.CommandText = "Select @@identity";
+                    int newID = (int)sqlCommand.ExecuteScalar();
+                    return newID;
+                }
+            }
+        }
+
+        public int UpdateFee(Fee f)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "SELECT ID FROM tblAddresses WHERE ID = ?";
+                    sqlCommand.Parameters.AddWithValue("ID", f.ID);
+                    connection.Open();
+                    OleDbDataReader reader = sqlCommand.ExecuteReader();
+                    if (reader.HasRows)
+                    {
+                        using (OleDbConnection connection2 = new OleDbConnection(ConnectionString))
+                        {
+                            using (OleDbCommand updateCommand = connection2.CreateCommand())
+                            {
+                                updateCommand.CommandText = "UPDATE tblFees SET " + f.GetFieldNames("update") +
+                                    ", Adjustment = @adj, AdjustmentExplanation = @adjexp " +
+                                    "WHERE ID = @id";
+                                foreach (ICharge charge in f.Charges)
+                                {
+                                    switch (charge.Type)
+                                    {
+                                        case "variable":
+                                            VariableCharge vCharge = (VariableCharge)charge;
+                                            updateCommand.Parameters.AddWithValue("@" + vCharge.DBField, vCharge.Count);
+                                            break;
+                                        case "categorical":
+                                            CategoricalCharge cCharge = (CategoricalCharge)charge;
+                                            updateCommand.Parameters.AddWithValue("@" + cCharge.DBField, cCharge.Count);
+                                            break;
+                                        case "boolean":
+                                            BooleanCharge bCharge = (BooleanCharge)charge;
+                                            updateCommand.Parameters.AddWithValue("@" + bCharge.DBField, bCharge.IsIncurred);
+                                            break;
+                                    }
+                                }
+                                updateCommand.Parameters.AddWithValue("@adj", f.Adjustment);
+                                updateCommand.Parameters.AddWithValue("@adjexp", f.AdjustmentExplanation ?? Convert.DBNull);
+                                updateCommand.Parameters.AddWithValue("@id", f.ID);
+
+                                connection2.Open();
+                                updateCommand.ExecuteNonQuery();
+                                return f.ID;
+                            }
+                        }
+                    }
+                    else
+                        return AddNewFee(f);
                 }
             }
         }

@@ -11,6 +11,8 @@ namespace Tracker.Core.Services
     {
         string ConnectionString { get; set; }
         void SetConnectionString();
-        Fee GetFeeData(Fee returnValue, bool loadAsCurrentSearch = true);
+        Fee GetFeeData(Fee returnValue);
+        int AddNewFee(Fee f);
+        int UpdateFee(Fee f);
     }
 }

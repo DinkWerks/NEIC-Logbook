@@ -13,6 +13,7 @@ namespace Tracker.Core.Models.Fees
         private ObservableCollection<ICharge> _charges = new ObservableCollection<ICharge>();
         private decimal _totalProjectCost;
         private decimal _adjustment = 0;
+        public string _adjustmentExplanation;
 
         public int ID
         {
@@ -36,6 +37,11 @@ namespace Tracker.Core.Models.Fees
         {
             get { return _adjustment; }
             set { SetProperty(ref _adjustment, value); }
+        }
+        public string AdjustmentExplanation
+        {
+            get { return _adjustmentExplanation; }
+            set { SetProperty(ref _adjustmentExplanation, value); }
         }
 
         public decimal TotalProjectCost
@@ -115,6 +121,32 @@ namespace Tracker.Core.Models.Fees
                 runningTotal += charge.TotalCost;
             }
             TotalProjectCost = runningTotal + Adjustment;
+        }
+
+        public string GetFieldNames(string queryType = "select")
+        {
+            switch (queryType)
+            {
+                case "select":
+                    string fields = "";
+                    foreach (ICharge c in Charges)
+                    {
+                        if (c.Type != "separator")
+                            fields += c.DBField + ", ";
+                    }
+                    return fields.Substring(0, fields.Length-2);
+                case "update":
+                    string updateFields = "";
+                    foreach (ICharge c in Charges)
+                    {
+                        if (c.Type != "separator")
+                            updateFields += c.DBField + " = @" + c.DBField + ", ";
+                    }
+                    return updateFields.Substring(0, updateFields.Length - 2);
+                default:
+                    return string.Empty;
+            }
+
         }
     }
 }

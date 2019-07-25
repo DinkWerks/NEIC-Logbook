@@ -52,7 +52,7 @@ namespace Tracker.Core.Services
                         "ProjectName, RecordSearchType, Status, SpecialCaseDetails, " +
                         "MainCounty, AdditionalCounties, PLSS, Acres, LinearMiles, " +
                         "AreResourcesInProject, Recommendation, IsReportReceived, Processor, EncryptionPassword, " +
-                        "FeeVersion, FeeID, TotalCost, DiscretionaryAdjustment, AdjustmentExplanation, " +
+                        "FeeVersion, FeeID, TotalCost, " +
                         "ProjectNumber, InvoiceNumber, CheckName, CheckNumber, IsPrePaid, IsSelected, Notes " +
                         "FROM tblRecordSearches WHERE ID = " + id;
                     connection.Open();
@@ -100,8 +100,6 @@ namespace Tracker.Core.Services
                         FeeID = reader.GetInt32Safe(index),
                         Fee = GetFeeData("v2017", reader.GetInt32Safe(index++)),
                         TotalFee = reader.GetDecimalSafe(index++),
-                        DiscretionaryAdjustment = reader.GetDecimalSafe(index++),
-                        AdjustmentExplanation = reader.GetStringSafe(index++),
                         ProjectNumber = reader.GetStringSafe(index++),
                         InvoiceNumber = reader.GetStringSafe(index++),
                         CheckName = reader.GetStringSafe(index++),
@@ -111,8 +109,6 @@ namespace Tracker.Core.Services
                         Notes = reader.GetStringSafe(index++),
                     };
 
-                    // TODO Load Fee info
-                    returnValue.Fee.Adjustment = returnValue.DiscretionaryAdjustment;
                     if (returnValue.IsMailingSameAsBilling)
                         returnValue.BillingAddress = returnValue.MailingAddress;
                     if (loadAsCurrentSearch)
@@ -136,7 +132,7 @@ namespace Tracker.Core.Services
                         "ProjectName, RecordSearchType, Status, SpecialCaseDetails, " +
                         "MainCounty, AdditionalCounties, PLSS, Acres, LinearMiles, " +
                         "AreResourcesInProject, Recommendation, IsReportReceived, Processor, EncryptionPassword, " +
-                        "FeeVersion, FeeID, TotalCost, DiscretionaryAdjustment, AdjustmentExplanation, " +
+                        "FeeVersion, FeeID, TotalCost, " +
                         "ProjectNumber, InvoiceNumber, CheckName, CheckNumber, IsPrePaid, IsSelected, Notes " +
                         "FROM tblRecordSearches " + criteria;
                     connection.Open();
@@ -187,8 +183,6 @@ namespace Tracker.Core.Services
                             FeeID = reader.GetInt32Safe(index),
                             Fee = GetFeeData("v2017", reader.GetInt32Safe(index++)),
                             TotalFee = reader.GetDecimalSafe(index++),
-                            DiscretionaryAdjustment = reader.GetDecimalSafe(index++),
-                            AdjustmentExplanation = reader.GetStringSafe(index++),
                             ProjectNumber = reader.GetStringSafe(index++),
                             InvoiceNumber = reader.GetStringSafe(index++),
                             CheckName = reader.GetStringSafe(index++),
@@ -305,6 +299,10 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
+                    rs.MailingAddress.AddressID = _as.UpdateAddress(rs.MailingAddress);
+                    rs.BillingAddress.AddressID = _as.UpdateAddress(rs.BillingAddress);
+                    rs.FeeID = _fs.UpdateFee(rs.Fee);
+
                     sqlCommand.CommandText = "UPDATE tblRecordSearches SET " +
                         "ICPrefix = @ICPrefix, ICYear = @ICYear, ICEnumeration = @ICEnumeration, ICSuffix = ?," +
                         "DateReceived = @DateReceived, DateEntered = @DateEntered, DateOfResponse = @DateOfResponse, DateBilled = @DateBilled, DatePaid = @DatePaid, LastUpdated = @LastUpdated, " +
@@ -312,7 +310,7 @@ namespace Tracker.Core.Services
                         "ProjectName = @ProjectName, RecordSearchType = @RecordSearchType, Status = @Status, SpecialCaseDetails = @SpecialCaseDetails, " +
                         "MainCounty = @MainCounty, AdditionalCounties = @AdditionalCountiesID, PLSS = @PLSS, Acres = @Acres, LinearMiles = @LinearMiles, " +
                         "AreResourcesInProject = @AreResourcesInProject, Recommendation = @Recommendation, IsReportReceived = @IsReportReceived, Processor = @Processor, EncryptionPassword = @EncryptionPassword, " +
-                        "FeeVersion = @FeeVersion, FeeID = @FeeID, TotalCost = @TotalCost, DiscretionaryAdjustment = @DiscretionaryAdjustment, AdjustmentExplanation = @AdjustmentExplanation, " +
+                        "FeeVersion = @FeeVersion, FeeID = @FeeID, TotalCost = @TotalCost, " +
                         "ProjectNumber = @ProjectNumber, InvoiceNumber = @InvoiceNumber, CheckName = @CheckName, CheckNumber = @CheckNumber, IsPrePaid = @IsPrePaid, IsSelected = @IsSelected, Notes = @Notes " +
                         "WHERE ID = ?";
                     sqlCommand.Parameters.AddWithValue("@ICPrefix", rs.ICTypePrefix ?? Convert.DBNull);
@@ -354,8 +352,6 @@ namespace Tracker.Core.Services
                     sqlCommand.Parameters.AddWithValue("@FeeVersion", rs.FeeVersion ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@FeeID", rs.FeeID); //??
                     sqlCommand.Parameters.AddWithValue("@TotalCost", rs.TotalFee);
-                    sqlCommand.Parameters.AddWithValue("@DiscretionaryAdjustment", rs.DiscretionaryAdjustment);
-                    sqlCommand.Parameters.AddWithValue("@AdjustmentExplanation", rs.AdjustmentExplanation ?? Convert.DBNull);
                     
                     sqlCommand.Parameters.AddWithValue("@ProjectNumber", rs.ProjectNumber ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@InvoiceNumber", rs.InvoiceNumber ?? Convert.DBNull);

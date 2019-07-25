@@ -152,7 +152,7 @@
             <TextBox Grid.Column="1" Text="{Binding FeeModel.Adjustment, UpdateSourceTrigger=PropertyChanged}" TextChanged="CostChangedEvent"/>
 
             <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="Adjustment Explanation:"/>
-            <TextBox Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FeeModel.Adjustment}" TextChanged="CostChangedEvent"/>
+            <TextBox Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FeeModel.AdjustmentExplanation}" TextChanged="CostChangedEvent"/>
         </Grid>
 
         

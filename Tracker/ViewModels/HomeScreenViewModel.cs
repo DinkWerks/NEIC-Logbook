@@ -4,9 +4,10 @@ using Prism.Regions;
 
 namespace Tracker.ViewModels
 {
-    public class HomeScreenViewModel : BindableBase
+    public class HomeScreenViewModel : BindableBase, INavigationAware
     {
         private IRegionManager _rm;
+        private IRegionNavigationJournal _journal;
 
         public DelegateCommand<string> NavigateCommand { get; private set; }
 
@@ -19,6 +20,21 @@ namespace Tracker.ViewModels
         private void Navigate(string navigationTarget)
         {
             _rm.RequestNavigate("ContentRegion", navigationTarget);
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            _journal = navigationContext.NavigationService.Journal;
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            
         }
     }
 }

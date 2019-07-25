@@ -51,8 +51,6 @@ namespace Tracker.Core.Models
         private int _feeID;
         private Fees.Fee _fee;
         private bool _isPrePaid;
-        private decimal _discretionaryAdjustment;
-        private string _adjustmentExplanation;
         private decimal _totalFee;
         //Billing Information
         private string _projectNumber;
@@ -332,18 +330,6 @@ namespace Tracker.Core.Models
         {
             get { return _isPrePaid; }
             set { SetProperty(ref _isPrePaid, value); }
-        }
-
-        public decimal DiscretionaryAdjustment
-        {
-            get { return _discretionaryAdjustment; }
-            set { SetProperty(ref _discretionaryAdjustment, value); }
-        }
-
-        public string AdjustmentExplanation
-        {
-            get { return _adjustmentExplanation; }
-            set { SetProperty(ref _adjustmentExplanation, value); }
         }
 
         public decimal TotalFee

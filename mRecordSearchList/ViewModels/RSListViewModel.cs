@@ -15,7 +15,7 @@ using Tracker.Core.StaticTypes;
 
 namespace mRecordSearchList.ViewModels
 {
-    public class RSListViewModel : BindableBase, IRegionMemberLifetime
+    public class RSListViewModel : BindableBase, IRegionMemberLifetime, INavigationAware
     {
         private IRecordSearchService _rss;
         private IRegionManager _rm;
@@ -24,13 +24,16 @@ namespace mRecordSearchList.ViewModels
         private string _rsidYearSearch;
         private string _rsidEnumerationSearch;
         private string _projectNameSearchText;
+        private IRegionNavigationJournal _journal;
 
         public List<RecordSearch> RecordSearches
         {
             get { return _recordSearches; }
             set { SetProperty(ref _recordSearches, value); }
         }
+
         public List<Prefix> PrefixChoices { get; private set; }
+
         public ICollectionView RecordSearchesView
         {
             get { return CollectionViewSource.GetDefaultView(RecordSearches); }
@@ -77,6 +80,7 @@ namespace mRecordSearchList.ViewModels
         }
 
         public InteractionRequest<ICreateNewRSNotification> NewRSRequest { get; private set; }
+        public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand CreateNewRSCommand { get; private set; }
         public bool KeepAlive => false;
 
@@ -92,6 +96,7 @@ namespace mRecordSearchList.ViewModels
             RecordSearchesView.Filter = RecordSearchViewFilter;
             NewRSRequest = new InteractionRequest<ICreateNewRSNotification>();
             CreateNewRSCommand = new DelegateCommand(CreateNewRecordSearch);
+            GoBackCommand = new DelegateCommand(GoBack);
 
             eventAggregator.GetEvent<RecordSearchListSelectEvent>().Subscribe(NavigateToRecordSearchEntry);
         }
@@ -106,6 +111,11 @@ namespace mRecordSearchList.ViewModels
 
             if (navTargetID >= 0)
                 _rm.RequestNavigate("ContentRegion", "RSEntry", parameters);
+        }
+
+        private void GoBack()
+        {
+            _journal.GoBack();
         }
 
         public void CreateNewRecordSearch()
@@ -180,6 +190,21 @@ namespace mRecordSearchList.ViewModels
             else passedTests++;
 
             return passedTests >= 4;
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            _journal = navigationContext.NavigationService.Journal;
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+
         }
     }
 }

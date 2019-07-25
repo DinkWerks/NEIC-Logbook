@@ -9,13 +9,12 @@ using Tracker.Core.Services;
 
 namespace mFeeCalculator.ViewModels
 {
-    public class CalculatorViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
+    public class CalculatorViewModel : BindableBase, IRegionMemberLifetime
     {
         private ObservableCollection<string> _versions = new ObservableCollection<string>();
         private ObservableCollection<ICharge> _charges = new ObservableCollection<ICharge>();
         private Fee _fee;
         private string _selectedVersion;
-        private string _adjustmentExplanation;
 
         public ObservableCollection<string> Versions
         {
@@ -45,12 +44,6 @@ namespace mFeeCalculator.ViewModels
             set { SetProperty(ref _fee, value); }
         }
 
-        public string AdjustmentExplanation
-        {
-            get { return _adjustmentExplanation; }
-            set { SetProperty(ref _adjustmentExplanation, value); }
-        }
-
         public bool KeepAlive => false;
 
         public CalculatorViewModel(IEventAggregator eventAggregator, IRecordSearchService recordSearchService)
@@ -63,7 +56,6 @@ namespace mFeeCalculator.ViewModels
                 {
                     FeeModel = recordSearchService.CurrentRecordSearch.Fee;
                     Charges = recordSearchService.CurrentRecordSearch.Fee.Charges;
-                    AdjustmentExplanation = recordSearchService.CurrentRecordSearch.AdjustmentExplanation;
                 }
             }
 
@@ -85,21 +77,6 @@ namespace mFeeCalculator.ViewModels
                 string fileName = Path.GetFileName(feeStructure);
                 Versions.Add(fileName.Remove(fileName.Length - 4));
             }
-        }
-
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-
-        }
-
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            return false;
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-
         }
     }
 }

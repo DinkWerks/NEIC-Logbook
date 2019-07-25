@@ -26,6 +26,7 @@
     <StackPanel Margin="10">
         <ToolBar Margin="0,0,0,10" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
             <Button Content="Add New" Command="{Binding CreateNewRSCommand}"/>
+            <Button Content="Back" Command="{Binding GoBackCommand}"/>
         </ToolBar>
         <Grid>
             <Grid.RowDefinitions>

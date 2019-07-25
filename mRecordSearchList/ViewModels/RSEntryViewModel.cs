@@ -27,14 +27,18 @@ namespace mRecordSearchList.ViewModels
         private int _selectedRequestor;
         private int _selectedClient;
         private bool _isLoaded = false;
-        
+        private IRegionNavigationJournal _journal;
+
         public List<Person> PeopleList { get; set; }
         public List<Client> ClientList { get; set; }
 
         public RecordSearch RecordSearch
         {
             get { return _recordSearch; }
-            set { SetProperty(ref _recordSearch, value); }
+            set
+            {
+                SetProperty(ref _recordSearch, value);
+            }
         }
 
         public int SelectedRequestor
@@ -59,6 +63,7 @@ namespace mRecordSearchList.ViewModels
 
         public DelegateCommand SaveCommand { get; private set; }
         public DelegateCommand<string> NavigateCommand { get; private set; }
+        public DelegateCommand GoBackCommand { get; private set; }
         public InteractionRequest<IAdditionalCountyNotification> CountySelectRequest { get; set; }
         public DelegateCommand CountySelectPopupCommand { get; private set; }
         public DelegateCommand<string> CopyRequestorCommand { get; private set; }
@@ -84,6 +89,7 @@ namespace mRecordSearchList.ViewModels
             SaveCommand = new DelegateCommand(SaveRS);
             CountySelectRequest = new InteractionRequest<IAdditionalCountyNotification>();
             NavigateCommand = new DelegateCommand<string>(Navigate);
+            GoBackCommand = new DelegateCommand(GoBack);
             CountySelectPopupCommand = new DelegateCommand(RaiseCountySelectPopup);
             CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
             CopyAffiliationCommand = new DelegateCommand<string>(CopyAffiliation);
@@ -91,7 +97,6 @@ namespace mRecordSearchList.ViewModels
         }
 
         // Methods
-
         private void SaveRS()
         {
             _rss.UpdateRecordSearch(RecordSearch);
@@ -113,6 +118,11 @@ namespace mRecordSearchList.ViewModels
                 if (SelectedClient > 0)
                     _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
             }
+        }
+
+        private void GoBack()
+        {
+            _journal.GoBack();
         }
 
         private void CopyRequestor(string destination)
@@ -177,6 +187,7 @@ namespace mRecordSearchList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _journal = navigationContext.NavigationService.Journal;
             int rsID = (int)navigationContext.Parameters["id"];
             if (rsID > 0)
             {
@@ -195,7 +206,7 @@ namespace mRecordSearchList.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            //Catch for unsaved work. Maybe store copy of original record search and compare them before navigating from?
+            SaveRS();
         }
     }
 }

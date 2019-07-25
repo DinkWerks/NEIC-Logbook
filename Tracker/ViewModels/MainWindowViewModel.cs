@@ -8,21 +8,21 @@ namespace Tracker.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private string _title = "NEIC Logbook";
-        private IRegionNavigationService _ns;
         private IRegionManager _rm;
+        private IRegionNavigationJournal _journal;
 
         public DelegateCommand<string> NavigateCommand { get; private set; }
-        public DelegateCommand GoBackCommand { get; private set; }
 
         public string Title
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
         }
-
-        public MainWindowViewModel(IRegionManager regionManager)
+        public DelegateCommand GoBackCommand { get; set; }
+        public MainWindowViewModel(IRegionManager regionManager, RegionNavigationService regionNavigationService)
         {
             _rm = regionManager;
+            _journal = regionNavigationService.Journal;
             regionManager.RegisterViewWithRegion("ContentRegion", typeof(HomeScreen));
             NavigateCommand = new DelegateCommand<string>(Navigate);
             GoBackCommand = new DelegateCommand(GoBack);
@@ -30,9 +30,8 @@ namespace Tracker.ViewModels
 
         private void GoBack()
         {
-            _ns.Journal.GoBack();
+            _journal.GoBack();
         }
-
         private void Navigate(string navigationTarget)
         {
             _rm.RequestNavigate("ContentRegion", navigationTarget);
