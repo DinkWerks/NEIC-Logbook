@@ -62,7 +62,7 @@ namespace Tracker.Core.Models
         //Utility
         private bool _isSelected;
         private string _notes;
-        
+
 
         public int ID
         {
@@ -101,31 +101,51 @@ namespace Tracker.Core.Models
         public DateTime? DateReceived
         {
             get { return _dateReceived; }
-            set { SetProperty(ref _dateReceived, value); }
+            set
+            {
+                SetProperty(ref _dateReceived, value);
+                Status = CalculateStatus();
+            }
         }
 
         public DateTime? DateEntered
         {
             get { return _dateEntered; }
-            set { SetProperty(ref _dateEntered, value); }
+            set
+            {
+                SetProperty(ref _dateEntered, value);
+                Status = CalculateStatus();
+            }
         }
 
         public DateTime? DateOfResponse
         {
             get { return _dateOfResponse; }
-            set { SetProperty(ref _dateOfResponse, value); }
+            set
+            {
+                SetProperty(ref _dateOfResponse, value);
+                Status = CalculateStatus();
+            }
         }
 
         public DateTime? DateBilled
         {
             get { return _dateBilled; }
-            set { SetProperty(ref _dateBilled, value); }
+            set
+            {
+                SetProperty(ref _dateBilled, value);
+                Status = CalculateStatus();
+            }
         }
 
         public DateTime? DatePaid
         {
             get { return _datePaid; }
-            set { SetProperty(ref _datePaid, value); }
+            set
+            {
+                SetProperty(ref _datePaid, value);
+                Status = CalculateStatus();
+            }
         }
 
         public DateTime? LastUpdated
@@ -145,7 +165,7 @@ namespace Tracker.Core.Models
         }
 
         public Person Requestor
-        {       
+        {
             get { return _requestor; }
             set { SetProperty(ref _requestor, value); }
         }
@@ -171,7 +191,8 @@ namespace Tracker.Core.Models
         public Address MailingAddress
         {
             get { return _mailingAddress; }
-            set {
+            set
+            {
                 SetProperty(ref _mailingAddress, value);
                 if (IsMailingSameAsBilling)
                     BillingAddress = value;
@@ -181,7 +202,8 @@ namespace Tracker.Core.Models
         public bool IsMailingSameAsBilling
         {
             get { return _isRequestorSameAsBilling; }
-            set {
+            set
+            {
                 SetProperty(ref _isRequestorSameAsBilling, value);
                 if (value)
                     BillingAddress = MailingAddress;
@@ -370,9 +392,40 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _notes, value); }
         }
 
+        //Constructor
         public RecordSearch()
         {
 
+        }
+
+        //Method
+        private string CalculateStatus()
+        {
+            DateTime today = DateTime.Now;
+
+            if (DatePaid != null)
+            {
+                return "Complete";
+            }
+            else if (DateBilled != null)
+            {
+                if ((today - DateBilled.Value).TotalDays < 60)
+                    return "Awaiting Payment";
+                else
+                    return "Overdue Payment";
+            }
+            else if (DateOfResponse != null)
+            {
+                return "Awaiting Billing";
+            }
+            else if (DateReceived != null)
+            {
+                if ((today - DateReceived.Value).TotalDays < 60)
+                    return "Awaiting Response";
+                else
+                    return "Overdue Response";
+            }
+            return "Entered";
         }
     }
 }

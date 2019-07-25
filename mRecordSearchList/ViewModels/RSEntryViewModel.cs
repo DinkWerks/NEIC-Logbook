@@ -28,7 +28,6 @@ namespace mRecordSearchList.ViewModels
         private int _selectedClient;
         private bool _isLoaded = false;
         
-
         public List<Person> PeopleList { get; set; }
         public List<Client> ClientList { get; set; }
 

@@ -78,7 +78,8 @@
                             </TextBlock.Text>
                         </TextBlock>
                         <TextBlock Grid.Column="1" Text="{Binding ProjectName}"/>
-                        <Image Grid.Column="3"/>
+						<TextBlock Grid.Column="2" Text="{Binding Status}"/>
+						<Image Grid.Column="2"/>
                         <TextBlock Grid.Column="3" Text="{Binding LastUpdated, StringFormat=d}" HorizontalAlignment="Right"/>
                     </Grid>
                 </DataTemplate>

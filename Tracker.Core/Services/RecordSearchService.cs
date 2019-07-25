@@ -211,7 +211,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = @"SELECT ID, ICPrefix, ICYear, ICEnumeration, ICSuffix, ProjectName, LastUpdated FROM tblRecordSearches";
+                    sqlCommand.CommandText = @"SELECT ID, ICPrefix, ICYear, ICEnumeration, ICSuffix, ProjectName, Status, LastUpdated FROM tblRecordSearches";
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -229,6 +229,7 @@ namespace Tracker.Core.Services
                             ICEnumeration = reader.GetInt32Safe(index++),
                             ICSuffix = reader.GetStringSafe(index++),
                             ProjectName = reader.GetStringSafe(index++),
+                            Status = reader.GetStringSafe(index++),
                             LastUpdated = reader.GetDateTimeSafe(index++)
                         };
                         returnCollection.Add(returnValue);
@@ -245,7 +246,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = @"SELECT ID, ICPrefix, ICYear, ICEnumeration, ICSuffix, ProjectName, LastUpdated, RequestorID FROM tblRecordSearches " + criteria;
+                    sqlCommand.CommandText = @"SELECT ID, ICPrefix, ICYear, ICEnumeration, ICSuffix, ProjectName, Status, LastUpdated FROM tblRecordSearches " + criteria;
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -263,6 +264,7 @@ namespace Tracker.Core.Services
                             ICEnumeration = reader.GetInt32Safe(index++),
                             ICSuffix = reader.GetStringSafe(index++),
                             ProjectName = reader.GetStringSafe(index++),
+                            Status = reader.GetStringSafe(index++),
                             LastUpdated = reader.GetDateTimeSafe(index++)
                         };
                         returnCollection.Add(returnValue);
