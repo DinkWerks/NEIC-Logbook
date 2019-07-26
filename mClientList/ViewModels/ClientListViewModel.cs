@@ -1,11 +1,13 @@
-﻿using Prism.Events;
+﻿using mClientList.Notifications;
+using Prism.Commands;
+using Prism.Events;
+using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
 using Tracker.Core.Events;
-using Tracker.Core.StaticTypes;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
 
@@ -50,15 +52,40 @@ namespace mClientList.ViewModels
             }
         }
 
+        public InteractionRequest<ICreateNewClientNotification> NewClientRequest { get; private set; }
+        public DelegateCommand NewClientCommand { get; private set; }
+        //Constructor
         public ClientListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IClientService clientService)
         {
             _rm = regionManager;
             _cs = clientService;
 
             Clients = _cs.GetAllPartialClients();
-            ClientView.Filter=ClientNameSearchFilter;
+            ClientView.Filter = ClientNameSearchFilter;
 
+
+            NewClientRequest = new InteractionRequest<ICreateNewClientNotification>();
+            NewClientCommand = new DelegateCommand(CreateNewClient);
             eventAggregator.GetEvent<ClientListSelectEvent>().Subscribe(NavigateToClientEntry);
+        }
+
+        //Methods
+        private void CreateNewClient()
+        {
+            NewClientRequest.Raise(new CreateNewClientNotification { Title = "Create a New Client Entry" }, r =>
+                {
+                    if (r.Confirmed)
+                    {
+                        int newClientID = _cs.AddNewClient(new Client()
+                        {
+                            ClientName = r.ClientName,
+                            OfficeName = r.OfficeName,
+                        });
+
+                        NavigateToClientEntry(newClientID);
+                    }
+                }
+            );
         }
 
         public void NavigateToClientEntry(int navTargetID)

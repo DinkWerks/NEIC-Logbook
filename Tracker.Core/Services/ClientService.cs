@@ -4,6 +4,7 @@ using System.Data.OleDb;
 using System.IO;
 using Tracker.Core.Extensions;
 using Tracker.Core.Models;
+using Tracker.Core.Types;
 
 namespace Tracker.Core.Services
 {
@@ -106,18 +107,17 @@ namespace Tracker.Core.Services
             }
         }
 
-        public int AddNewClient(object[] array)
+        public int AddNewClient(Client newClient)
         {
             using (OleDbConnection connection = new OleDbConnection(ConnectionString))
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "INSERT INTO tblClients (NewPEID, ClientName, OfficeName, Standing) " +
+                    sqlCommand.CommandText = "INSERT INTO tblClients (ClientName, OfficeName, Standing) " +
                         "VALUES (?,?,?,?)";
-                    sqlCommand.Parameters.AddWithValue("NewPEID", array[0]);
-                    sqlCommand.Parameters.AddWithValue("ClientName", array[1]);
-                    sqlCommand.Parameters.AddWithValue("OfficeName", array[2] ?? DBNull.Value);
-                    sqlCommand.Parameters.AddWithValue("Standing", array[3]);
+                    sqlCommand.Parameters.AddWithValue("ClientName", newClient.ClientName);
+                    sqlCommand.Parameters.AddWithValue("OfficeName", newClient.OfficeName);
+                    sqlCommand.Parameters.AddWithValue("Standing", "Good Standing");
 
                     connection.Open();
                     sqlCommand.ExecuteNonQuery();

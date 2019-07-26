@@ -52,6 +52,8 @@
     <Compile Include="Converters\ClientNameConverter.cs" />
     <Compile Include="Converters\StandingToImageConverter.cs" />
     <Compile Include="mClientListModule.cs" />
+    <Compile Include="Notifications\CreateNewClientNotification.cs" />
+    <Compile Include="Notifications\ICreateNewClientNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -67,11 +69,15 @@
     </Compile>
     <Compile Include="ViewModels\ClientEntryViewModel.cs" />
     <Compile Include="ViewModels\ClientListViewModel.cs" />
+    <Compile Include="ViewModels\NewClientDialogViewModel.cs" />
     <Compile Include="Views\ClientEntry.xaml.cs">
       <DependentUpon>ClientEntry.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ClientList.xaml.cs">
       <DependentUpon>ClientList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\NewClientDialog.xaml.cs">
+      <DependentUpon>NewClientDialog.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -92,6 +98,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\NewClientDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Prism.Unity">
@@ -105,8 +115,6 @@
       <Name>Tracker.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Interfaces\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

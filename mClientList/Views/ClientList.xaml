@@ -2,7 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:converters="clr-namespace:mClientList.Converters"
-             xmlns:prism="http://prismlibrary.com/"             
+             xmlns:prism="http://prismlibrary.com/"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:views="clr-namespace:mClientList.Views"
              prism:ViewModelLocator.AutoWireViewModel="True">
     <UserControl.Resources>
         <Style TargetType="TextBlock" x:Key="ColumnTitle">
@@ -12,7 +14,21 @@
         <converters:StandingToImageConverter x:Key="StandingToImageConverter"/>
     </UserControl.Resources>
 
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding NewClientRequest}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
+                <prism:PopupWindowAction.WindowContent>
+                    <views:NewClientDialog/>
+                </prism:PopupWindowAction.WindowContent>
+            </prism:PopupWindowAction>
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
+    
     <StackPanel Margin="5">
+        <ToolBar Margin="0,0,0,10" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
+            <Button Content="Add New" Command="{Binding NewClientCommand}"/>
+        </ToolBar>
+        
         <Grid HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
