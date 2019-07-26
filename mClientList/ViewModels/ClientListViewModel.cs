@@ -13,7 +13,7 @@ using Tracker.Core.Services;
 
 namespace mClientList.ViewModels
 {
-    public class ClientListViewModel : BindableBase
+    public class ClientListViewModel : BindableBase, IRegionMemberLifetime
     {
         private IRegionManager _rm;
         private IClientService _cs;
@@ -54,6 +54,8 @@ namespace mClientList.ViewModels
 
         public InteractionRequest<ICreateNewClientNotification> NewClientRequest { get; private set; }
         public DelegateCommand NewClientCommand { get; private set; }
+        public bool KeepAlive => false;
+
         //Constructor
         public ClientListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IClientService clientService)
         {

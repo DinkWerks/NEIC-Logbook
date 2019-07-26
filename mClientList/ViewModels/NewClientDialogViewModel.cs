@@ -3,7 +3,6 @@ using mClientList.Notifications;
 using Prism.Commands;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
-using Prism.Regions;
 using Tracker.Core.Services;
 
 namespace mClientList.ViewModels

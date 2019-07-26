@@ -85,7 +85,7 @@ namespace Tracker.Core.Services
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
 
                     List<Client> returnCollection = new List<Client>();
-                    
+
                     while (reader.Read())
                     {
                         int index = 0;
@@ -101,7 +101,7 @@ namespace Tracker.Core.Services
                         };
                         returnCollection.Add(returnValue);
                     }
-                    
+
                     return returnCollection;
                 }
             }
@@ -114,7 +114,7 @@ namespace Tracker.Core.Services
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
                     sqlCommand.CommandText = "INSERT INTO tblClients (ClientName, OfficeName, Standing) " +
-                        "VALUES (?,?,?,?)";
+                        "VALUES (?,?,?)";
                     sqlCommand.Parameters.AddWithValue("ClientName", newClient.ClientName);
                     sqlCommand.Parameters.AddWithValue("OfficeName", newClient.OfficeName);
                     sqlCommand.Parameters.AddWithValue("Standing", "Good Standing");
@@ -134,7 +134,31 @@ namespace Tracker.Core.Services
 
         public bool ConfirmDistinct(string clientName, string officeName)
         {
-            throw new NotImplementedException();
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    if (string.IsNullOrWhiteSpace(officeName))
+                    {
+                        sqlCommand.CommandText = "SELECT ID FROM tblClients WHERE ClientName = @clientName";
+                        sqlCommand.Parameters.AddWithValue("@clientName", clientName ?? Convert.DBNull);
+                    }
+                    else
+                    {
+                        sqlCommand.CommandText = "SELECT ID FROM tblClients WHERE ClientName = @clientName AND OfficeName = @officeName";
+                        sqlCommand.Parameters.AddWithValue("@clientName", clientName ?? Convert.DBNull);
+                        sqlCommand.Parameters.AddWithValue("@officeName", officeName ?? Convert.DBNull);
+                    }
+                    connection.Open();
+
+                    OleDbDataReader reader = sqlCommand.ExecuteReader();
+                    reader.Read();
+
+                    if (reader.HasRows)
+                        return false;
+                    return true;
+                }
+            }
         }
     }
 }
