@@ -76,6 +76,7 @@ namespace mPersonList.ViewModels
             int addressID = _as.UpdateAddress(PersonModel.AddressModel);
             PersonModel.AddressID = addressID;
             PersonModel.AddressModel.AddressID = addressID;
+            PersonModel.CurrentAssociationID = SelectedClient;
             _ps.UpdatePersonInformation(PersonModel);
         }
 
@@ -106,8 +107,7 @@ namespace mPersonList.ViewModels
             int personID = (int)navigationContext.Parameters["id"];
             if (personID > 0)
             {
-                _ps.GetPersonByID(personID);
-                PersonModel = _ps.CurrentPerson;
+                PersonModel = _ps.GetPersonByID(personID);
                 SelectedClient = PersonModel.CurrentAssociationID;
                 PersonModel.AddressModel = _as.GetAddressByID(PersonModel.AddressID);
                 RecordSearches = new ObservableCollection<RecordSearch>(

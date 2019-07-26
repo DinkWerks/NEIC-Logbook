@@ -8,7 +8,7 @@ namespace Tracker.Core.Models
         private int _id;
         private string _firstName;
         private string _lastName;
-        private int _currentAssociationID;
+        private int _currentAssociationID = 0;
         private int _addressID;
         private Address _address;
         private string _phone1;

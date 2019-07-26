@@ -1,8 +1,9 @@
-﻿using Prism.Commands;
+﻿using mPersonList.Notifications;
+using Prism.Commands;
 using Prism.Events;
+using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 using Prism.Regions;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
@@ -12,9 +13,10 @@ using Tracker.Core.Services;
 
 namespace mPersonList.ViewModels
 {
-    public class PersonListViewModel : BindableBase
+    public class PersonListViewModel : BindableBase, IRegionMemberLifetime
     {
         private IRegionManager _rm;
+        private IPersonService _ps;
         private List<Person> _people = new List<Person>();
         private string _personNameSearchText;
         private string _affilliationSearchText;
@@ -50,18 +52,27 @@ namespace mPersonList.ViewModels
             }
         }
 
+        public InteractionRequest<INewPersonNotification> NewPersonRequest { get; private set; }
+        public DelegateCommand NewClientCommand { get; private set; }
+        public bool KeepAlive => false;
+
+        //Constructor
         public PersonListViewModel(IRegionManager regionManager, IEventAggregator eventAggregator, IPersonService personService)
         {
             _rm = regionManager;
+            _ps = personService;
 
             People = personService.GetAllPartialPeople();
             PeopleView.Refresh();
             PeopleView.Filter = PersonNameSearchFilter;
 
+            NewPersonRequest = new InteractionRequest<INewPersonNotification>();
+            NewClientCommand = new DelegateCommand(CreateNewPerson);
             eventAggregator.GetEvent<PersonListSelectEvent>().Subscribe(NavigateToPersonEntry);
         }
 
-        public void NavigateToPersonEntry(int navTargetID)
+        //Methods
+        private void NavigateToPersonEntry(int navTargetID)
         {
             var parameters = new NavigationParameters
             {
@@ -72,7 +83,25 @@ namespace mPersonList.ViewModels
                 _rm.RequestNavigate("ContentRegion", "PersonEntry", parameters);
         }
 
-        public bool PersonNameSearchFilter(object item)
+        private void CreateNewPerson()
+        {
+            NewPersonRequest.Raise(new NewPersonNotification { Title = "Create a New Person Entry" }, r =>
+                {
+                    if (r.Confirmed)
+                    {
+                        int newPersonID = _ps.AddNewPerson(new Person()
+                        {
+                            FirstName = r.FirstName,
+                            LastName = r.LastName
+                        });
+
+                        NavigateToPersonEntry(newPersonID);
+                    }
+                }
+            );
+        }
+
+        private bool PersonNameSearchFilter(object item)
         {
             Person person = item as Person;
             if (person == null)

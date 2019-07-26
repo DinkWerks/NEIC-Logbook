@@ -66,7 +66,7 @@ namespace Tracker.Core.Services
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
                     sqlCommand.CommandText = "INSERT INTO tblAddresses (AddressName, AttentionTo, Line1, Line2, City, State, Zip, Notes) " +
-                        "VALUES (@AddressName @AttentionTo, @Line1, @Line2, @City, @State, @Zip, @Notes)";
+                        "VALUES (@AddressName, @AttentionTo, @Line1, @Line2, @City, @State, @Zip, @Notes)";
                     sqlCommand.Parameters.AddWithValue("@AddressName", a.AddressName ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@AttentionTo", a.AttentionTo ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@Line1", a.AddressLine1 ?? Convert.DBNull);

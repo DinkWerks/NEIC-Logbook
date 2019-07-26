@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="Converters\ICFileNumberConverter.cs" />
     <Compile Include="mPersonListModule.cs" />
+    <Compile Include="Notifications\INewPersonNotification.cs" />
+    <Compile Include="Notifications\NewPersonNotification.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -64,8 +66,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="ViewModels\NewPersonDialogViewModel.cs" />
     <Compile Include="ViewModels\PersonEntryViewModel.cs" />
     <Compile Include="ViewModels\PersonListViewModel.cs" />
+    <Compile Include="Views\NewPersonDialog.xaml.cs">
+      <DependentUpon>NewPersonDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\PersonEntry.xaml.cs">
       <DependentUpon>PersonEntry.xaml</DependentUpon>
     </Compile>
@@ -83,6 +89,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\NewPersonDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\PersonEntry.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

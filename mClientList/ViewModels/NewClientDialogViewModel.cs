@@ -68,7 +68,7 @@ namespace mClientList.ViewModels
 
         private void Accept()
         {
-            if (ConfirmDistinct())
+            if (_cs.ConfirmDistinct(ClientName, OfficeName))
             {
                 _notification.ClientName = ClientName;
                 _notification.OfficeName = OfficeName;
@@ -85,11 +85,6 @@ namespace mClientList.ViewModels
                 return true;
             else
                 return false;
-        }
-
-        private bool ConfirmDistinct()
-        {
-            return _cs.ConfirmDistinct(ClientName, OfficeName);
         }
     }
 }

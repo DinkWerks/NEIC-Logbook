@@ -38,8 +38,7 @@ namespace Tracker.Core.Services
                 {
                     sqlCommand.CommandText = "SELECT ID, FirstName, LastName, CurrentAssociationID, " +
                         "AddressID, Phone1, Phone2, Email, DisclosureLevel, Notes" +
-                        " FROM tblPeople WHERE ID = ?";
-                    sqlCommand.Parameters.AddWithValue("ID",  id);
+                        " FROM tblPeople WHERE ID = " + id;
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -139,24 +138,15 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "INSERT INTO tblAddresses (AttentionTo, Line1, Line2, City, State, Zip, Notes) " +
-                        "VALUES (@AttentionTo, @Line1, @Line2, @City, @State, @Zip, @Notes)";
+                    sqlCommand.CommandText = "INSERT INTO tblPeople (FirstName, LastName) VALUEs (?,?)";
                     sqlCommand.Parameters.AddWithValue("FirstName", p.FirstName ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("LastName", p.LastName ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("CurrentAssociationID", p.CurrentAssociationID);
-                    sqlCommand.Parameters.AddWithValue("AddressID", p.AddressID);
-                    sqlCommand.Parameters.AddWithValue("Phone1", p.Phone1 ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("Phone2", p.Phone2 ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("Email", p.Email ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("DisclosureLevel", p.DisclosureLevel ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("Notes", p.Note ?? Convert.DBNull);
 
                     connection.Open();
                     sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "Select @@identity";
 
-                    int newID = 1;
-                    return newID;
+                    sqlCommand.CommandText = "Select @@identity";
+                    return (int)sqlCommand.ExecuteScalar();
                 }
             }
         }
@@ -210,7 +200,24 @@ namespace Tracker.Core.Services
 
         public bool ConfirmDistinct(string firstName, string lastName)
         {
-            throw new System.NotImplementedException();
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "SELECT ID FROM tblPeople WHERE FirstName = @firstName AND LastName = @lastName";
+                    sqlCommand.Parameters.AddWithValue("@firstname", firstName ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@lastName", lastName ?? Convert.DBNull);
+
+                    connection.Open();
+
+                    OleDbDataReader reader = sqlCommand.ExecuteReader();
+                    reader.Read();
+
+                    if (reader.HasRows)
+                        return false;
+                    return true;
+                }
+            }
         }
     }
 }

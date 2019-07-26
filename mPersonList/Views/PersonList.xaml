@@ -4,7 +4,9 @@
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:views="clr-namespace:mPersonList.Views"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
 	<UserControl.Resources>
@@ -12,8 +14,22 @@
 			<Setter Property="FontWeight" Value="Bold"/>
 		</Style>
 	</UserControl.Resources>
-	<StackPanel Margin="10">
 
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding NewPersonRequest}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
+                <prism:PopupWindowAction.WindowContent>
+                    <views:NewPersonDialog/>
+                </prism:PopupWindowAction.WindowContent>
+            </prism:PopupWindowAction>
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
+
+    <StackPanel Margin="10">
+        <ToolBar>
+            <Button Content="Add New" Command="{Binding NewClientCommand}"/>
+        </ToolBar>
+        
 		<!--Column Headers and Search Bars-->
 		<Grid>
 			<Grid.ColumnDefinitions>
