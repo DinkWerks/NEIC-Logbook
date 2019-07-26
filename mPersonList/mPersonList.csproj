@@ -49,6 +49,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converters\AssociationIDToName.cs" />
     <Compile Include="Converters\ICFileNumberConverter.cs" />
     <Compile Include="mPersonListModule.cs" />
     <Compile Include="Notifications\INewPersonNotification.cs" />

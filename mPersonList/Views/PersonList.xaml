@@ -6,6 +6,7 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             xmlns:converters="clr-namespace:mPersonList.Converters"
              xmlns:views="clr-namespace:mPersonList.Views"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
@@ -13,7 +14,8 @@
 		<Style TargetType="TextBlock" x:Key="ColumnTitle">
 			<Setter Property="FontWeight" Value="Bold"/>
 		</Style>
-	</UserControl.Resources>
+        <converters:AssociationIDToName x:Key="AssocIDToName"/>
+    </UserControl.Resources>
 
     <i:Interaction.Triggers>
         <prism:InteractionRequestTrigger SourceObject="{Binding NewPersonRequest}">
@@ -46,9 +48,8 @@
 			<TextBox Grid.Column="1" Text="{Binding AffiliationSearchText, UpdateSourceTrigger=PropertyChanged}"/>
 
 			<TextBlock Grid.Row="1" Text="Name" Style="{StaticResource ColumnTitle}"/>
-			<TextBlock Grid.Row="1" Grid.Column="1" Text="Affiliation" Style="{StaticResource ColumnTitle}"/>
-			<TextBlock Grid.Row="1" Grid.Column="2" Text="Last Contact" Style="{StaticResource ColumnTitle}"/>
-		</Grid>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Affiliation" Style="{StaticResource ColumnTitle}"/>
+        </Grid>
 
 		<!--List Box-->
 		<ListBox x:Name="PersonListBox" ItemsSource="{Binding PeopleView}" HorizontalContentAlignment="Stretch">
@@ -74,9 +75,8 @@
 								</MultiBinding>
 							</TextBlock.Text>
 						</TextBlock>
-						<TextBlock Grid.Column="1" Text="{Binding CurrentAssociation}"/>
-						<TextBlock Grid.Column="2" Text="{Binding LastContactedDate}"/>
-					</Grid>
+                        <TextBlock Grid.Column="1" Text="{Binding CurrentAssociationID, Converter={StaticResource AssocIDToName}}"/>
+                    </Grid>
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>

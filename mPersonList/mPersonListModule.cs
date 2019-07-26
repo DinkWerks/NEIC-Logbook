@@ -2,6 +2,9 @@
 using Prism.Ioc;
 using Prism.Modularity;
 using Prism.Regions;
+using System.Windows;
+using Tracker.Core.Services;
+using Unity;
 
 namespace mPersonList
 {
@@ -9,7 +12,7 @@ namespace mPersonList
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
- 
+            Application.Current.Resources.Add("IoC", containerProvider);
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
