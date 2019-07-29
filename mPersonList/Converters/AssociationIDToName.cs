@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Globalization;
-using System.Windows;
 using System.Windows.Data;
 using Tracker.Core.Services;
-using Unity;
-using Unity.Extension;
+using Prism.Ioc;
+using Prism.Unity;
 
 namespace mPersonList.Converters
 {
@@ -14,8 +13,7 @@ namespace mPersonList.Converters
 
         public AssociationIDToName()
         {
-            UnityContainerExtension unityContainer = (UnityContainerExtension)Application.Current.Resources["IoC"];
-            _cs = unityContainer.Resolve<IClientService>();
+
         }
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)

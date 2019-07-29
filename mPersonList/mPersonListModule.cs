@@ -12,7 +12,7 @@ namespace mPersonList
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
-            Application.Current.Resources.Add("IoC", containerProvider);
+
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

@@ -11,9 +11,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
 	<UserControl.Resources>
-		<Style TargetType="TextBlock" x:Key="ColumnTitle">
-			<Setter Property="FontWeight" Value="Bold"/>
-		</Style>
+        <Style TargetType="TextBlock" x:Key="ColumnTitle">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
         <converters:AssociationIDToName x:Key="AssocIDToName"/>
     </UserControl.Resources>
 

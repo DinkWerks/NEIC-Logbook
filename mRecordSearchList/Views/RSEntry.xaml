@@ -61,6 +61,7 @@
 				<RowDefinition Height="Auto"/>
 				<RowDefinition/>
 			</Grid.RowDefinitions>
+            
 			<!--Project Title-->
 			<Border BorderThickness="10" BorderBrush="SandyBrown" Background="SandyBrown" Panel.ZIndex="1">
 				<Border.Effect>
@@ -119,7 +120,6 @@
 					</StackPanel>
 				</Grid>
 			</Border>
-
 
 
 			<!--Content Area-->
@@ -297,8 +297,7 @@
 								<ComboBox Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.MainCounty}"
 								IsEditable="True" ItemsSource="{Binding Source={x:Static static:Counties.regionCounties}}"/>
 
-								<!--Complex UI for Additional Counties-->
-
+								<!--Additional Counties-->
 								<StackPanel Grid.Row="1" Grid.ColumnSpan="4" Margin="0,10">
 									<TextBlock Text="Additional Counties" FontSize="10"/>
 									<ScrollViewer VerticalScrollBarVisibility="Hidden">
@@ -326,36 +325,47 @@
 						</GroupBox>
 
 						<!--Results Information-->
-						<GroupBox Header="Results" Grid.Row="2" Grid.Column="1" Margin="5,0,0,0">
-							<Grid>
-								<Grid.RowDefinitions>
-									<RowDefinition Height="Auto"/>
-									<RowDefinition Height="Auto"/>
-									<RowDefinition Height="Auto"/>
-									<RowDefinition Height="Auto"/>
-									<RowDefinition Height="Auto"/>
-								</Grid.RowDefinitions>
-								<Grid.ColumnDefinitions>
-									<ColumnDefinition Width="Auto"/>
-									<ColumnDefinition/>
-								</Grid.ColumnDefinitions>
+                        <GroupBox Header="Results" Grid.Row="2" Grid.Column="1" Margin="5,0,0,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
 
-								<TextBlock Text="Processor:" Style="{StaticResource Line Header}"/>
-								<ComboBox Grid.Column="1" ItemsSource="{Binding Source={x:Static static:StaticData.Staff}}"/>
+                                <TextBlock Text="Processor:" Style="{StaticResource Line Header}"/>
+                                <ComboBox Grid.Column="1" ItemsSource="{Binding Source={x:Static static:StaticData.Staff}}"/>
 
-								<TextBlock Grid.Row="1" Text="Recommendation:" Style="{StaticResource Line Header}"/>
-								<ComboBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordSearch.Recommendation}" IsEditable="True"
+                                <TextBlock Grid.Row="1" Text="Recommendation:" Style="{StaticResource Line Header}"/>
+                                <ComboBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordSearch.Recommendation}" IsEditable="True"
                                           ItemsSource="{Binding Source={x:Static static:StaticData.Recommendations}}"/>
 
-								<CheckBox Grid.Row="2" Grid.Column="1" Content="Resources Present in Project Area" IsChecked="{Binding RecordSearch.AreResourcesInProject}" Margin="0,0,0,5"/>
+                                <CheckBox Grid.Row="2" Grid.Column="1" Content="Resources Present in Project Area" IsChecked="{Binding RecordSearch.AreResourcesInProject}" Margin="0,0,0,5"/>
 
-								<CheckBox Grid.Row="3" Grid.Column="1" Content="Report Recieved" IsChecked="{Binding RecordSearch.IsReportReceived}" Margin="0,0,0,5"/>
+                                <CheckBox Grid.Row="3" Grid.Column="1" Content="Report Recieved" IsChecked="{Binding RecordSearch.IsReportReceived}" Margin="0,0,0,5"/>
 
-								<TextBlock Grid.Row="4" Text="Encryption Password:" Style="{StaticResource Line Header}"/>
-								<tc:LockableTextBox Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.EncryptionPassword}"/>
-							</Grid>
-						</GroupBox>
-					</Grid>
+                                <TextBlock Grid.Row="4" Text="Encryption Password:" Style="{StaticResource Line Header}"/>
+                                <tc:LockableTextBox Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.EncryptionPassword}"/>
+
+                                <Separator Grid.ColumnSpan="2" Grid.Row="5" Margin="0,0,0,10"/>
+                                
+                                <TextBlock Grid.Row="6" Text="Check Name:" Style="{StaticResource Line Header}"/>
+                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding RecordSearch.CheckName}"/>
+
+                                <TextBlock Grid.Row="7" Text="Check Number:" Style="{StaticResource Line Header}"/>
+                                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding RecordSearch.CheckNumber}"/>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
 				</ScrollViewer>
 			</Border>
 		</Grid>

@@ -13,11 +13,23 @@ namespace mReporting.Reporting
     {
         private IRecordSearchService _rss;
         private object missing;
-        private readonly Word.Document document;
+        private Word.Document document;
+
+        public string Name { get; set; }
+        public string Description { get; set; }
+        public ParameterTypes Parameters { get; set; }
 
         public BillingExport(IRecordSearchService recordSearchService)
         {
             _rss = recordSearchService;
+
+            Name = "Research Foundation Billing Export";
+            Description = "Exports a detailed list of every project to be billed by the Research Foundation. The list will open up in a word document that the user can edit, print, and save.";
+            Parameters = ParameterTypes.Date_Range;
+        }
+
+        public void Execute(object[] parameters)
+        {
             List<RecordSearch> recordSearches = _rss.GetRecordSearchesByCriteria("WHERE ID > 0");
             try
             {
