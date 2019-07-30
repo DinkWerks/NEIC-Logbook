@@ -17,6 +17,7 @@ namespace mReporting.Reporting
 
         public string Name { get; set; }
         public string Description { get; set; }
+        public ReportCategories Category { get; set; }
         public ParameterTypes Parameters { get; set; }
 
         public BillingExport(IRecordSearchService recordSearchService)

@@ -31,5 +31,12 @@
         </TreeView>
 
         <Button Grid.Column="1" Content="Test Report"  Width="100" Height="25" Command="{Binding TestReportCommand}"/>
+        <ListBox Grid.Column="2" ItemsSource="{Binding Reports}" SelectedItem="{Binding SelectedReport}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding Name}"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>

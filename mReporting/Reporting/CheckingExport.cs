@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Word = Microsoft.Office.Interop.Word;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
@@ -19,6 +16,7 @@ namespace mReporting.Reporting
 
         public string Name { get; set; }
         public string Description { get; set; }
+        public ReportCategories Category { get; set; }
         public ParameterTypes Parameters { get; set; }
 
         //Constructor
@@ -27,6 +25,7 @@ namespace mReporting.Reporting
             _rss = recordSearchService;
             Name = "Checks to Deposit Export";
             Description = "This exported view will list any check recieved as payments within a specific date range.";
+            
             Parameters = ParameterTypes.Date_Range;
         }
 
