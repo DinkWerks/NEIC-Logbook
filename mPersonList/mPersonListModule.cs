@@ -1,10 +1,6 @@
 ﻿using mPersonList.Views;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
-using System.Windows;
-using Tracker.Core.Services;
-using Unity;
 
 namespace mPersonList
 {

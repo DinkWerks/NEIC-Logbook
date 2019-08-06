@@ -108,7 +108,7 @@
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\RecordSearchService.cs" />
     <Compile Include="Services\IRecordSearchService.cs" />
-    <Compile Include="StaticTypes\ClientStanding.cs" />
+    <Compile Include="StaticTypes\ClientStandings.cs" />
     <Compile Include="StaticTypes\Counties.cs" />
     <Compile Include="StaticTypes\DisclosureLevels.cs" />
     <Compile Include="StaticTypes\StaticData.cs" />

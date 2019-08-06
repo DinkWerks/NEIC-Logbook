@@ -12,7 +12,7 @@ namespace Tracker.Core.Services
         Client GetClientByID(int id, bool loadAsCurrentClient = true);
         List<Client> GetAllPartialClients();
         int AddNewClient(Client newClient);
-        void UpdateClientInformation(object array);
+        void UpdateClientInformation(Client c);
         bool ConfirmDistinct(string clientName, string officeName);
     }
 }

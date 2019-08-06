@@ -6,7 +6,6 @@
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-             xmlns:converters="clr-namespace:mPersonList.Converters"
              xmlns:views="clr-namespace:mPersonList.Views"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
@@ -14,7 +13,6 @@
         <Style TargetType="TextBlock" x:Key="ColumnTitle">
             <Setter Property="FontWeight" Value="Bold"/>
         </Style>
-        <converters:AssociationIDToName x:Key="AssocIDToName"/>
     </UserControl.Resources>
 
     <i:Interaction.Triggers>
@@ -75,7 +73,7 @@
 								</MultiBinding>
 							</TextBlock.Text>
 						</TextBlock>
-                        <TextBlock Grid.Column="1" Text="{Binding CurrentAssociationID, Converter={StaticResource AssocIDToName}}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding CurrentAssociation}"/>
                     </Grid>
 				</DataTemplate>
 			</ListBox.ItemTemplate>

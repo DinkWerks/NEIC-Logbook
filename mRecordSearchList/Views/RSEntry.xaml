@@ -9,6 +9,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:tc="clr-namespace:Tracker.Controls;assembly=Tracker.Controls"
+             xmlns:converters="clr-namespace:mRecordSearchList.Converters"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="1280">
 	<UserControl.Resources>
@@ -24,10 +25,12 @@
 		<Style TargetType="TextBox">
 			<Setter Property="VerticalAlignment" Value="Top"/>
 		</Style>
-		<Style TargetType="ComboBox">
-			<Setter Property="Margin" Value="0,0,2,8"/>
-		</Style>
-	</UserControl.Resources>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="0,0,2,8"/>
+        </Style>
+        <converters:ClientNameConverter x:Key="ClientNameConverter"/>
+        <converters:StandingToImageConverter x:Key="StandingToImageConverter"/>
+    </UserControl.Resources>
 
 
 	<i:Interaction.Triggers>
@@ -205,23 +208,58 @@
 						                VerticalAlignment="Top"  DockPanel.Dock="Right">
 									<Image Source="/Tracker.Core;component/Resources/Icons/link_go.png"/>
 								</Button>
-								<ComboBox ItemsSource="{Binding ClientList}" SelectedValue="{Binding SelectedClient}"  SelectedValuePath="ID" 
-                                          IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" IsEditable="True"/>
-							</DockPanel>
+                                <ComboBox ItemsSource="{Binding ClientList}" SelectedValue="{Binding SelectedClient}"  SelectedValuePath="ID" 
+                                          IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" IsEditable="True">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding Standing.Icon, Converter={StaticResource StandingToImageConverter}}"/>
+                                                <TextBlock>
+                                                    <TextBlock.Text>
+                                                        <MultiBinding Converter="{StaticResource ClientNameConverter}">
+                                                            <Binding Path="ClientName"/>
+                                                            <Binding Path="OfficeName"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
 
-							<TextBlock Grid.Row="1" Text="New PEID:" Style="{StaticResource Line Header}"/>
-							<TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.NewPEID}"/>
-							<TextBlock Grid.Row="1" Grid.Column="2" Text="Old PEID:" Style="{StaticResource Line Header}"/>
-							<TextBlock Grid.Row="1" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.OldPEID}"/>
+                                </ComboBox>
+                            </DockPanel>
 
-							<TextBlock Grid.Row="2" Text="Phone:" Style="{StaticResource Line Header}"/>
-							<TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding RecordSearch.ClientModel.Phone}"/>
+                            <TextBlock Grid.Row="1" Text="Status:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Standing}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RecordSearch.ClientModel.Standing.Severity}" Value="2">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding RecordSearch.ClientModel.Standing.Severity}" Value="1">
+                                                <Setter Property="Foreground" Value="Orange"/>
+                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
 
-							<TextBlock Grid.Row="3" Text="Email:" Style="{StaticResource Line Header}"/>
-							<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding RecordSearch.ClientModel.Email}"/>
+                            <TextBlock Grid.Row="2" Text="New PEID:" Style="{StaticResource Line Header}"/>
+							<TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.NewPEID}"/>
+							<TextBlock Grid.Row="2" Grid.Column="2" Text="Old PEID:" Style="{StaticResource Line Header}"/>
+							<TextBlock Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.OldPEID}"/>
 
-							<TextBlock Grid.Row="4" Text="Website:" Style="{StaticResource Line Header}"/>
-							<TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.ClientModel.Website}"/>
+							<TextBlock Grid.Row="3" Text="Phone:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Phone}"/>
+
+							<TextBlock Grid.Row="4" Text="Email:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Email}"/>
+
+							<TextBlock Grid.Row="5" Text="Website:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Website}"/>
 						</Grid>
 
 						<!--Address Information-->

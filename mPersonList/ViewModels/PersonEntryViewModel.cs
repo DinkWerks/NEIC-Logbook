@@ -77,6 +77,11 @@ namespace mPersonList.ViewModels
             PersonModel.AddressID = addressID;
             PersonModel.AddressModel.AddressID = addressID;
             PersonModel.CurrentAssociationID = SelectedClient;
+            Client selectedClientModel = ClientList[SelectedClient - 1];
+            if (string.IsNullOrWhiteSpace(selectedClientModel.OfficeName))
+                PersonModel.CurrentAssociation = selectedClientModel.ClientName;
+            else
+                PersonModel.CurrentAssociation = selectedClientModel.ClientName + " - " + selectedClientModel.OfficeName;
             _ps.UpdatePersonInformation(PersonModel);
         }
 

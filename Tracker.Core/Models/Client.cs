@@ -1,4 +1,5 @@
 ﻿using Prism.Mvvm;
+using Tracker.Core.StaticTypes;
 
 namespace Tracker.Core.Models
 {
@@ -12,7 +13,7 @@ namespace Tracker.Core.Models
         private string _phone;
         private string _email;
         private string _website;
-        private string _standing;
+        private ClientStanding _standing;
         private int _addressID;
         private Address _addressModel;
         private string _notes;
@@ -65,7 +66,7 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _website, value); }
         }
 
-        public string Standing
+        public ClientStanding Standing
         {
             get { return _standing; }
             set { SetProperty(ref _standing, value); }

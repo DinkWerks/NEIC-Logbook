@@ -51,7 +51,9 @@
   <ItemGroup>
     <Compile Include="Converters\AdditionalCountyToBoolConverter.cs" />
     <Compile Include="Converters\AdditionalCountyToBoolInitialConverter.cs" />
+    <Compile Include="Converters\ClientNameConverter.cs" />
     <Compile Include="Converters\RSIDFormatter.cs" />
+    <Compile Include="Converters\StandingToImageConverter.cs" />
     <Compile Include="mRecordSearchListModule.cs" />
     <Compile Include="Notifications\AdditionalCountyNotification.cs" />
     <Compile Include="Notifications\CreateNewRSNotification.cs" />

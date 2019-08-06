@@ -1,25 +1,14 @@
 ﻿using System;
 using System.Globalization;
 using System.Windows.Data;
-using Tracker.Core.Services;
-using Prism.Ioc;
-using Prism.Unity;
 
-namespace mPersonList.Converters
+namespace mRecordSearchList.Converters
 {
-    public class AssociationIDToName : IValueConverter
+    public class StandingToImageConverter : IValueConverter
     {
-        private IClientService _cs;
-
-        public AssociationIDToName()
-        {
-
-        }
-
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            int associationID = (int)value;
-            return "text";
+            return "/Tracker.Core;component/Resources/Icons/" + value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

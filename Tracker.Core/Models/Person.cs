@@ -9,6 +9,7 @@ namespace Tracker.Core.Models
         private string _firstName;
         private string _lastName;
         private int _currentAssociationID = 0;
+        private string _currentAssociation;
         private int _addressID;
         private Address _address;
         private string _phone1;
@@ -39,6 +40,12 @@ namespace Tracker.Core.Models
         {
             get { return _currentAssociationID; }
             set { SetProperty(ref _currentAssociationID, value); }
+        }
+
+        public string CurrentAssociation
+        {
+            get { return _currentAssociation; }
+            set { SetProperty(ref _currentAssociation, value); }
         }
 
         public int AddressID

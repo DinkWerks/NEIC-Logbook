@@ -32,6 +32,7 @@ namespace mClientList.ViewModels
 
         public DelegateCommand<string> NavigateCommand { get; private set; }
 
+        //Constructor
         public ClientEntryViewModel(IRegionManager regionManager, IEventAggregator eventAggregator, IClientService clientService, IPersonService personService)
         {
             _rm = regionManager;
@@ -41,6 +42,12 @@ namespace mClientList.ViewModels
             NavigateCommand = new DelegateCommand<string>(Navigate);
 
             eventAggregator.GetEvent<PersonListSelectEvent>().Subscribe(NavigateToPersonEntry);
+        }
+
+        //Methods
+        private void Save()
+        {
+            _cs.UpdateClientInformation(ClientModel);
         }
 
         public void Navigate(string navTarget)
@@ -83,7 +90,7 @@ namespace mClientList.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            
+            Save();
         }
     }
 }

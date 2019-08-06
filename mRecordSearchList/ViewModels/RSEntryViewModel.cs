@@ -193,6 +193,7 @@ namespace mRecordSearchList.ViewModels
             {
                 _rss.GetRecordSearchByID(rsID, true);
                 RecordSearch = _rss.CurrentRecordSearch;
+                RecordSearch.Status = RecordSearch.CalculateStatus();
                 SelectedRequestor = RecordSearch.RequestorID;
                 SelectedClient = RecordSearch.ClientID;
                 _isLoaded = true;

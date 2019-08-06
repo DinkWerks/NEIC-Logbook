@@ -385,7 +385,7 @@ namespace Tracker.Core.Models
         }
 
         //Method
-        private string CalculateStatus()
+        public string CalculateStatus()
         {
             DateTime today = DateTime.Now;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Data.OleDb;
 using System.IO;
 using Tracker.Core.Extensions;
@@ -36,7 +35,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "SELECT ID, FirstName, LastName, CurrentAssociationID, " +
+                    sqlCommand.CommandText = "SELECT ID, FirstName, LastName, CurrentAssociationID, CurrentAssociation, " +
                         "AddressID, Phone1, Phone2, Email, DisclosureLevel, Notes" +
                         " FROM tblPeople WHERE ID = " + id;
                     connection.Open();
@@ -54,6 +53,7 @@ namespace Tracker.Core.Services
                         FirstName = reader.GetStringSafe(index++),
                         LastName = reader.GetStringSafe(index++),
                         CurrentAssociationID = reader.GetInt32Safe(index++),
+                        CurrentAssociation = reader.GetStringSafe(index++),
                         AddressID = reader.GetInt32Safe(index),
                         AddressModel = _as.GetAddressByID(reader.GetInt32(index++)),
                         Phone1 = reader.GetStringSafe(index++),
@@ -78,7 +78,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "SELECT ID, FirstName, LastName, CurrentAssociationID FROM tblPeople " + criteria;
+                    sqlCommand.CommandText = "SELECT ID, FirstName, LastName, CurrentAssociation FROM tblPeople " + criteria;
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -92,7 +92,7 @@ namespace Tracker.Core.Services
                             ID = reader.GetInt32Safe(index++),
                             FirstName = reader.GetStringSafe(index++),
                             LastName = reader.GetStringSafe(index++),
-                            CurrentAssociationID = reader.GetInt32Safe(index++)
+                            CurrentAssociation = reader.GetStringSafe(index++)
                         };
                         returnCollection.Add(returnValue);
                     }
@@ -108,7 +108,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "SELECT ID, FirstName, LastName, CurrentAssociationID FROM tblPeople";
+                    sqlCommand.CommandText = "SELECT ID, FirstName, LastName, CurrentAssociation FROM tblPeople";
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -122,7 +122,7 @@ namespace Tracker.Core.Services
                             ID = reader.GetInt32Safe(index++),
                             FirstName = reader.GetStringSafe(index++),
                             LastName = reader.GetStringSafe(index++),
-                            CurrentAssociationID = reader.GetInt32Safe(index++)
+                            CurrentAssociation = reader.GetStringSafe(index++)
                         };
                         returnCollection.Add(returnValue);
                     }
@@ -169,12 +169,13 @@ namespace Tracker.Core.Services
                         {
                             using (OleDbCommand updateCommand = connection2.CreateCommand())
                             {
-                                updateCommand.CommandText = "UPDATE tblPeople SET FirstName = @fname, LastName = @lname, CurrentAssociationID = @assoc, " +
+                                updateCommand.CommandText = "UPDATE tblPeople SET FirstName = @fname, LastName = @lname, CurrentAssociationID = @assoc, CurrentAssociation = @assocname, " +
                                     "AddressID = @addr, Phone1 = @phone1, Phone2 = @phone2, Email = @email, DisclosureLevel = @disclosure, Notes = @notes " +
                                     "WHERE ID = @id";
                                 updateCommand.Parameters.AddWithValue("@fname", p.FirstName ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@lname", p.LastName ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@assoc", p.CurrentAssociationID);
+                                updateCommand.Parameters.AddWithValue("@assocname", p.CurrentAssociation ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@addr", p.AddressID);
                                 updateCommand.Parameters.AddWithValue("@phone1", p.Phone1 ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@phone2", p.Phone2 ?? Convert.DBNull);
