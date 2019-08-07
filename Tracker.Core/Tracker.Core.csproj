@@ -113,7 +113,6 @@
     <Compile Include="StaticTypes\DisclosureLevels.cs" />
     <Compile Include="StaticTypes\StaticData.cs" />
     <Compile Include="StaticTypes\RecordSearchPrefixes.cs" />
-    <Compile Include="Types\Standing.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

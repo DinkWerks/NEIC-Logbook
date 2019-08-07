@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Tracker.Core.Models.Fees;
+﻿using Tracker.Core.Models.Fees;
 
 namespace Tracker.Core.Services
 {
@@ -12,7 +7,7 @@ namespace Tracker.Core.Services
         string ConnectionString { get; set; }
         void SetConnectionString();
         Fee GetFeeData(Fee returnValue);
-        int AddNewFee(Fee f);
+        int AddNewFee();
         int UpdateFee(Fee f);
     }
 }

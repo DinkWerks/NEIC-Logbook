@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using Tracker.Core.Extensions;
 using Tracker.Core.Models.Fees;
 
@@ -67,21 +68,18 @@ namespace Tracker.Core.Services
             }
         }
 
-        public int AddNewFee(Fee f)
+        public int AddNewFee()
         {
-            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            using (OleDbConnection feeConnection = new OleDbConnection(ConnectionString))
             {
-                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                using (OleDbCommand newFeeCommand = feeConnection.CreateCommand())
                 {
-                    string fields = "";
-                    string values = "";
-                    sqlCommand.CommandText = "INSERT INTO tblAddresses () " +
-                        "VALUES ()";
+                    newFeeCommand.CommandText = "INSERT INTO tblFees DEFAULT VALUES";
 
-                    connection.Open();
-                    sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "Select @@identity";
-                    int newID = (int)sqlCommand.ExecuteScalar();
+                    feeConnection.Open();
+                    newFeeCommand.ExecuteNonQuery();
+                    newFeeCommand.CommandText = "Select @@identity";
+                    int newID = (int)newFeeCommand.ExecuteScalar();
                     return newID;
                 }
             }
@@ -135,7 +133,7 @@ namespace Tracker.Core.Services
                         }
                     }
                     else
-                        return AddNewFee(f);
+                        return AddNewFee();
                 }
             }
         }

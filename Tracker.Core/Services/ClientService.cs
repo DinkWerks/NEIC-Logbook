@@ -6,7 +6,6 @@ using System.Linq;
 using Tracker.Core.Extensions;
 using Tracker.Core.Models;
 using Tracker.Core.StaticTypes;
-using Tracker.Core.Types;
 
 namespace Tracker.Core.Services
 {

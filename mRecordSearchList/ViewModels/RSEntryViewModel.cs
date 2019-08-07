@@ -84,6 +84,7 @@ namespace mRecordSearchList.ViewModels
 
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
+
             regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
 
             SaveCommand = new DelegateCommand(SaveRS);
@@ -193,6 +194,8 @@ namespace mRecordSearchList.ViewModels
             {
                 _rss.GetRecordSearchByID(rsID, true);
                 RecordSearch = _rss.CurrentRecordSearch;
+
+                //TODO make Calculator region redraw according to newly created fee data.
                 RecordSearch.Status = RecordSearch.CalculateStatus();
                 SelectedRequestor = RecordSearch.RequestorID;
                 SelectedClient = RecordSearch.ClientID;

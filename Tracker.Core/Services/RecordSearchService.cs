@@ -394,10 +394,11 @@ namespace Tracker.Core.Services
 
         public Fee GetFeeData(string version, int id)
         {
-            Fee newFee = new Fee(version)
-            {
-                ID = id
-            };
+            if (id < 1)
+                id = _fs.AddNewFee();
+
+            Fee newFee = new Fee(version) { ID = id };
+
             _fs.GetFeeData(newFee);
             return newFee;
         }
