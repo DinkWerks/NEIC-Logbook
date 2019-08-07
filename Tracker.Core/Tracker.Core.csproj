@@ -145,6 +145,9 @@
     <Resource Include="Resources\Icons\link_go.png" />
     <Resource Include="Resources\Icons\add.png" />
     <Resource Include="Resources\Icons\delete.png" />
+    <Content Include="Resources\FeeStructures\Electronic2012b.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\FeeStructures\v2017.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

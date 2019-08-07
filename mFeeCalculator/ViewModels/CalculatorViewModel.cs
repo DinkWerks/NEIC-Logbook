@@ -15,6 +15,8 @@ namespace mFeeCalculator.ViewModels
         private ObservableCollection<ICharge> _charges = new ObservableCollection<ICharge>();
         private Fee _fee;
         private string _selectedVersion;
+        private IRecordSearchService _rs;
+        private bool _loaded = false;
 
         public ObservableCollection<string> Versions
         {
@@ -28,7 +30,12 @@ namespace mFeeCalculator.ViewModels
             set
             {
                 SetProperty(ref _selectedVersion, value);
-                FeeModel = new Fee(value);
+                if (_loaded)
+                {
+                    int oldFeeID = FeeModel.ID;
+                    FeeModel = new Fee(value) { ID = oldFeeID };
+                    _rs.CurrentRecordSearch.Fee = FeeModel;
+                }
             }
         }
 
@@ -41,24 +48,28 @@ namespace mFeeCalculator.ViewModels
         public Fee FeeModel
         {
             get { return _fee; }
-            set { SetProperty(ref _fee, value); }
+            set {
+                SetProperty(ref _fee, value);
+                Charges = FeeModel.Charges;
+            }
         }
 
         public bool KeepAlive => false;
 
         public CalculatorViewModel(IEventAggregator eventAggregator, IRecordSearchService recordSearchService)
         {
+            _rs = recordSearchService;
             LoadFeeStructures();
-            if (Versions.Contains(recordSearchService.CurrentRecordSearch.FeeVersion))
+            if (Versions.Contains(recordSearchService.CurrentRecordSearch.Fee.FeeVersion))
             {
-                SelectedVersion = recordSearchService.CurrentRecordSearch.FeeVersion;
+                SelectedVersion = recordSearchService.CurrentRecordSearch.Fee.FeeVersion;
                 if (recordSearchService.CurrentRecordSearch != null && recordSearchService.CurrentRecordSearch.Fee != null)
                 {
                     FeeModel = recordSearchService.CurrentRecordSearch.Fee;
-                    Charges = recordSearchService.CurrentRecordSearch.Fee.Charges;
                 }
             }
 
+            _loaded = true;
             eventAggregator.GetEvent<CalculatorCostChangedEvent>().Subscribe(UpdateTotalCost);
         }
 

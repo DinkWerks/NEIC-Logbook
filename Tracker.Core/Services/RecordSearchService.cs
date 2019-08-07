@@ -97,8 +97,7 @@ namespace Tracker.Core.Services
                         Processor = reader.GetStringSafe(index++),
                         EncryptionPassword = reader.GetStringSafe(index++),
                         FeeVersion = reader.GetStringSafe(index++),
-                        FeeID = reader.GetInt32Safe(index),
-                        Fee = GetFeeData("v2017", reader.GetInt32Safe(index++)),
+                        FeeID = reader.GetInt32Safe(index++),
                         TotalFee = reader.GetDecimalSafe(index++),
                         ProjectNumber = reader.GetStringSafe(index++),
                         InvoiceNumber = reader.GetStringSafe(index++),
@@ -109,6 +108,7 @@ namespace Tracker.Core.Services
                         Notes = reader.GetStringSafe(index++),
                     };
 
+                    returnValue.Fee = GetFeeData(returnValue.FeeVersion, returnValue.FeeID);
                     if (returnValue.IsMailingSameAsBilling)
                         returnValue.BillingAddress = returnValue.MailingAddress;
                     if (loadAsCurrentSearch)
@@ -180,8 +180,7 @@ namespace Tracker.Core.Services
                             Processor = reader.GetStringSafe(index++),
                             EncryptionPassword = reader.GetStringSafe(index++),
                             FeeVersion = reader.GetStringSafe(index++),
-                            FeeID = reader.GetInt32Safe(index),
-                            Fee = GetFeeData("v2017", reader.GetInt32Safe(index++)),
+                            FeeID = reader.GetInt32Safe(index++),
                             TotalFee = reader.GetDecimalSafe(index++),
                             ProjectNumber = reader.GetStringSafe(index++),
                             InvoiceNumber = reader.GetStringSafe(index++),
@@ -191,6 +190,7 @@ namespace Tracker.Core.Services
                             IsSelected = reader.GetBooleanSafe(index++),
                             Notes = reader.GetStringSafe(index++),
                         };
+                        returnValue.Fee = GetFeeData(returnValue.FeeVersion, returnValue.FeeID);
                         returnCollection.Add(returnValue);
                     }
 
@@ -302,6 +302,8 @@ namespace Tracker.Core.Services
                     rs.MailingAddress.AddressID = _as.UpdateAddress(rs.MailingAddress);
                     rs.BillingAddress.AddressID = _as.UpdateAddress(rs.BillingAddress);
                     rs.FeeID = _fs.UpdateFee(rs.Fee);
+                    rs.FeeVersion = rs.Fee.FeeVersion;
+                    rs.TotalFee = rs.Fee.TotalProjectCost;
 
                     sqlCommand.CommandText = "UPDATE tblRecordSearches SET " +
                         "ICPrefix = @ICPrefix, ICYear = @ICYear, ICEnumeration = @ICEnumeration, ICSuffix = ?," +
@@ -325,9 +327,9 @@ namespace Tracker.Core.Services
                     sqlCommand.Parameters.AddWithValue("@DatePaid", rs.DatePaid ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@LastUpdated", rs.LastUpdated ?? Convert.DBNull);
 
-                    sqlCommand.Parameters.AddWithValue("@RequestorID", rs.RequestorID); //??
+                    sqlCommand.Parameters.AddWithValue("@RequestorID", rs.RequestorID);
                     sqlCommand.Parameters.AddWithValue("@AdditionalRequestors", rs.AdditionalRequestors ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("@ClientID", rs.ClientID); //??
+                    sqlCommand.Parameters.AddWithValue("@ClientID", rs.ClientID);
                     sqlCommand.Parameters.AddWithValue("@MailingAddressID", rs.MailingAddress.AddressID);
                     sqlCommand.Parameters.AddWithValue("@IsMailingAddressSameAsBilling", rs.IsMailingSameAsBilling);
                     sqlCommand.Parameters.AddWithValue("@BillingAddressID", rs.BillingAddress.AddressID);
@@ -338,7 +340,7 @@ namespace Tracker.Core.Services
                     sqlCommand.Parameters.AddWithValue("@SpecialCaseDetails", rs.SpecialDetails ?? Convert.DBNull);
 
                     sqlCommand.Parameters.AddWithValue("@MainCounty", rs.MainCounty ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("@AdditionalCounties", WriteAdditionalCounties(rs.AdditionalCounties)); // TODO figure out additional counties field
+                    sqlCommand.Parameters.AddWithValue("@AdditionalCounties", WriteAdditionalCounties(rs.AdditionalCounties));
                     sqlCommand.Parameters.AddWithValue("@PLSS", rs.PLSS ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@Acres", rs.Acres);
                     sqlCommand.Parameters.AddWithValue("@LinearMiles", rs.LinearMiles);
@@ -350,7 +352,7 @@ namespace Tracker.Core.Services
                     sqlCommand.Parameters.AddWithValue("@EncryptionPassword", rs.EncryptionPassword ?? Convert.DBNull);
 
                     sqlCommand.Parameters.AddWithValue("@FeeVersion", rs.FeeVersion ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("@FeeID", rs.FeeID); //??
+                    sqlCommand.Parameters.AddWithValue("@FeeID", rs.FeeID);
                     sqlCommand.Parameters.AddWithValue("@TotalCost", rs.TotalFee);
                     
                     sqlCommand.Parameters.AddWithValue("@ProjectNumber", rs.ProjectNumber ?? Convert.DBNull);

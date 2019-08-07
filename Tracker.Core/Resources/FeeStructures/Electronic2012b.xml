@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<FeeStructure version="v2017">
+<FeeStructure version="Electronic2012b">
   <Fee type="variable">
     <Index>1</Index>
     <Name>Staff Time</Name>
@@ -19,7 +19,7 @@
     <Description>How many hours it took for staff to complete the record search.</Description>
     <Cost>75</Cost>
   </Fee>
-  
+
   <Fee type="variable">
     <Index>3</Index>
     <Name>InHouse Time</Name>
@@ -29,75 +29,30 @@
     <Description>How many hours it took for the client to perform the record search in house.</Description>
     <Cost>100</Cost>
   </Fee>
-  
+
   <Fee type="categorical">
     <Index>4</Index>
-    <Name>Custom Map Charges</Name>
+    <Name>Custom Map/Shapefile Charges</Name>
     <DBField>GISFeatures</DBField>
     <UnitName>feature</UnitName>
     <UnitNamePlural>features</UnitNamePlural>
-    <Description>Per feature fee for customers asking for customized maps of features.</Description>
+    <Description>Per feature fee for customers asking for customized maps of features and/or shapefiles.</Description>
     <CostCategories>
-      <Category type ="category">
+      <Category type ="variable">
         <Minimum>1</Minimum>
-        <Maximum>4</Maximum>
-        <Cost>25</Cost>
+        <Maximum>999</Maximum>
+        <Cost>12</Cost>
+        <FlatCost>0</FlatCost>
       </Category>
-      <Category type ="category">
-        <Minimum>5</Minimum>
-        <Maximum>14</Maximum>
-        <Cost>75</Cost>
-      </Category>
-      <Category type ="category">
-        <Minimum>15</Minimum>
-        <Maximum>34</Maximum>
-        <Cost>150</Cost>
-      </Category>
-      <Category type ="category">
-        <Minimum>35</Minimum>
-        <Maximum>49</Maximum>
-        <Cost>300</Cost>
-      </Category>
-      <Category type ="category">
-        <Minimum>50</Minimum>
-        <Maximum>99</Maximum>
-        <Cost>450</Cost>
-      </Category>
-      <Category type ="category">
-        <Minimum>100</Minimum>
-        <Maximum>149</Maximum>
-        <Cost>650</Cost>
-      </Category>
-      <Category type ="category">
-        <Minimum>150</Minimum>
-        <Maximum>199</Maximum>
-        <Cost>850</Cost>
-      </Category>
-      <Category type ="category">
-        <Minimum>200</Minimum>
-        <Maximum>249</Maximum>
-        <Cost>1150</Cost>
-      </Category>
-      <Category type ="category">
-        <Minimum>250</Minimum>
-        <Maximum>299</Maximum>
-        <Cost>1450</Cost>
-      </Category>
-      <Category type ="category">
-        <Minimum>300</Minimum>
-        <Maximum>349</Maximum>
-        <Cost>1850</Cost>
-      </Category>
-      <Category type ="hybrid">
-        <Minimum>300</Minimum>
-        <Maximum>1000000000</Maximum>
-        <Cost>400</Cost>
-        <GroupSize>50</GroupSize>
-        <FlatCost>1850</FlatCost>
+      <Category type ="variable">
+        <Minimum>1000</Minimum>
+        <Maximum>1000000</Maximum>
+        <Cost>0.25</Cost>
+        <FlatCost>11988</FlatCost>
       </Category>
     </CostCategories>
   </Fee>
-  
+
   <Fee type="boolean">
     <Index>5</Index>
     <Name>Address Mapped Shape Fee</Name>
@@ -105,7 +60,7 @@
     <Description>Inccured flat fee for projects that require digital data.</Description>
     <Cost>25</Cost>
   </Fee>
-  
+
   <Fee type="categorical">
     <Index>6</Index>
     <Name>Digital Database Record Fee</Name>
@@ -117,13 +72,13 @@
       <Category type="variable">
         <Minimum>1</Minimum>
         <Maximum>999</Maximum>
-        <Cost>.25</Cost>
+        <Cost>0.25</Cost>
         <FlatCost>0</FlatCost>
       </Category>
       <Category type="variable">
         <Minimum>1000</Minimum>
         <Maximum>9999</Maximum>
-        <Cost>.15</Cost>
+        <Cost>0.15</Cost>
         <FlatCost>249.75</FlatCost>
       </Category>
     </CostCategories>
@@ -184,8 +139,9 @@
       </Category>
     </CostCategories>
   </Fee>
-  
-  
+
+
+
   <Fee type="separator">
     <Index>8</Index>
   </Fee>
@@ -218,8 +174,9 @@
       </Category>
     </CostCategories>
   </Fee>
-  
-  
+
+
+
   <Fee type="separator">
     <Index>11</Index>
   </Fee>
@@ -243,7 +200,7 @@
     <Description>Pages copied or printed for the product using color.</Description>
     <Cost>1</Cost>
   </Fee>
-  
+
   <Fee type="variable">
     <Index>14</Index>
     <Name>Staff Assistance Time</Name>
@@ -253,5 +210,4 @@
     <Description>How many hours spent by staff to perform related work such as copying and printing.</Description>
     <Cost>40</Cost>
   </Fee>
-  
 </FeeStructure>
