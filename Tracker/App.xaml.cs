@@ -24,6 +24,7 @@ namespace Tracker
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<HomeScreen>();
+            containerRegistry.RegisterForNavigation<SettingsScreen>();
             containerRegistry.RegisterSingleton<IRecordSearchService, RecordSearchService>();
             containerRegistry.RegisterSingleton<IClientService, ClientService>();
             containerRegistry.RegisterSingleton<IPersonService, PersonService>();

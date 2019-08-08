@@ -106,6 +106,8 @@ namespace Tracker.Core.Models.Fees
                                                                 };
             //Foreach charge add to Charges
             ObservableCollection<ICharge> sortedCharges = new ObservableCollection<ICharge>();
+
+            //TODO Can I replace this with group by statements?
             separators.ToList().ForEach(sortedCharges.Add);
             variableCharges.ToList().ForEach(sortedCharges.Add);
             booleanCharges.ToList().ForEach(sortedCharges.Add);

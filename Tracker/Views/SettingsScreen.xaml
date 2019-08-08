@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="Tracker.Views.SettingsScreen"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="720" d:DesignWidth="1280">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="GroupHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,0,10"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+        </Style>
+        <Style x:Key="LineHeader" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Margin" Value="0,0,10,0"/>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel MaxWidth="800" Margin="0,20,0,0">
+        <TextBlock Text="Database Settings" Style="{StaticResource GroupHeader}"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Database Location:" Style="{StaticResource LineHeader}"/>
+            <TextBlock Grid.Column="1" Text="{Binding Settings.DatabaseAddress.Value}"/>
+            <Button Grid.Column="2" Command="{Binding LocateDatabaseCommand}">
+                <Image Source="/Tracker.Core;component/Resources/Icons/database_wrench.png" Width="16" Margin="5,0"/>
+            </Button>
+        </Grid>
+
+        <Separator Margin="5,20"/>
+        
+        <TextBlock Text="Defaults" Style="{StaticResource GroupHeader}"/>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Default Fee Structure:" Style="{StaticResource LineHeader}"/>
+            <ComboBox Grid.Column="1" ItemsSource="{Binding FeeStructures}" SelectedItem="{Binding Settings.DefaultFeeStructure.Value}"/>
+        </Grid>
+
+        <Button Margin="0,10" Content="Save Settings" Command="{Binding SaveSettingsCommand}"/>
+    </StackPanel>
+</UserControl>

@@ -108,6 +108,7 @@
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\RecordSearchService.cs" />
     <Compile Include="Services\IRecordSearchService.cs" />
+    <Compile Include="Settings\Settings.cs" />
     <Compile Include="StaticTypes\ClientStandings.cs" />
     <Compile Include="StaticTypes\Counties.cs" />
     <Compile Include="StaticTypes\DisclosureLevels.cs" />
@@ -139,6 +140,9 @@
     <Resource Include="Resources\Icons\cancel.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\Settings.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Resource Include="Resources\Icons\house.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -148,12 +152,18 @@
     <Content Include="Resources\FeeStructures\Electronic2012b.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Resources\FeeStructures\v2017.xml">
+    <Content Include="Resources\FeeStructures\Electronic2012a.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Resource Include="Resources\Icons\lock.png" />
     <Resource Include="Resources\Icons\lock_open.png" />
     <Resource Include="Resources\Icons\application_edit.png" />
+    <Resource Include="Resources\Icons\arrow_left.png" />
+    <Resource Include="Resources\Icons\arrow_right.png" />
+    <Resource Include="Resources\Icons\bug.png" />
+    <Resource Include="Resources\Icons\cog.png" />
+    <Resource Include="Resources\Icons\information.png" />
+    <Resource Include="Resources\Icons\database_wrench.png" />
     <Content Include="Resources\Icons\ReferenceFormat.txt" />
     <Content Include="Resources\RS_Backend.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

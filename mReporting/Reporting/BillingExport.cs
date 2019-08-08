@@ -94,7 +94,6 @@ namespace mReporting.Reporting
             iTable.Columns[2].PreferredWidthType = Word.WdPreferredWidthType.wdPreferredWidthPercent;
             iTable.Columns[2].PreferredWidth = 30;
 
-            //TODO Determine Name Field's source
             if (string.IsNullOrWhiteSpace(record.BillingAddress.AddressLine2))
                 iTable.Rows[1].Cells[1].Range.Text = String.Format("{0}\r\n{1}\r\n{2}, {3} {4}",
                    record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);

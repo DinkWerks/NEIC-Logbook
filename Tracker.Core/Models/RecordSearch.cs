@@ -31,12 +31,12 @@ namespace Tracker.Core.Models
         private Address _billingAddress;
         // Meta
         private string _projectName;
-        private string _rsType; //TODO make RSType type
+        private string _rsType;
         private string _status;
         private string _specialDetails;
         // Location
-        private string _mainCounty; //TODO make County type
-        private ObservableCollection<County> _additionalCounties = new ObservableCollection<County>() { Counties.BUTTE };
+        private string _mainCounty;
+        private ObservableCollection<County> _additionalCounties = new ObservableCollection<County>();
         private string _plss;
         private int _acres;
         private int _linearMiles;

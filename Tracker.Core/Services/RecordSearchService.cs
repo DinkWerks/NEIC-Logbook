@@ -35,9 +35,8 @@ namespace Tracker.Core.Services
         //Methods
         public void SetConnectionString()
         {
-            //TODO Have this pull from a setting.
-            var dir = Directory.GetCurrentDirectory();
-            ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dir + @"\Resources\RS_Backend.accdb";
+            var dir = Settings.Settings.Instance.DatabaseAddress;
+            ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dir;
         }
 
         public RecordSearch GetRecordSearchByID(int id, bool loadAsCurrentSearch = true)

@@ -21,9 +21,8 @@ namespace Tracker.Core.Services
 
         public void SetConnectionString()
         {
-            //TODO Pull this from a setting
-            var dir = Directory.GetCurrentDirectory();
-            ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dir + @"\Resources\RS_Backend.accdb";
+            var dir = Settings.Settings.Instance.DatabaseAddress;
+            ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dir;
         }
 
         public Fee GetFeeData(Fee returnValue)

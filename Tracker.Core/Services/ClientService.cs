@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
-using System.IO;
 using System.Linq;
 using Tracker.Core.Extensions;
 using Tracker.Core.Models;
@@ -26,9 +25,8 @@ namespace Tracker.Core.Services
 
         public void SetConnectionString()
         {
-            //TODO Have this pull from a setting.
-            var dir = Directory.GetCurrentDirectory();
-            ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dir + @"\Resources\RS_Backend.accdb";
+            var dir = Settings.Settings.Instance.DatabaseAddress;
+            ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dir;
         }
 
         public Client GetClientByID(int id, bool loadAsCurrentClient = true)
