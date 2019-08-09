@@ -17,7 +17,7 @@ namespace mReporting.Reporting
         public string Name { get; set; }
         public string Description { get; set; }
         public ReportCategories Category { get; set; }
-        public ParameterTypes Parameters { get; set; }
+        public ParameterTypes? Parameters { get; set; }
 
         //Constructor
         public CheckingExport(IRecordSearchService recordSearchService)
@@ -40,6 +40,7 @@ namespace mReporting.Reporting
                     ShowAnimation = false,
                     Visible = true
                 };
+
                 missing = Missing.Value;
                 document = wordApp.Documents.Add(ref missing, ref missing, ref missing, ref missing);
                 document.Paragraphs.SpaceAfter = 0;
@@ -64,6 +65,11 @@ namespace mReporting.Reporting
         private void AddEntry()
         {
             throw new NotImplementedException();
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

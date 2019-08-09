@@ -22,12 +22,9 @@
             <Setter Property="VerticalAlignment" Value="Bottom"/>
         </Style>
     </UserControl.Resources>
-	
-	<StackPanel Margin="10">
-		<DockPanel HorizontalAlignment="Right">
-			<Button Content="Save" Command="{Binding SaveCommand}"/>
-		</DockPanel>
-		<TextBlock Text="Person Entry Form" HorizontalAlignment="Center" FontSize="36" FontWeight="SemiBold" Margin="0,0,0,25"/>
+
+    <StackPanel Margin="10">
+        <TextBlock Text="Person Entry Form" HorizontalAlignment="Center" FontSize="36" FontWeight="SemiBold" Margin="0,0,0,25"/>
 
 		<!--Person Name Grid-->
 		<Grid MaxWidth="500">

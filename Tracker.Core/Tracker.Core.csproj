@@ -140,6 +140,7 @@
     <Resource Include="Resources\Icons\cancel.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Icons\github.png" />
     <Content Include="Resources\Settings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

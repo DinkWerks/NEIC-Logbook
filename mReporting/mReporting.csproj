@@ -68,7 +68,12 @@
     <Compile Include="Reporting\BillingExport.cs" />
     <Compile Include="Reporting\CheckingExport.cs" />
     <Compile Include="Reporting\IReport.cs" />
+    <Compile Include="Utils\BindableSelectedItemBehavior.cs" />
+    <Compile Include="ViewModels\DateParametersViewModel.cs" />
     <Compile Include="ViewModels\ReportingHomeScreenViewModel.cs" />
+    <Compile Include="Views\DateParameters.xaml.cs">
+      <DependentUpon>DateParameters.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ReportingHomeScreen.xaml.cs">
       <DependentUpon>ReportingHomeScreen.xaml</DependentUpon>
     </Compile>
@@ -95,6 +100,10 @@
     <PackageReference Include="Prism.Wpf" Version="7.1.0.431&#xD;" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\DateParameters.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\ReportingHomeScreen.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

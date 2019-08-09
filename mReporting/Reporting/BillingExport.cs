@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Prism.Regions;
+using System;
 using System.Collections.Generic;
 using System.Windows;
 using Tracker.Core.Extensions;
@@ -12,13 +13,14 @@ namespace mReporting.Reporting
     public class BillingExport : IReport
     {
         private IRecordSearchService _rss;
+        private decimal _total;
         private object missing;
         private Word.Document document;
 
         public string Name { get; set; }
         public string Description { get; set; }
         public ReportCategories Category { get; set; }
-        public ParameterTypes Parameters { get; set; }
+        public ParameterTypes? Parameters { get; set; }
 
         public BillingExport(IRecordSearchService recordSearchService)
         {
@@ -42,7 +44,11 @@ namespace mReporting.Reporting
                 missing = System.Reflection.Missing.Value;
                 document = wordApp.Documents.Add(ref missing, ref missing, ref missing, ref missing);
                 document.Paragraphs.SpaceAfter = 0;
+
+                foreach (RecordSearch record in recordSearches)
+                    _total += record.TotalFee;
                 AddHeader();
+
                 foreach (RecordSearch record in recordSearches)
                 {
                     AddEntry(record);
@@ -57,12 +63,11 @@ namespace mReporting.Reporting
         private void AddHeader()
         {
             Word.Paragraph header = document.Content.Paragraphs.Add(ref missing);
-            string money = "14,364.78";
             header.Range.Font.Bold = 1;
             header.Range.Font.Size = 14;
             header.Range.ParagraphFormat.SpaceAfter = 0;
             header.Range.Text = "Northeast Information Center - Billing Through " + DateTime.Now.Date.ToDateString() + Environment.NewLine +
-                "Credit Account 808008900   $" + money;
+                "Credit Account 808008900   $" + _total;
             header.Range.InsertParagraphAfter();
             InsertLine();
         }
@@ -89,6 +94,8 @@ namespace mReporting.Reporting
 
             //Address, PEID, & Invoice #
             Word.Table iTable = document.Tables.Add(dateHeader.Range, 1, 3, ref missing, ref missing);
+            iTable.AllowAutoFit = true;
+            iTable.AutoFitBehavior(Word.WdAutoFitBehavior.wdAutoFitWindow);
             iTable.Columns[1].PreferredWidthType = Word.WdPreferredWidthType.wdPreferredWidthPercent;
             iTable.Columns[1].PreferredWidth = 40;
             iTable.Columns[2].PreferredWidthType = Word.WdPreferredWidthType.wdPreferredWidthPercent;
@@ -136,6 +143,8 @@ namespace mReporting.Reporting
 
             //Billing Info
             Word.Table bTable = document.Content.Tables.Add(projectInfo.Range, 1, 2, ref missing);
+            bTable.AllowAutoFit = true;
+            bTable.AutoFitBehavior(Word.WdAutoFitBehavior.wdAutoFitWindow);
             bTable.Columns[1].PreferredWidthType = Word.WdPreferredWidthType.wdPreferredWidthPercent;
             bTable.Columns[1].PreferredWidth = 25;
 
@@ -170,6 +179,11 @@ namespace mReporting.Reporting
 
             //Finish with line
             InsertLine();
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

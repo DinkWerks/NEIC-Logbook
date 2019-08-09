@@ -5,38 +5,48 @@
              prism:ViewModelLocator.AutoWireViewModel="True" 
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:local="clr-namespace:mReporting"
+             xmlns:utils="clr-namespace:mReporting.Utils"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="1280">
+
+    <UserControl.Resources>
+        <ObjectDataProvider x:Key="ReportCategories" MethodName="GetValues"
+                            ObjectType="{x:Type sys:Enum}">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="local:ReportCategories"/>
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+    </UserControl.Resources>
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        
-        <TreeView>
-            <Button Content="Test" Command="{Binding TestReportCommand}"/>
-            <TreeViewItem Header="Billing">
-                <TextBlock Text="bleh"/>
-                <TextBlock Text="bleh"/>
-                <TextBlock Text="bleh"/>
-                <TextBlock Text="bleh"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="3*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TreeView Grid.RowSpan="2">
+            <i:Interaction.Behaviors>
+                <utils:BindableSelectedItemBehavior SelectedItem="{Binding SelectedReport, Mode=TwoWay}"/>
+            </i:Interaction.Behaviors>
+            <TreeViewItem Header="Billing Reports" ItemsSource="{Binding BillingReports}">
+
             </TreeViewItem>
-            <TreeViewItem Header="Reporting">
-                <TextBlock Text="blah"/>
-                <TextBlock Text="blah"/>
-                <TextBlock Text="blah"/>
-                <TextBlock Text="blah"/>
+            <TreeViewItem Header="OHP Reports" ItemsSource="{Binding OHPReports}">
+
             </TreeViewItem>
         </TreeView>
 
-        <Button Grid.Column="1" Content="Test Report"  Width="100" Height="25" Command="{Binding TestReportCommand}"/>
-        <ListBox Grid.Column="2" ItemsSource="{Binding Reports}" SelectedItem="{Binding SelectedReport}">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding Name}"/>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <ContentControl Grid.RowSpan="2" Grid.Column="1" prism:RegionManager.RegionName="ReportViewRegion"/>
+        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="ParameterRegion" prism:RegionManager.RegionContext="ParameterPayload"/>
+
+        <Button Grid.Column="1" Grid.Row="2" Content="Run Report" Command="{Binding ExecuteReportCommand}" HorizontalAlignment="Right" Margin="0,0,5,0" Width="100" Height="25"/>
     </Grid>
 </UserControl>

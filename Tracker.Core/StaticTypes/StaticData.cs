@@ -14,11 +14,18 @@ namespace Tracker.Core.StaticTypes
 
         public static List<string> Staff = new List<string>()
         {
-            "In House",
-            "Kyle Deutsch",
+            "Adrienne Springsteen",
             "Amy Huberland",
-            "Ryan Bradshaw",
-            "Adrienne Springsteen"
+            "Ashlyn Weaver",
+            "Casey Hegel",
+            "Cecily Merwin",
+            "In House",
+            "Intern",
+            "Katie Jorgenson",
+            "Kyle Piercy",
+            "Noel Jones",
+            "Rob McCann",
+            "Ryan Bradshaw"
         };
 
         public static List<string> RecordSearchTypes = new List<string>()

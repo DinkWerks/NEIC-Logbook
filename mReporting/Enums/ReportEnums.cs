@@ -9,6 +9,6 @@
     public enum ReportCategories
     {
         Billing,
-        Reporting
+        OHP
     }
 }
