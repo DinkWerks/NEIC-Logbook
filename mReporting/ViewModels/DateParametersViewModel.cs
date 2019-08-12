@@ -7,6 +7,7 @@ namespace mReporting.ViewModels
     {
         private DateTime? _startDate;
         private DateTime? _endDate;
+        private object[] _parameterPayload;
 
         public DateTime? Date
         {
@@ -18,6 +19,12 @@ namespace mReporting.ViewModels
         {
             get { return _endDate; }
             set { SetProperty(ref _endDate, value); }
+        }
+
+        public object[] ParameterPayload
+        {
+            get { return _parameterPayload; }
+            set { SetProperty(ref _parameterPayload, value); }
         }
 
         public DateParametersViewModel()
