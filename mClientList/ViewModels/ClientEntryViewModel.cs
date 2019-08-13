@@ -1,8 +1,8 @@
 ﻿using Prism.Commands;
 using Prism.Events;
+using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 using Prism.Regions;
-using System;
 using System.Collections.ObjectModel;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
@@ -10,13 +10,14 @@ using Tracker.Core.Services;
 
 namespace mClientList.ViewModels
 {
-    public class ClientEntryViewModel : BindableBase, INavigationAware
+    public class ClientEntryViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
     {
         private IRegionManager _rm;
         private IClientService _cs;
         private IPersonService _ps;
         private ObservableCollection<Person> _associates = new ObservableCollection<Person>();
         private Client _client;
+        private bool _deleting = false;
 
         public ObservableCollection<Person> Associates
         {
@@ -30,7 +31,11 @@ namespace mClientList.ViewModels
             set { SetProperty(ref _client, value); }
         }
 
-        public DelegateCommand<string> NavigateCommand { get; private set; }
+        public DelegateCommand DeleteEntryCommand { get; private set; }
+
+        public InteractionRequest<IConfirmation> DeleteConfirmationRequest { get; set; }
+
+        public bool KeepAlive => false;
 
         //Constructor
         public ClientEntryViewModel(IRegionManager regionManager, IEventAggregator eventAggregator, IClientService clientService, IPersonService personService)
@@ -39,8 +44,9 @@ namespace mClientList.ViewModels
             _cs = clientService;
             _ps = personService;
             
-            NavigateCommand = new DelegateCommand<string>(Navigate);
+            DeleteEntryCommand = new DelegateCommand(DeleteEntry);
 
+            DeleteConfirmationRequest = new InteractionRequest<IConfirmation>();
             eventAggregator.GetEvent<PersonListSelectEvent>().Subscribe(NavigateToPersonEntry);
         }
 
@@ -50,9 +56,22 @@ namespace mClientList.ViewModels
             _cs.UpdateClientInformation(ClientModel);
         }
 
-        public void Navigate(string navTarget)
+        public void DeleteEntry()
         {
-            _rm.RequestNavigate("ContentRegion", "ClientList");
+            DeleteConfirmationRequest.Raise(new Confirmation {
+                Title = "Confirm Delete",
+                Content = "Are you sure you would like to delete this record?"
+            }, 
+                r =>
+                {
+                    if (r.Confirmed)
+                    {
+                        _deleting = true;
+                        _cs.RemoveClient(ClientModel.ID, ClientModel.AddressModel.AddressID);
+                        _rm.RequestNavigate("ContentRegion", "ClientList");
+                    }
+                }
+            );
         }
 
         public void NavigateToPersonEntry(int navTargetID)
@@ -68,14 +87,7 @@ namespace mClientList.ViewModels
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
         {
-            //TODO What is this for? Yoinked from the Passing Parameters sample.
-            Client client = navigationContext.Parameters["client"] as Client;
-            if (client != null)
-            {
-                return ClientModel != null && ClientModel.ClientName == client.ClientName;
-            }
-            else
-                return true;
+            return true;
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
@@ -90,7 +102,8 @@ namespace mClientList.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            Save();
+            if(!_deleting)
+                Save();
         }
     }
 }

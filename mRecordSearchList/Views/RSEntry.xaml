@@ -42,7 +42,11 @@
 				</prism:PopupWindowAction.WindowContent>
 			</prism:PopupWindowAction>
 		</prism:InteractionRequestTrigger>
-	</i:Interaction.Triggers>
+
+        <prism:InteractionRequestTrigger SourceObject="{Binding DeleteConfirmationRequest}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
 
     
 	<Grid>
@@ -396,6 +400,8 @@
                                 <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding RecordSearch.CheckNumber}"/>
                             </Grid>
                         </GroupBox>
+
+                        <Button Margin="0, 20" Grid.Column="1" Grid.Row="3" Content="Delete Entry" Command="{Binding RemoveEntryCommand}"/>
                     </Grid>
 				</ScrollViewer>
 			</Border>

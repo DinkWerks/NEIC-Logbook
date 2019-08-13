@@ -2,9 +2,7 @@
 using Prism.Regions;
 using Prism.Commands;
 using Tracker.Views;
-using System;
 using Prism.Interactivity.InteractionRequest;
-using System.Media;
 using System.Windows;
 
 namespace Tracker.ViewModels

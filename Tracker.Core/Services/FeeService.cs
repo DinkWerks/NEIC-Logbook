@@ -136,5 +136,19 @@ namespace Tracker.Core.Services
                 }
             }
         }
+
+        public void DeleteFee(int id)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "DELETE FROM tblFees WHERE ID = " + id;
+
+                    connection.Open();
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

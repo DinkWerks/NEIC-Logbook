@@ -17,7 +17,6 @@ namespace mRecordSearchList.ViewModels
     public class RSEntryViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
     {
         private IRegionManager _rm;
-        private IEventAggregator _ea;
         private IRecordSearchService _rss;
         private IPersonService _ps;
         private IClientService _cs;
@@ -26,6 +25,7 @@ namespace mRecordSearchList.ViewModels
         private int _selectedClient;
         private bool _isLoaded = false;
         private IRegionNavigationJournal _journal;
+        private bool _deleting = false;
 
         public List<Person> PeopleList { get; set; }
         public List<Client> ClientList { get; set; }
@@ -59,21 +59,25 @@ namespace mRecordSearchList.ViewModels
             }
         }
 
+        //Commands
         public DelegateCommand SaveCommand { get; private set; }
         public DelegateCommand<string> NavigateCommand { get; private set; }
         public DelegateCommand GoBackCommand { get; private set; }
-        public InteractionRequest<IAdditionalCountyNotification> CountySelectRequest { get; set; }
         public DelegateCommand CountySelectPopupCommand { get; private set; }
         public DelegateCommand<string> CopyRequestorCommand { get; private set; }
         public DelegateCommand<string> CopyAffiliationCommand { get; private set; }
-        public bool KeepAlive => false;
+        public DelegateCommand RemoveEntryCommand { get; private set; }
 
+        //Requests
+        public InteractionRequest<IAdditionalCountyNotification> CountySelectRequest { get; set; }
+        public InteractionRequest<IConfirmation> DeleteConfirmationRequest { get; set; }
+
+        public bool KeepAlive => false;
         // Constructor
         public RSEntryViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IPersonService personService, IClientService clientService,
             IRecordSearchService recordSearchService)
         {
             _rm = regionManager;
-            _ea = eventAggregator;
             _rss = recordSearchService;
             _ps = personService;
             _cs = clientService;
@@ -85,12 +89,17 @@ namespace mRecordSearchList.ViewModels
             regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
 
             SaveCommand = new DelegateCommand(SaveRS);
-            CountySelectRequest = new InteractionRequest<IAdditionalCountyNotification>();
+
             NavigateCommand = new DelegateCommand<string>(Navigate);
             GoBackCommand = new DelegateCommand(GoBack);
             CountySelectPopupCommand = new DelegateCommand(RaiseCountySelectPopup);
             CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
             CopyAffiliationCommand = new DelegateCommand<string>(CopyAffiliation);
+            RemoveEntryCommand = new DelegateCommand(RemoveEntry);
+
+            CountySelectRequest = new InteractionRequest<IAdditionalCountyNotification>();
+            DeleteConfirmationRequest = new InteractionRequest<IConfirmation>();
+
             eventAggregator.GetEvent<AdditionalCountySelectionEvent>().Subscribe(ChangeAdditionalCounties);
         }
 
@@ -137,6 +146,28 @@ namespace mRecordSearchList.ViewModels
                 RecordSearch.MailingAddress = RecordSearch.ClientModel.AddressModel;
             else if (destination == "Billing")
                 RecordSearch.BillingAddress = RecordSearch.ClientModel.AddressModel;
+        }
+
+        private void RemoveEntry()
+        {
+            DeleteConfirmationRequest.Raise(new Confirmation
+            {
+                Title = "Confirm Delete",
+                Content = "Are you sure you would like to delete this record?"
+            },
+                r =>
+                {
+                    if (r.Confirmed)
+                    {
+                        _deleting = true;
+                        _rss.RemoveRecordSearch(RecordSearch.ID,
+                            RecordSearch.MailingAddress.AddressID,
+                            RecordSearch.BillingAddress.AddressID,
+                            RecordSearch.Fee.ID);
+                        _rm.RequestNavigate("ContentRegion", "RSList");
+                    }
+                }
+            );
         }
 
         private void LoadNewRequestor(int value)
@@ -205,7 +236,8 @@ namespace mRecordSearchList.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            SaveRS();
+            if (!_deleting)
+                SaveRS();
         }
     }
 }

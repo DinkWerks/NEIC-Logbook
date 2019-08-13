@@ -14,6 +14,7 @@ namespace Tracker.Core.Services
         List<Person> GetAllPartialPeople();
         int AddNewPerson(Person p);
         int UpdatePersonInformation(Person p);
+        void RemovePerson(int id, int addressID);
         bool ConfirmDistinct(string firstName, string lastName);
     }
 }

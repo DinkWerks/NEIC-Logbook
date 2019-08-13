@@ -9,5 +9,6 @@ namespace Tracker.Core.Services
         Fee GetFeeData(Fee returnValue);
         int AddNewFee();
         int UpdateFee(Fee f);
+        void DeleteFee(int id);
     }
 }

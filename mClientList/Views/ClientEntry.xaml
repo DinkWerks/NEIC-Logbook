@@ -7,6 +7,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:static="clr-namespace:Tracker.Core.StaticTypes;assembly=Tracker.Core"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
 
@@ -23,8 +24,13 @@
         <converters:ClientNameConverter x:Key="ClientNameConverter"/>
 		<converters:StandingToImageConverter x:Key="StandingToImageConverter"/>
 	</UserControl.Resources>
-    
-    
+
+    <i:Interaction.Triggers>
+        <prism:InteractionRequestTrigger SourceObject="{Binding DeleteConfirmationRequest}">
+            <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
+        </prism:InteractionRequestTrigger>
+    </i:Interaction.Triggers>
+
     <StackPanel Margin="10">
         <TextBlock Text="Client Entry Form" HorizontalAlignment="Center" FontSize="36" FontWeight="SemiBold" Margin="0,0,0,25"/>
         <Grid>
@@ -178,6 +184,8 @@
                 <TextBox Text="{Binding ClientModel.Notes}" MinLines="10" MaxLines="10"
 					 HorizontalAlignment="Stretch"/>
             </DockPanel>
+
+            <Button Grid.Row="3" Grid.Column="2" Content="Delete Entry" Command="{Binding DeleteEntryCommand}"/>
         </Grid>
     </StackPanel>
 </UserControl>

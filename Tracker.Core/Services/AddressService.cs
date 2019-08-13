@@ -125,5 +125,19 @@ namespace Tracker.Core.Services
                 }
             }
         }
+
+        public void RemoveAddress(int id)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "DELETE FROM tblAddresses WHERE ID = " + id;
+
+                    connection.Open();
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
     }
 }

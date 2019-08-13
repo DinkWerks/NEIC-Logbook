@@ -20,6 +20,7 @@ namespace mPersonList.ViewModels
         private Person _person;
         private ObservableCollection<RecordSearch> _recordSearches = new ObservableCollection<RecordSearch>();
         private int _selectedClient;
+        private bool _deleting = false;
 
         public List<Client> ClientList { get; set; }
 
@@ -51,8 +52,10 @@ namespace mPersonList.ViewModels
         }
 
         public DelegateCommand SaveCommand { get; private set; }
-        public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
         public DelegateCommand NavigateToClientCommand { get; private set; }
+        public DelegateCommand DeleteRecordCommand { get; private set; }
+
+        public InteractionRequest<IConfirmation> DeleteConfirmationRequest { get; set; }
 
         public bool KeepAlive => false;
 
@@ -66,8 +69,10 @@ namespace mPersonList.ViewModels
 
             ClientList = clientService.CompleteClientList;
             SaveCommand = new DelegateCommand(SavePerson);
-            ConfirmationRequest = new InteractionRequest<IConfirmation>();
             NavigateToClientCommand = new DelegateCommand(NavigateToClient);
+            DeleteRecordCommand = new DelegateCommand(DeleteRecord);
+
+            DeleteConfirmationRequest = new InteractionRequest<IConfirmation>();
             eventAggregator.GetEvent<RecordSearchListSelectEvent>().Subscribe(NavigateToRecordSearch);
         }
 
@@ -94,6 +99,25 @@ namespace mPersonList.ViewModels
 
             if (SelectedClient > 0)
                 _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
+        }
+
+        private void DeleteRecord()
+        {
+            DeleteConfirmationRequest.Raise(new Confirmation
+            {
+                Title = "Confirm Delete",
+                Content = "Are you sure you would like to delete this record?"
+            },
+               r =>
+               {
+                   if (r.Confirmed)
+                   {
+                       _deleting = true;
+                       _ps.RemovePerson(PersonModel.ID, PersonModel.AddressModel.AddressID);
+                       _rm.RequestNavigate("ContentRegion", "PersonList");
+                   }
+               }
+           );
         }
 
         private void NavigateToRecordSearch(int navTarget)
@@ -128,7 +152,8 @@ namespace mPersonList.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            SavePerson();
+            if(!_deleting)
+                SavePerson();
         }
     }
 }

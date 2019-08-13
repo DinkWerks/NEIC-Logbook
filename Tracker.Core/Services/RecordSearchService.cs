@@ -353,7 +353,7 @@ namespace Tracker.Core.Services
                     sqlCommand.Parameters.AddWithValue("@FeeVersion", rs.FeeVersion ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@FeeID", rs.FeeID);
                     sqlCommand.Parameters.AddWithValue("@TotalCost", rs.TotalFee);
-                    
+
                     sqlCommand.Parameters.AddWithValue("@ProjectNumber", rs.ProjectNumber ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@InvoiceNumber", rs.InvoiceNumber ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@CheckName", rs.CheckName ?? Convert.DBNull);
@@ -366,6 +366,25 @@ namespace Tracker.Core.Services
 
                     connection.Open();
                     sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
+        public void RemoveRecordSearch(int id, int mailingAddressID, int billingAddressID, int feeID)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "DELETE FROM tblRecordSearches WHERE ID = " + id;
+
+                    connection.Open();
+                    sqlCommand.ExecuteNonQuery();
+
+                    //TODO Review. Mailing address might break.
+                    _as.RemoveAddress(mailingAddressID);
+                    try { _as.RemoveAddress(billingAddressID); }
+                    finally { _fs.DeleteFee(feeID); }
                 }
             }
         }

@@ -13,6 +13,7 @@ namespace Tracker.Core.Services
         List<Client> GetAllPartialClients();
         int AddNewClient(Client newClient);
         void UpdateClientInformation(Client c);
+        void RemoveClient(int id, int addressID);
         bool ConfirmDistinct(string clientName, string officeName);
     }
 }

@@ -199,6 +199,22 @@ namespace Tracker.Core.Services
             }
         }
 
+        public void RemovePerson(int id, int addressID)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "DELETE FROM tblPeople WHERE ID = " + id;
+
+                    connection.Open();
+                    sqlCommand.ExecuteNonQuery();
+
+                    _as.RemoveAddress(addressID);
+                }
+            }
+        }
+
         public bool ConfirmDistinct(string firstName, string lastName)
         {
             using (OleDbConnection connection = new OleDbConnection(ConnectionString))

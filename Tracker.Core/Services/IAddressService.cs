@@ -9,5 +9,6 @@ namespace Tracker.Core.Services
         Address GetAddressByID(int id);
         int AddNewAddress(Address a);
         int UpdateAddress(Address a);
+        void RemoveAddress(int id);
     }
 }
