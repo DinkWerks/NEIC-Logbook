@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Settings>
   <Setting setting_name="Database Address" group="Database Settings">
-    <Value>C:\Users\Kyle\source\repos\Tracker\Tracker\bin\Debug\Resources\RS_Backend.accdb</Value>
+    <Value>C:\Users\kdeutsch\source\repos\Tracker\Tracker\bin\Debug\Resources\RS_Backend.accdb</Value>
     <ValueType>string</ValueType>
   </Setting>
 

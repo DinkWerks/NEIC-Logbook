@@ -22,7 +22,7 @@ namespace mReporting.Reporting
         public string Name { get; set; }
         public string Description { get; set; }
         public ReportCategories Category { get; set; }
-        public ParameterTypes? Parameters { get; set; }
+        public ParameterTypes? Parameters { get; } = ParameterTypes.Date_Range;
         public int ParameterCount { get; } = 2;
         public ObservableCollection<object> ParameterPayload
         {
@@ -37,16 +37,21 @@ namespace mReporting.Reporting
 
             Name = "Research Foundation Billing Export";
             Description = "Exports a detailed list of every project to be billed by the Research Foundation. The list will open up in a word document that the user can edit, print, and save.";
-            Parameters = ParameterTypes.Date_Range;
         }
 
         //Methods
         public void Execute(ObservableCollection<object> parameters)
         {
             ParameterPayload = parameters;
+            DateTime StartDate = (DateTime)ParameterPayload[0];
+            DateTime EndDate = (DateTime)ParameterPayload[1];
+
             if (VerifyParameters())
             {
-                List<RecordSearch> recordSearches = _rss.GetRecordSearchesByCriteria("WHERE ID > 0");
+                List<RecordSearch> recordSearches = _rss.GetRecordSearchesByCriteria(
+                    string.Format("WHERE DateOfResponse BETWEEN #{0}# AND #{1}# AND Status = 'Awaiting Billing'",
+                    StartDate.ToShortDateString(), EndDate.ToShortDateString()
+                    ));
                 try
                 {
                     Word.Application wordApp = new Word.Application
@@ -60,8 +65,8 @@ namespace mReporting.Reporting
 
                     foreach (RecordSearch record in recordSearches)
                         _total += record.TotalFee;
-                    AddHeader();
 
+                    AddHeader();
                     foreach (RecordSearch record in recordSearches)
                     {
                         AddEntry(record);
@@ -80,9 +85,11 @@ namespace mReporting.Reporting
             {
                 if (param == null)
                     return false;
-
             }
-            return true;
+            if ((DateTime)ParameterPayload[0] < (DateTime)ParameterPayload[1])
+                return true;
+            else
+                return false;
         }
 
         private void AddHeader()
@@ -127,10 +134,10 @@ namespace mReporting.Reporting
             iTable.Columns[2].PreferredWidth = 30;
 
             if (string.IsNullOrWhiteSpace(record.BillingAddress.AddressLine2))
-                iTable.Rows[1].Cells[1].Range.Text = String.Format("{0}\r\n{1}\r\n{2}, {3} {4}",
+                iTable.Rows[1].Cells[1].Range.Text = string.Format("{0}\r\n{1}\r\n{2}, {3} {4}",
                    record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
             else
-                iTable.Rows[1].Cells[1].Range.Text = String.Format("{0}\r\n{1}\r\n{2}\r\n{3}, {4} {5}",
+                iTable.Rows[1].Cells[1].Range.Text = string.Format("{0}\r\n{1}\r\n{2}\r\n{3}, {4} {5}",
                    record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.AddressLine2, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
 
             iTable.Rows[1].Cells[2].Range.Text = string.Format("PEID # " + record.ClientModel.OldPEID.PadLeft(6, '0'));
@@ -146,17 +153,17 @@ namespace mReporting.Reporting
             Word.Paragraph projectInfo = document.Content.Paragraphs.Add(ref missing);
 
             string attentionTo;
-            if (String.IsNullOrWhiteSpace(record.BillingAddress.AttentionTo))
+            if (string.IsNullOrWhiteSpace(record.BillingAddress.AttentionTo))
                 attentionTo = "";
             else
                 attentionTo = "\r\nATTN: " + record.BillingAddress.AttentionTo;
             string fileNumber = "IC File # " + record.ICTypePrefix + record.ICYear + "-" + record.ICEnumeration + record.ICSuffix;
 
-            if (String.IsNullOrWhiteSpace(record.Requestor.FirstName))
-                projectInfo.Range.Text = String.Format("{0}\r\n>>\r\nRE: {1}; {2}\r\n>>",
+            if (string.IsNullOrWhiteSpace(record.Requestor.FirstName))
+                projectInfo.Range.Text = string.Format("{0}\r\n>>\r\nRE: {1}; {2}\r\n>>",
                     attentionTo, record.ProjectName, fileNumber);
             else
-                projectInfo.Range.Text = String.Format("{0}\r\n>>\r\nRE: {1} (Requested By: {2} {3}); {4}\r\n>>",
+                projectInfo.Range.Text = string.Format("{0}\r\n>>\r\nRE: {1} (Requested By: {2} {3}); {4}\r\n>>",
                     attentionTo, record.ProjectName, record.Requestor.FirstName, record.Requestor.LastName, fileNumber);
 
             object startRange = projectInfo.Range.End - (fileNumber.Length + 4);

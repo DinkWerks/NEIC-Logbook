@@ -7,7 +7,7 @@ namespace mReporting.Reporting
         string Name { get; set; }
         string Description { get; set; }
         ReportCategories Category { get; set; }
-        ParameterTypes? Parameters { get; set; }
+        ParameterTypes? Parameters { get; }
         ObservableCollection<object> ParameterPayload { get; set; }
         int ParameterCount { get; }
         void Execute(ObservableCollection<object> parameters);

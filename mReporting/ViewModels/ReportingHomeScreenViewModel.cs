@@ -94,7 +94,6 @@ namespace mReporting.ViewModels
 
         private void AddParameter()
         {
-            ParameterPayload.Clear();
             if (SelectedReport.Parameters != null)
             {
                 string navigationTarget = "";

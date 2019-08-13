@@ -12,28 +12,29 @@
              xmlns:converters="clr-namespace:mRecordSearchList.Converters"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="1280">
-	<UserControl.Resources>
-		<Style x:Key="Line Header" TargetType="TextBlock">
-			<Setter Property="FontWeight" Value="Bold"/>
-			<Setter Property="Margin" Value="0,0,5,10"/>
-			<Setter Property="VerticalAlignment" Value="Center"/>
-		</Style>
-		<Style TargetType="DatePicker">
-			<Setter Property="Margin" Value="0,0,0,4"/>
-			<Setter Property="VerticalAlignment" Value="Center"/>
-		</Style>
-		<Style TargetType="TextBox">
-			<Setter Property="VerticalAlignment" Value="Top"/>
-		</Style>
+
+    <UserControl.Resources>
+        <Style x:Key="Line Header" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,5,10"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Margin" Value="0,0,0,4"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="0,0,2,8"/>
         </Style>
         <converters:ClientNameConverter x:Key="ClientNameConverter"/>
         <converters:StandingToImageConverter x:Key="StandingToImageConverter"/>
     </UserControl.Resources>
-
-
-	<i:Interaction.Triggers>
+    
+    
+    <i:Interaction.Triggers>
 		<prism:InteractionRequestTrigger SourceObject="{Binding CountySelectRequest}">
 			<prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
 				<prism:PopupWindowAction.WindowContent>
@@ -43,8 +44,7 @@
 		</prism:InteractionRequestTrigger>
 	</i:Interaction.Triggers>
 
-
-
+    
 	<Grid>
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition Width="3*"/>
@@ -61,7 +61,7 @@
 			</Grid.RowDefinitions>
             
 			<!--Project Title-->
-			<Border BorderThickness="10" BorderBrush="SandyBrown" Background="SandyBrown" Panel.ZIndex="1">
+			<Border RenderOptions.EdgeMode="Aliased" BorderThickness="10" BorderBrush="SandyBrown" Background="SandyBrown" Panel.ZIndex="1">
 				<Border.Effect>
 					<DropShadowEffect Direction="277" Color="#FF5A5A5A" Opacity="0.66" BlurRadius="10" ShadowDepth="3"/>
 				</Border.Effect>
@@ -75,7 +75,7 @@
 						<RowDefinition/>
 					</Grid.RowDefinitions>
 
-					<TextBlock FontSize="36" FontWeight="SemiBold" >
+					<TextBlock FontSize="36" FontWeight="Bold" >
 						<TextBlock.Text>
 							<MultiBinding StringFormat="{}{0}-{1}-{2}{3}">
 								<Binding Path="RecordSearch.ICTypePrefix"/>

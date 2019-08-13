@@ -146,12 +146,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="SmallTransparent.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Artboard 1.ico" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="LogBookIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

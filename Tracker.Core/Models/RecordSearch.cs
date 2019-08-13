@@ -413,5 +413,13 @@ namespace Tracker.Core.Models
             }
             return "Entered";
         }
+
+        public string GetFileNumberFormatted()
+        {
+            if (ICSuffix == null)
+                return ICTypePrefix + ICYear + "-" + ICEnumeration;
+            else
+                return ICTypePrefix + ICYear + "-" + ICEnumeration + ICSuffix;
+        }
     }
 }

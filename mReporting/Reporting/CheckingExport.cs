@@ -14,12 +14,13 @@ namespace mReporting.Reporting
         private IRecordSearchService _rss;
         private object missing;
         private Word.Document document;
+        private Word.Table table;
         private ObservableCollection<object> _parameterPayload = new ObservableCollection<object>();
 
         public string Name { get; set; }
         public string Description { get; set; }
         public ReportCategories Category { get; set; }
-        public ParameterTypes? Parameters { get; set; }
+        public ParameterTypes? Parameters { get; } = ParameterTypes.Date_Range;
         public int ParameterCount { get; } = 2;
         public ObservableCollection<object> ParameterPayload
         {
@@ -33,17 +34,19 @@ namespace mReporting.Reporting
             _rss = recordSearchService;
             Name = "Checks to Deposit Export";
             Description = "This exported view will list any check recieved as payments within a specific date range.";
-
-            Parameters = ParameterTypes.Date_Range;
         }
 
         //Methods
         public void Execute(ObservableCollection<object> parameters)
         {
             ParameterPayload = parameters;
+            DateTime StartDate = (DateTime)ParameterPayload[0];
+            DateTime EndDate = (DateTime)ParameterPayload[1];
+
             if (VerifyParameters())
             {
-                List<RecordSearch> recordSearches = _rss.GetRecordSearchesByCriteria("WHERE ID > 0 AND CheckName IS NOT NULL");
+                List<RecordSearch> recordSearches = _rss.GetRecordSearchesByCriteria(string.Format("WHERE DatePaid BETWEEN #{0}# AND #{1}# AND CheckNumber IS NOT NULL OR CheckNumber <> ''", 
+                    StartDate.ToShortDateString(), EndDate.ToShortDateString()));
                 try
                 {
                     Word.Application wordApp = new Word.Application
@@ -56,10 +59,36 @@ namespace mReporting.Reporting
                     document = wordApp.Documents.Add(ref missing, ref missing, ref missing, ref missing);
                     document.Paragraphs.SpaceAfter = 0;
 
-                    AddHeader();
+                    AddTitle(StartDate, EndDate);
+
+                    //Create table
+                    Word.Paragraph tableSection = document.Content.Paragraphs.Add(ref missing);
+                    table = document.Tables.Add(tableSection.Range, recordSearches.Count + 1, 5, ref missing, ref missing);
+
+                    table.AllowAutoFit = true;
+                    table.AutoFitBehavior(Word.WdAutoFitBehavior.wdAutoFitWindow);
+
+                    SetColumnWidth(1, 15);
+                    SetColumnWidth(2, 15);
+                    SetColumnWidth(3, 45);
+                    SetColumnWidth(4, 15);
+                    SetColumnWidth(5, 10);
+
+                    //Create Header
+                    table.Rows[1].Borders[Word.WdBorderType.wdBorderBottom].LineStyle = Word.WdLineStyle.wdLineStyleSingle;
+                    table.Rows[1].Borders[Word.WdBorderType.wdBorderBottom].LineWidth = Word.WdLineWidth.wdLineWidth225pt;
+                    AddHeaderText(1, "Date Paid");
+                    AddHeaderText(2, "IC File #");
+                    AddHeaderText(3, "Project Name");
+                    AddHeaderText(4, "Amount");
+                    AddHeaderText(5, "Check #");
+
+                    //Start Index at 2 to skip header row.
+                    int index = 2;
                     foreach (RecordSearch rs in recordSearches)
                     {
-                        AddEntry();
+                        AddEntry(index, rs);
+                        index++;
                     }
                 }
                 catch (Exception exception)
@@ -76,17 +105,51 @@ namespace mReporting.Reporting
                 if (param == null)
                     return false;
             }
-            return true;
+            if ((DateTime)ParameterPayload[0] < (DateTime)ParameterPayload[1])
+                return true;
+            else
+                return false;
         }
 
-        private void AddHeader()
+        private void AddTitle(DateTime start, DateTime end)
         {
-            throw new NotImplementedException();
+            Word.Paragraph header = document.Content.Paragraphs.Add(ref missing);
+            header.Range.Font.Bold = 1;
+            header.Range.Font.Size = 18;
+            header.Range.Text = "Northeast Information Center Deposits"; 
+            header.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            header.Range.InsertParagraphAfter();
+
+            Word.Paragraph dateRange = document.Content.Paragraphs.Add(ref missing);
+            dateRange.Range.Font.Bold = 1;
+            dateRange.Range.Font.Size = 14;
+            dateRange.Range.Text = start.ToShortDateString() + " - " + end.ToShortDateString();
+            dateRange.Alignment = Word.WdParagraphAlignment.wdAlignParagraphCenter;
+            header.Range.InsertParagraphAfter();
         }
 
-        private void AddEntry()
+        private void AddEntry(int index, RecordSearch rs)
         {
-            throw new NotImplementedException();
+            table.Rows[index].Cells[1].Range.Text = rs.DateReceived.Value.ToShortDateString();
+            table.Rows[index].Cells[2].Range.Text = rs.GetFileNumberFormatted();
+            table.Rows[index].Cells[3].Range.Text = rs.ProjectName;
+            table.Rows[index].Cells[4].Range.Text = rs.TotalFee.ToString();
+            table.Rows[index].Cells[4].Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            table.Rows[index].Cells[5].Range.Text = rs.CheckNumber;
+            table.Rows[index].Cells[5].Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
+            table.Rows[index].Cells[5].Range.ParagraphFormat.LineSpacing = 16;
+        }
+
+        private void SetColumnWidth(int column, int width)
+        {
+            table.Columns[column].PreferredWidthType = Word.WdPreferredWidthType.wdPreferredWidthPercent;
+            table.Columns[column].PreferredWidth = width;
+        }
+
+        private void AddHeaderText(int cell, string text)
+        {
+            table.Rows[1].Cells[cell].Range.Text = text;
+            table.Rows[1].Cells[cell].Range.Bold = 1;
         }
 
         public override string ToString()
