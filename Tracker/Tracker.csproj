@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>LogBookIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -141,6 +144,15 @@
       <Project>{91072ca4-6b1a-4a0d-bf41-1123e13c3ebc}</Project>
       <Name>Tracker.Core</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="SmallTransparent.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Artboard 1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="LogBookIcon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -141,8 +141,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\github.png" />
-    <Content Include="Resources\Images\LargeTransparent.png" />
-    <Content Include="Resources\Images\SmallTransparent.png" />
+    <Resource Include="Resources\Images\LargeTransparent.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Resources\Images\SmallTransparent.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Content Include="Resources\Settings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
