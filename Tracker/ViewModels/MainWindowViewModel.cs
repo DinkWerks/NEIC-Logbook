@@ -56,7 +56,7 @@ namespace Tracker.ViewModels
 
         private void GoToGithub()
         {
-            System.Diagnostics.Process.Start("http://www.github.com");
+            System.Diagnostics.Process.Start("https://github.com/DinkWerks/NEIC-Logbook");
         }
 
         private void Exit()
