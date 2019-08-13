@@ -1,6 +1,7 @@
 ﻿using Prism.Regions;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows;
 using Tracker.Core.Extensions;
 using Tracker.Core.Models;
@@ -16,12 +17,20 @@ namespace mReporting.Reporting
         private decimal _total;
         private object missing;
         private Word.Document document;
+        private ObservableCollection<object> _parameterPayload = new ObservableCollection<object>();
 
         public string Name { get; set; }
         public string Description { get; set; }
         public ReportCategories Category { get; set; }
         public ParameterTypes? Parameters { get; set; }
+        public int ParameterCount { get; } = 2;
+        public ObservableCollection<object> ParameterPayload
+        {
+            get { return _parameterPayload; }
+            set { _parameterPayload = value; }
+        }
 
+        //Constructor
         public BillingExport(IRecordSearchService recordSearchService)
         {
             _rss = recordSearchService;
@@ -31,33 +40,49 @@ namespace mReporting.Reporting
             Parameters = ParameterTypes.Date_Range;
         }
 
-        public void Execute(object[] parameters)
+        //Methods
+        public void Execute(ObservableCollection<object> parameters)
         {
-            List<RecordSearch> recordSearches = _rss.GetRecordSearchesByCriteria("WHERE ID > 0");
-            try
+            ParameterPayload = parameters;
+            if (VerifyParameters())
             {
-                Word.Application wordApp = new Word.Application
+                List<RecordSearch> recordSearches = _rss.GetRecordSearchesByCriteria("WHERE ID > 0");
+                try
                 {
-                    ShowAnimation = false,
-                    Visible = true
-                };
-                missing = System.Reflection.Missing.Value;
-                document = wordApp.Documents.Add(ref missing, ref missing, ref missing, ref missing);
-                document.Paragraphs.SpaceAfter = 0;
+                    Word.Application wordApp = new Word.Application
+                    {
+                        ShowAnimation = false,
+                        Visible = true
+                    };
+                    missing = System.Reflection.Missing.Value;
+                    document = wordApp.Documents.Add(ref missing, ref missing, ref missing, ref missing);
+                    document.Paragraphs.SpaceAfter = 0;
 
-                foreach (RecordSearch record in recordSearches)
-                    _total += record.TotalFee;
-                AddHeader();
+                    foreach (RecordSearch record in recordSearches)
+                        _total += record.TotalFee;
+                    AddHeader();
 
-                foreach (RecordSearch record in recordSearches)
+                    foreach (RecordSearch record in recordSearches)
+                    {
+                        AddEntry(record);
+                    }
+                }
+                catch (Exception exception)
                 {
-                    AddEntry(record);
+                    MessageBox.Show(exception.Message);
                 }
             }
-            catch (Exception exception)
+        }
+
+        public bool VerifyParameters()
+        {
+            foreach (object param in ParameterPayload)
             {
-                MessageBox.Show(exception.Message);
+                if (param == null)
+                    return false;
+
             }
+            return true;
         }
 
         private void AddHeader()
@@ -159,7 +184,7 @@ namespace mReporting.Reporting
                 {
                     case "variable":
                         VariableCharge vCharge = (VariableCharge)charge;
-                        chargeInformation += string.Format("  {0} - {1} {2} @ ${3} per {4}\n", 
+                        chargeInformation += string.Format("  {0} - {1} {2} @ ${3} per {4}\n",
                             vCharge.Name, vCharge.Count, vCharge.UnitNamePlural, vCharge.Cost, vCharge.UnitName);
                         break;
                     case "boolean":

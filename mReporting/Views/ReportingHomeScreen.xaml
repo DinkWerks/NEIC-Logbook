@@ -45,10 +45,8 @@
         </TreeView>
 
         <ContentControl Grid.RowSpan="2" Grid.Column="1" prism:RegionManager.RegionName="ReportViewRegion"/>
-        <ContentControl Grid.Row="1" prism:RegionManager.RegionName="ParameterRegion" prism:RegionManager.RegionContext="{Binding ParameterPayload}"/>
+		<ContentControl Grid.Row="1" prism:RegionManager.RegionName="ParameterRegion" prism:RegionManager.RegionContext="{Binding ParameterPayload}"/>
 
-        <TextBlock Text="{Binding ParameterPayload}"/>
-
-        <Button Grid.Column="1" Grid.Row="2" Content="Run Report" Command="{Binding ExecuteReportCommand}" HorizontalAlignment="Right" Margin="0,0,5,0" Width="100" Height="25"/>
+		<Button Grid.Column="1" Grid.Row="2" Content="Run Report" Command="{Binding ExecuteReportCommand}" HorizontalAlignment="Right" Margin="0,0,5,0" Width="100" Height="25"/>
     </Grid>
 </UserControl>

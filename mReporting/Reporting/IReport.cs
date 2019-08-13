@@ -1,4 +1,6 @@
-﻿namespace mReporting.Reporting
+﻿using System.Collections.ObjectModel;
+
+namespace mReporting.Reporting
 {
     public interface IReport
     {
@@ -6,6 +8,9 @@
         string Description { get; set; }
         ReportCategories Category { get; set; }
         ParameterTypes? Parameters { get; set; }
-        void Execute(object[] parameters);
+        ObservableCollection<object> ParameterPayload { get; set; }
+        int ParameterCount { get; }
+        void Execute(ObservableCollection<object> parameters);
+        bool VerifyParameters();
     }
 }

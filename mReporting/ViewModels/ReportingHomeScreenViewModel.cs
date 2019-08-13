@@ -7,6 +7,7 @@ using Tracker.Core.Services;
 using System;
 using System.Linq;
 using Prism.Regions;
+using System.Collections.ObjectModel;
 
 namespace mReporting.ViewModels
 {
@@ -14,12 +15,12 @@ namespace mReporting.ViewModels
     {
         private List<IReport> _ohpReports = new List<IReport>();
         private List<IReport> _billingReport = new List<IReport>();
-        private List<object> _parameterPayload;
+        private ObservableCollection<object> _parameterPayload = new ObservableCollection<object>();
         private IReport _report;
         private IRecordSearchService _rss;
         private IRegionManager _rm;
 
-        public List<IReport>OHPReports
+        public List<IReport> OHPReports
         {
             get { return _ohpReports; }
             set { SetProperty(ref _ohpReports, value); }
@@ -34,13 +35,14 @@ namespace mReporting.ViewModels
         public IReport SelectedReport
         {
             get { return _report; }
-            set {
+            set
+            {
                 SetProperty(ref _report, value);
                 AddParameter();
             }
         }
-        
-        public List<object> ParameterPayload
+
+        public ObservableCollection<object> ParameterPayload
         {
             get { return _parameterPayload; }
             set { SetProperty(ref _parameterPayload, value); }
@@ -55,7 +57,7 @@ namespace mReporting.ViewModels
         {
             _rss = recordSearchService;
             _rm = regionManager;
-            
+
             ExecuteReportCommand = new DelegateCommand(ExecuteReport);
             GetReportsFromNamespace(Assembly.GetExecutingAssembly(), "mReporting.Reporting");
         }
@@ -86,11 +88,13 @@ namespace mReporting.ViewModels
         private void ExecuteReport()
         {
             if (SelectedReport != null)
-                SelectedReport.Execute(null);
+                SelectedReport.Execute(ParameterPayload);
+
         }
 
         private void AddParameter()
         {
+            ParameterPayload.Clear();
             if (SelectedReport.Parameters != null)
             {
                 string navigationTarget = "";
