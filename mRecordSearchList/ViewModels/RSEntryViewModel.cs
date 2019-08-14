@@ -61,6 +61,7 @@ namespace mRecordSearchList.ViewModels
 
         //Commands
         public DelegateCommand SaveCommand { get; private set; }
+        public DelegateCommand ChangeFileNumCommand { get; private set; }
         public DelegateCommand<string> NavigateCommand { get; private set; }
         public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand CountySelectPopupCommand { get; private set; }
@@ -69,6 +70,7 @@ namespace mRecordSearchList.ViewModels
         public DelegateCommand RemoveEntryCommand { get; private set; }
 
         //Requests
+        public InteractionRequest<IChangeICFileNumberNotification> ChangeFileNumRequest { get; set; }
         public InteractionRequest<IAdditionalCountyNotification> CountySelectRequest { get; set; }
         public InteractionRequest<IConfirmation> DeleteConfirmationRequest { get; set; }
 
@@ -90,6 +92,7 @@ namespace mRecordSearchList.ViewModels
 
             SaveCommand = new DelegateCommand(SaveRS);
 
+            ChangeFileNumCommand = new DelegateCommand(ChangeFileNum);
             NavigateCommand = new DelegateCommand<string>(Navigate);
             GoBackCommand = new DelegateCommand(GoBack);
             CountySelectPopupCommand = new DelegateCommand(RaiseCountySelectPopup);
@@ -97,6 +100,7 @@ namespace mRecordSearchList.ViewModels
             CopyAffiliationCommand = new DelegateCommand<string>(CopyAffiliation);
             RemoveEntryCommand = new DelegateCommand(RemoveEntry);
 
+            ChangeFileNumRequest = new InteractionRequest<IChangeICFileNumberNotification>();
             CountySelectRequest = new InteractionRequest<IAdditionalCountyNotification>();
             DeleteConfirmationRequest = new InteractionRequest<IConfirmation>();
 
@@ -107,6 +111,21 @@ namespace mRecordSearchList.ViewModels
         private void SaveRS()
         {
             _rss.UpdateRecordSearch(RecordSearch);
+        }
+
+        private void ChangeFileNum()
+        {
+            ChangeFileNumRequest.Raise(new ChangeICFileNumberNotification { Title = "Change the Entry's File Number" }, r =>
+            {
+                object[] newFileNumber = new object[4];
+                if (r.Confirmed)
+                {
+                    RecordSearch.ICTypePrefix = r.Prefix;
+                    RecordSearch.ICYear = r.Year;
+                    RecordSearch.ICEnumeration = r.Enumeration;
+                    RecordSearch.ICSuffix = r.Suffix;
+                }
+            });
         }
 
         private void Navigate(string destination)

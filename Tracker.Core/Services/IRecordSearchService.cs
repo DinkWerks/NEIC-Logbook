@@ -14,8 +14,10 @@ namespace Tracker.Core.Services
         List<RecordSearch> GetPartialRecordSearchesByCriteria(string criteria);
         int AddNewRecordSearch(object[] array);
         void UpdateRecordSearch(RecordSearch rs);
+        void UpdateICFileNumber(int id, object[] array);
         void RemoveRecordSearch(int id, int mailingAddressID, int billingAddressID, int feeID);
         int GetNextEnumeration(string prefix, string year);
         bool ConfirmDistinct(string prefix, string year, int enumeration, string suffix);
+
     }
 }

@@ -147,6 +147,7 @@
     <Resource Include="Resources\Images\SmallTransparent.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Resources\Icons\pencil.png" />
     <Content Include="Resources\Settings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

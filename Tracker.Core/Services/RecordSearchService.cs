@@ -305,7 +305,7 @@ namespace Tracker.Core.Services
                     rs.TotalFee = rs.Fee.TotalProjectCost;
 
                     sqlCommand.CommandText = "UPDATE tblRecordSearches SET " +
-                        "ICPrefix = @ICPrefix, ICYear = @ICYear, ICEnumeration = @ICEnumeration, ICSuffix = ?," +
+                        "ICPrefix = @ICPrefix, ICYear = @ICYear, ICEnumeration = @ICEnumeration, ICSuffix = @ICSuffix," +
                         "DateReceived = @DateReceived, DateEntered = @DateEntered, DateOfResponse = @DateOfResponse, DateBilled = @DateBilled, DatePaid = @DatePaid, LastUpdated = @LastUpdated, " +
                         "RequestorID = @RequestorID, AdditionalRequestors = @AdditionalRequestors, ClientID = @ClientID, MailingAddressID = @MailingAddressID, IsMailingAddressSameAsBilling = @IsMailingAddressSameAsBilling, BillingAddressID = @BillingAddressID, " +
                         "ProjectName = @ProjectName, RecordSearchType = @RecordSearchType, Status = @Status, SpecialCaseDetails = @SpecialCaseDetails, " +
@@ -370,6 +370,28 @@ namespace Tracker.Core.Services
             }
         }
 
+        public void UpdateICFileNumber(int id, object[] array)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = "UPDATE tblRecordSearches SET " +
+                        "ICPrefix = @ICPrefix, ICYear = @ICYear, ICEnumeration = @ICEnumeration, ICSuffix = @ICSuffix " +
+                        "WHERE ID = ?";
+
+                    sqlCommand.Parameters.AddWithValue("@ICPrefix", array[0] ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@ICYear", array[1] ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@ICEnumeration", array[2]);
+                    sqlCommand.Parameters.AddWithValue("@ICSuffix", array[3] ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("ID", id);
+
+                    connection.Open();
+                    sqlCommand.ExecuteNonQuery();
+                }
+            }
+        }
+
         public void RemoveRecordSearch(int id, int mailingAddressID, int billingAddressID, int feeID)
         {
             using (OleDbConnection connection = new OleDbConnection(ConnectionString))
@@ -381,10 +403,12 @@ namespace Tracker.Core.Services
                     connection.Open();
                     sqlCommand.ExecuteNonQuery();
 
-                    //TODO Review. Mailing address might break.
-                    _as.RemoveAddress(mailingAddressID);
-                    try { _as.RemoveAddress(billingAddressID); }
-                    finally { _fs.DeleteFee(feeID); }
+                    if (mailingAddressID > 0)
+                        _as.RemoveAddress(mailingAddressID);
+                    if (mailingAddressID > 0)
+                        _as.RemoveAddress(billingAddressID);
+                    if (feeID > 0)
+                        _fs.DeleteFee(feeID);
                 }
             }
         }
