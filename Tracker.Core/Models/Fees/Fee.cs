@@ -53,7 +53,7 @@ namespace Tracker.Core.Models.Fees
         public Fee(string version)
         {
             if (string.IsNullOrEmpty(version))
-                FeeVersion = Properties.Settings.Default.FeeType;
+                FeeVersion = Settings.Settings.Instance.DefaultFeeStructure.Value;
             else
                 FeeVersion = version;
             LoadFeeData(FeeVersion);
