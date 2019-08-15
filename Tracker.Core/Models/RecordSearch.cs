@@ -411,7 +411,12 @@ namespace Tracker.Core.Models
                 else
                     return "Overdue Response";
             }
-            return "Entered";
+            else if (DateEntered != null)
+            {
+                return "Entered";
+            }
+            else
+                return string.Empty;
         }
 
         public string GetFileNumberFormatted()
