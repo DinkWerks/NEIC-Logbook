@@ -9,9 +9,9 @@ namespace mRecordSearchList.Converters
         public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
         {
             if (string.IsNullOrWhiteSpace((string)values[3]))
-                return string.Format("{0}-{1}-{2}", values);
+                return string.Format("{0}{1}-{2}", values);
             else
-                return string.Format("{0}-{1}-{2}-{3}", values);
+                return string.Format("{0}{1}-{2}{3}", values);
         }
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
