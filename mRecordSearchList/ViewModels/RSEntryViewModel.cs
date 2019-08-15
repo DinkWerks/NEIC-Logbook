@@ -1,20 +1,23 @@
-﻿using System.Collections.Generic;
-using Prism.Mvvm;
+﻿using System.Windows;
+using System.Collections.Generic;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Regions;
 using Tracker.Core.Models;
+using Tracker.Core.BaseClasses;
 using Tracker.Core.Events.CustomPayloads;
 using Tracker.Core.Events;
 using Tracker.Core.Services;
+using Tracker.Core.CompositeCommands;
 using mFeeCalculator.Views;
 using mRecordSearchList.Views;
 using mRecordSearchList.Notifications;
 
+
 namespace mRecordSearchList.ViewModels
 {
-    public class RSEntryViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
+    public class RSEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
         private IRegionManager _rm;
         private IRecordSearchService _rss;
@@ -25,7 +28,6 @@ namespace mRecordSearchList.ViewModels
         private int _selectedClient;
         private bool _isLoaded = false;
         private IRegionNavigationJournal _journal;
-        private bool _deleting = false;
 
         public List<Person> PeopleList { get; set; }
         public List<Client> ClientList { get; set; }
@@ -60,24 +62,21 @@ namespace mRecordSearchList.ViewModels
         }
 
         //Commands
-        public DelegateCommand SaveCommand { get; private set; }
         public DelegateCommand ChangeFileNumCommand { get; private set; }
         public DelegateCommand<string> NavigateCommand { get; private set; }
         public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand CountySelectPopupCommand { get; private set; }
         public DelegateCommand<string> CopyRequestorCommand { get; private set; }
         public DelegateCommand<string> CopyAffiliationCommand { get; private set; }
-        public DelegateCommand RemoveEntryCommand { get; private set; }
 
         //Requests
         public InteractionRequest<IChangeICFileNumberNotification> ChangeFileNumRequest { get; set; }
         public InteractionRequest<IAdditionalCountyNotification> CountySelectRequest { get; set; }
         public InteractionRequest<IConfirmation> DeleteConfirmationRequest { get; set; }
 
-        public bool KeepAlive => false;
         // Constructor
         public RSEntryViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IPersonService personService, IClientService clientService,
-            IRecordSearchService recordSearchService)
+            IRecordSearchService recordSearchService, IApplicationCommands applicationCommands) : base(applicationCommands)
         {
             _rm = regionManager;
             _rss = recordSearchService;
@@ -90,15 +89,12 @@ namespace mRecordSearchList.ViewModels
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
 
-            SaveCommand = new DelegateCommand(SaveRS);
-
             ChangeFileNumCommand = new DelegateCommand(ChangeFileNum);
             NavigateCommand = new DelegateCommand<string>(Navigate);
             GoBackCommand = new DelegateCommand(GoBack);
             CountySelectPopupCommand = new DelegateCommand(RaiseCountySelectPopup);
             CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
             CopyAffiliationCommand = new DelegateCommand<string>(CopyAffiliation);
-            RemoveEntryCommand = new DelegateCommand(RemoveEntry);
 
             ChangeFileNumRequest = new InteractionRequest<IChangeICFileNumberNotification>();
             CountySelectRequest = new InteractionRequest<IAdditionalCountyNotification>();
@@ -108,9 +104,31 @@ namespace mRecordSearchList.ViewModels
         }
 
         // Methods
-        private void SaveRS()
+        public override void SaveEntry()
         {
             _rss.UpdateRecordSearch(RecordSearch);
+        }
+
+        public override void DeleteEntry()
+        {
+            DeleteConfirmationRequest.Raise(new Confirmation
+            {
+                Title = "Confirm Delete",
+                Content = "Are you sure you would like to delete this record?"
+            },
+                r =>
+                {
+                    if (r.Confirmed)
+                    {
+                        _deleting = true;
+                        _rss.RemoveRecordSearch(RecordSearch.ID,
+                            RecordSearch.MailingAddress.AddressID,
+                            RecordSearch.BillingAddress.AddressID,
+                            RecordSearch.Fee.ID);
+                        _rm.RequestNavigate("ContentRegion", "RSList");
+                    }
+                }
+            );
         }
 
         private void ChangeFileNum()
@@ -165,28 +183,6 @@ namespace mRecordSearchList.ViewModels
                 RecordSearch.MailingAddress = RecordSearch.ClientModel.AddressModel;
             else if (destination == "Billing")
                 RecordSearch.BillingAddress = RecordSearch.ClientModel.AddressModel;
-        }
-
-        private void RemoveEntry()
-        {
-            DeleteConfirmationRequest.Raise(new Confirmation
-            {
-                Title = "Confirm Delete",
-                Content = "Are you sure you would like to delete this record?"
-            },
-                r =>
-                {
-                    if (r.Confirmed)
-                    {
-                        _deleting = true;
-                        _rss.RemoveRecordSearch(RecordSearch.ID,
-                            RecordSearch.MailingAddress.AddressID,
-                            RecordSearch.BillingAddress.AddressID,
-                            RecordSearch.Fee.ID);
-                        _rm.RequestNavigate("ContentRegion", "RSList");
-                    }
-                }
-            );
         }
 
         private void LoadNewRequestor(int value)
@@ -246,17 +242,6 @@ namespace mRecordSearchList.ViewModels
                 SelectedClient = RecordSearch.ClientID;
                 _isLoaded = true;
             }
-        }
-
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            return true;
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            if (!_deleting)
-                SaveRS();
         }
     }
 }

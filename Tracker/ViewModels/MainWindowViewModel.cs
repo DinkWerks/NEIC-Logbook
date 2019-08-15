@@ -4,6 +4,7 @@ using Prism.Commands;
 using Tracker.Views;
 using Prism.Interactivity.InteractionRequest;
 using System.Windows;
+using Tracker.Core.CompositeCommands;
 
 namespace Tracker.ViewModels
 {
@@ -13,6 +14,8 @@ namespace Tracker.ViewModels
         private string _version = "Version 0.5.1";
         private IRegionManager _rm;
         private IRegionNavigationJournal _journal;
+        private IApplicationCommands applicationCommands;
+        
         public string Title
         {
             get { return _title; }
@@ -25,6 +28,13 @@ namespace Tracker.ViewModels
             set { SetProperty(ref _version, value); }
         }
 
+        public IApplicationCommands ApplicationCommands
+        {
+            get { return applicationCommands; }
+            set { SetProperty(ref applicationCommands, value); }
+        }
+
+        //Commands
         public DelegateCommand<string> NavigateCommand { get; private set; }
         public DelegateCommand GoToGithubCommand { get; private set; }
         public DelegateCommand ExitCommand { get; private set; }
@@ -33,10 +43,11 @@ namespace Tracker.ViewModels
         public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
 
         //Constructor
-        public MainWindowViewModel(IRegionManager regionManager, RegionNavigationService regionNavigationService)
+        public MainWindowViewModel(IRegionManager regionManager, RegionNavigationService regionNavigationService, IApplicationCommands applicationCommands)
         {
             _rm = regionManager;
             _journal = regionNavigationService.Journal;
+            ApplicationCommands = applicationCommands;
 
             regionManager.RegisterViewWithRegion("ContentRegion", typeof(HomeScreen));
 
@@ -47,6 +58,7 @@ namespace Tracker.ViewModels
 
             ConfirmationRequest = new InteractionRequest<IConfirmation>();
         }
+
         private void Navigate(string navigationTarget)
         {
             _rm.RequestNavigate("ContentRegion", navigationTarget);

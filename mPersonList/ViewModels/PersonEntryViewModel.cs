@@ -1,17 +1,18 @@
 ﻿using Prism.Commands;
 using Prism.Events;
 using Prism.Interactivity.InteractionRequest;
-using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Tracker.Core.BaseClasses;
+using Tracker.Core.CompositeCommands;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
 
 namespace mPersonList.ViewModels
 {
-    public class PersonEntryViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
+    public class PersonEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
         private IRegionManager _rm;
         private IPersonService _ps;
@@ -20,7 +21,6 @@ namespace mPersonList.ViewModels
         private Person _person;
         private ObservableCollection<RecordSearch> _recordSearches = new ObservableCollection<RecordSearch>();
         private int _selectedClient;
-        private bool _deleting = false;
 
         public List<Client> ClientList { get; set; }
 
@@ -51,16 +51,14 @@ namespace mPersonList.ViewModels
             }
         }
 
-        public DelegateCommand SaveCommand { get; private set; }
         public DelegateCommand NavigateToClientCommand { get; private set; }
-        public DelegateCommand DeleteRecordCommand { get; private set; }
 
         public InteractionRequest<IConfirmation> DeleteConfirmationRequest { get; set; }
 
-        public bool KeepAlive => false;
-
+        //Constructor
         public PersonEntryViewModel(IRegionManager regionManager, IEventAggregator eventAggregator, IPersonService personService,
-            IAddressService addressService, IRecordSearchService recordSearchService, IClientService clientService)
+            IAddressService addressService, IRecordSearchService recordSearchService, IClientService clientService,
+            IApplicationCommands applicationCommands) : base(applicationCommands)
         {
             _rm = regionManager;
             _ps = personService;
@@ -68,40 +66,36 @@ namespace mPersonList.ViewModels
             _rss = recordSearchService;
 
             ClientList = clientService.CompleteClientList;
-            SaveCommand = new DelegateCommand(SavePerson);
-            NavigateToClientCommand = new DelegateCommand(NavigateToClient);
-            DeleteRecordCommand = new DelegateCommand(DeleteRecord);
 
+            SaveCommand = new DelegateCommand(SaveEntry);
+            applicationCommands.SaveCompCommand.RegisterCommand(SaveCommand);
+            DeleteCommand = new DelegateCommand(DeleteEntry);
+            applicationCommands.DeleteCompCommand.RegisterCommand(DeleteCommand);
+
+            NavigateToClientCommand = new DelegateCommand(NavigateToClient);
             DeleteConfirmationRequest = new InteractionRequest<IConfirmation>();
             eventAggregator.GetEvent<RecordSearchListSelectEvent>().Subscribe(NavigateToRecordSearch);
         }
 
-        private void SavePerson()
+        //Methods
+        public override void SaveEntry()
         {
             int addressID = _as.UpdateAddress(PersonModel.AddressModel);
             PersonModel.AddressID = addressID;
             PersonModel.AddressModel.AddressID = addressID;
             PersonModel.CurrentAssociationID = SelectedClient;
-            Client selectedClientModel = ClientList[SelectedClient - 1];
-            if (string.IsNullOrWhiteSpace(selectedClientModel.OfficeName))
-                PersonModel.CurrentAssociation = selectedClientModel.ClientName;
-            else
-                PersonModel.CurrentAssociation = selectedClientModel.ClientName + " - " + selectedClientModel.OfficeName;
+            if (SelectedClient > 0)
+            {
+                Client selectedClientModel = ClientList[SelectedClient - 1];
+                if (string.IsNullOrWhiteSpace(selectedClientModel.OfficeName))
+                    PersonModel.CurrentAssociation = selectedClientModel.ClientName;
+                else
+                    PersonModel.CurrentAssociation = selectedClientModel.ClientName + " - " + selectedClientModel.OfficeName;
+            }
             _ps.UpdatePersonInformation(PersonModel);
         }
 
-        private void NavigateToClient()
-        {
-            var parameters = new NavigationParameters
-            {
-                { "id", SelectedClient }
-            };
-
-            if (SelectedClient > 0)
-                _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
-        }
-
-        private void DeleteRecord()
+        public override void DeleteEntry()
         {
             DeleteConfirmationRequest.Raise(new Confirmation
             {
@@ -118,6 +112,17 @@ namespace mPersonList.ViewModels
                    }
                }
            );
+        }
+
+        private void NavigateToClient()
+        {
+            var parameters = new NavigationParameters
+            {
+                { "id", SelectedClient }
+            };
+
+            if (SelectedClient > 0)
+                _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
         }
 
         private void NavigateToRecordSearch(int navTarget)
@@ -143,17 +148,6 @@ namespace mPersonList.ViewModels
                     _rss.GetPartialRecordSearchesByCriteria("WHERE RequestorID = " + personID)
                     );
             }
-        }
-
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            return true;
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-            if(!_deleting)
-                SavePerson();
         }
     }
 }

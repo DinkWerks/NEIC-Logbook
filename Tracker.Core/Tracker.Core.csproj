@@ -63,6 +63,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseClasses\RecordEntryBindableBase.cs" />
+    <Compile Include="CompositeCommands\ApplicationCommands.cs" />
+    <Compile Include="CompositeCommands\IApplicationCommands.cs" />
     <Compile Include="Events\AdditionalCountySelectionEvent.cs" />
     <Compile Include="Events\AdditionalCountySelectionOpenedEvent.cs" />
     <Compile Include="Events\CalculatorCostChangedEvent.cs" />
@@ -148,6 +151,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Resources\Icons\pencil.png" />
+    <Resource Include="Resources\Icons\disk.png" />
     <Content Include="Resources\Settings.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

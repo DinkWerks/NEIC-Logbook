@@ -4,6 +4,7 @@ using Prism.Modularity;
 using System.Windows;
 using Tracker.Core.Services;
 using mReporting.Reporting;
+using Tracker.Core.CompositeCommands;
 
 namespace Tracker
 {
@@ -25,6 +26,11 @@ namespace Tracker
         {
             containerRegistry.RegisterForNavigation<HomeScreen>();
             containerRegistry.RegisterForNavigation<SettingsScreen>();
+
+            //Composite Commands
+            containerRegistry.RegisterSingleton<IApplicationCommands, ApplicationCommands>();
+
+            //Services
             containerRegistry.RegisterSingleton<IRecordSearchService, RecordSearchService>();
             containerRegistry.RegisterSingleton<IClientService, ClientService>();
             containerRegistry.RegisterSingleton<IPersonService, PersonService>();
