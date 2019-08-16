@@ -5,12 +5,18 @@ using System;
 using Tracker.Core.Settings;
 using System.Collections.Generic;
 using System.IO;
+using Tracker.Core.Services;
 
 namespace Tracker.ViewModels
 {
     public class SettingsScreenViewModel : BindableBase
     {
         private List<string> _feeStructures = new List<string>();
+        private IRecordSearchService _rs;
+        private IPersonService _ps;
+        private IFeeService _fs;
+        private IClientService _cs;
+        private IAddressService _as;
 
         public Settings Settings { get; private set; }
 
@@ -22,10 +28,15 @@ namespace Tracker.ViewModels
 
         public DelegateCommand LocateDatabaseCommand { get; private set; }
         public DelegateCommand SaveSettingsCommand { get; private set; }
-        
+
         //Constructor
-        public SettingsScreenViewModel()
+        public SettingsScreenViewModel(IRecordSearchService recordSearchService, IPersonService personService, IFeeService feeService, IClientService clientService, IAddressService addressService)
         {
+            _rs = recordSearchService;
+            _ps = personService;
+            _fs = feeService;
+            _cs = clientService;
+            _as = addressService;
             Settings = Settings.Instance;
             ListFeeStructures();
 
@@ -45,6 +56,11 @@ namespace Tracker.ViewModels
             if (selectFile.ShowDialog() == true)
             {
                 Settings.DatabaseAddress.Value = selectFile.FileName;
+                _rs.SetConnectionString();
+                _ps.SetConnectionString();
+                _fs.SetConnectionString();
+                _cs.SetConnectionString();
+                _as.SetConnectionString();
             }
         }
 

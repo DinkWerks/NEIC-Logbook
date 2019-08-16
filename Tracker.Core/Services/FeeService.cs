@@ -90,7 +90,7 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    sqlCommand.CommandText = "SELECT ID FROM tblAddresses WHERE ID = ?";
+                    sqlCommand.CommandText = "SELECT ID FROM tblFees WHERE ID = ?";
                     sqlCommand.Parameters.AddWithValue("ID", f.ID);
                     connection.Open();
                     OleDbDataReader reader = sqlCommand.ExecuteReader();

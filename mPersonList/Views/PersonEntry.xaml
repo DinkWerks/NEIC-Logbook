@@ -165,7 +165,6 @@
                 </ListBox>
             </GroupBox>
 
-            <Button Grid.Row="8" Grid.Column="3" Content="Delete Entry" Command="{Binding DeleteRecordCommand}"/>
         </Grid>
 	</StackPanel>
 

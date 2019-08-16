@@ -145,6 +145,8 @@ namespace Tracker.Core.Services
                     connection.Open();
                     sqlCommand.ExecuteNonQuery();
 
+                    CompletePeopleList = GetAllPartialPeople();
+
                     sqlCommand.CommandText = "Select @@identity";
                     return (int)sqlCommand.ExecuteScalar();
                 }
@@ -187,6 +189,8 @@ namespace Tracker.Core.Services
                                 connection2.Open();
                                 updateCommand.ExecuteNonQuery();
                                 connection2.Close();
+
+                                CompletePeopleList = GetAllPartialPeople();
                                 return p.ID;
                             }
                         }

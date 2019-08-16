@@ -11,7 +11,7 @@ namespace Tracker.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private string _title = "NEIC Logbook";
-        private string _version = "Version 0.5.1";
+        private string _version = "Version 0.5.3";
         private IRegionManager _rm;
         private IRegionNavigationJournal _journal;
         private IApplicationCommands applicationCommands;

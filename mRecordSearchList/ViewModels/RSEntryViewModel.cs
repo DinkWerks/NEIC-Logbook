@@ -67,7 +67,7 @@ namespace mRecordSearchList.ViewModels
         public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand CountySelectPopupCommand { get; private set; }
         public DelegateCommand<string> CopyRequestorCommand { get; private set; }
-        public DelegateCommand<string> CopyAffiliationCommand { get; private set; }
+        public DelegateCommand<string> CopyClientCommand { get; private set; }
 
         //Requests
         public InteractionRequest<IChangeICFileNumberNotification> ChangeFileNumRequest { get; set; }
@@ -94,7 +94,7 @@ namespace mRecordSearchList.ViewModels
             GoBackCommand = new DelegateCommand(GoBack);
             CountySelectPopupCommand = new DelegateCommand(RaiseCountySelectPopup);
             CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
-            CopyAffiliationCommand = new DelegateCommand<string>(CopyAffiliation);
+            CopyClientCommand = new DelegateCommand<string>(CopyAffiliation);
 
             ChangeFileNumRequest = new InteractionRequest<IChangeICFileNumberNotification>();
             CountySelectRequest = new InteractionRequest<IAdditionalCountyNotification>();

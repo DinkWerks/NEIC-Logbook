@@ -86,7 +86,7 @@ namespace mPersonList.ViewModels
             PersonModel.CurrentAssociationID = SelectedClient;
             if (SelectedClient > 0)
             {
-                Client selectedClientModel = ClientList[SelectedClient - 1];
+                Client selectedClientModel = ClientList[SelectedClient - 2];
                 if (string.IsNullOrWhiteSpace(selectedClientModel.OfficeName))
                     PersonModel.CurrentAssociation = selectedClientModel.ClientName;
                 else
