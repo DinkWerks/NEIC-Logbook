@@ -110,7 +110,7 @@ namespace mPersonList.ViewModels
             }
 
             string name = person.FirstName.ToLower() + " " + person.LastName.ToLower();
-            string affiliation = person.CurrentAssociationID.ToString();
+            string affiliation = person.CurrentAssociation.ToLower();
             if (PersonNameSearchText != null && AffiliationSearchText != null)
             {
                 if (name.Contains(PersonNameSearchText.ToLower()) && affiliation.Contains(AffiliationSearchText.ToLower()))

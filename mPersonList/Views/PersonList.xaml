@@ -43,7 +43,7 @@
 			</Grid.RowDefinitions>
 
 			<TextBox Text="{Binding PersonNameSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,2,0"/>
-			<TextBox Grid.Column="1" Text="{Binding AffiliationSearchText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Column="1" Text="{Binding AffiliationSearchText, UpdateSourceTrigger=PropertyChanged}"/>
 
 			<TextBlock Grid.Row="1" Text="Name" Style="{StaticResource ColumnTitle}"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Affiliation" Style="{StaticResource ColumnTitle}"/>
