@@ -17,7 +17,6 @@ namespace mRecordSearchList.ViewModels
         private string _year;
         private int _enumeration;
         private string _suffix;
-        private string _projectName;
         private bool _isAcceptEnabled;
         private string _isDistinctWarningVisible;
 
