@@ -25,13 +25,17 @@ namespace mPersonList.ViewModels
 
         public List<Client> ClientList { get; set; }
 
+        private int _initialClient;
+        public int InitialClient
+        {
+            get { return _initialClient; }
+            set { SetProperty(ref _initialClient, value); }
+        }
+
         public Client SelectedClient
         {
             get { return _selectedClient; }
-            set
-            {
-                SetProperty(ref _selectedClient, value);
-            }
+            set { SetProperty(ref _selectedClient, value); }
         }
 
         public Person PersonModel
@@ -147,6 +151,7 @@ namespace mPersonList.ViewModels
             {
                 PersonModel = _ps.GetPersonByID(personID);
                 SelectedClient = _cs.GetClientByID(PersonModel.CurrentAssociationID);
+                InitialClient = ClientList.FindIndex(c => c.ToString() == SelectedClient.ToString());
                 PersonModel.AddressModel = _as.GetAddressByID(PersonModel.AddressID);
                 RecordSearches = new ObservableCollection<RecordSearch>(
                     _rss.GetPartialRecordSearchesByCriteria("WHERE RequestorID = " + personID)

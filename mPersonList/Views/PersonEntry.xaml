@@ -75,7 +75,8 @@
 						VerticalAlignment="Center"  DockPanel.Dock="Right">
 					<Image Source="/Tracker.Core;component/Resources/Icons/link_go.png"/>
 				</Button>
-				<ComboBox ItemsSource="{Binding ClientList}" SelectedValue="{Binding SelectedClient, Mode=TwoWay}" SelectedValuePath="Name"
+                <ComboBox ItemsSource="{Binding ClientList}" SelectedItem="{Binding SelectedClient, Mode=TwoWay}" 
+                          SelectedIndex="{Binding InitialClient}"
 						  IsTextSearchEnabled="True" IsEditable="True" Margin="0,0,5,0" />
 			</DockPanel>
 

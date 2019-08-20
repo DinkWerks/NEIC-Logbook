@@ -1,5 +1,4 @@
 ﻿using Prism.Mvvm;
-using Tracker.Core.Services;
 
 namespace Tracker.Core.Models
 {
@@ -67,6 +66,24 @@ namespace Tracker.Core.Models
         {
             get { return _notes; }
             set { SetProperty(ref _notes, value); }
+        }
+
+        public Address()
+        {
+
+        }
+
+        public Address(int id, Address oldAddress)
+        {
+            AddressID = id;
+            AddressName = oldAddress.AddressName;
+            AttentionTo = oldAddress.AttentionTo;
+            AddressLine1 = oldAddress.AddressLine1;
+            AddressLine2 = oldAddress.AddressLine2;
+            City = oldAddress.City;
+            State = oldAddress.State;
+            ZIP = oldAddress.ZIP;
+            Notes = oldAddress.Notes;
         }
     }
 }

@@ -172,17 +172,17 @@ namespace mRecordSearchList.ViewModels
         private void CopyRequestor(string destination)
         {
             if (destination == "Mailing")
-                RecordSearch.MailingAddress = RecordSearch.Requestor.AddressModel;
+                RecordSearch.MailingAddress = new Address(RecordSearch.MailingAddress.AddressID, RecordSearch.Requestor.AddressModel);
             else if (destination == "Billing")
-                RecordSearch.BillingAddress = RecordSearch.Requestor.AddressModel;
+                RecordSearch.BillingAddress = new Address(RecordSearch.BillingAddress.AddressID, RecordSearch.Requestor.AddressModel);
         }
 
         private void CopyAffiliation(string destination)
         {
             if (destination == "Mailing")
-                RecordSearch.MailingAddress = RecordSearch.ClientModel.AddressModel;
+                RecordSearch.MailingAddress = new Address(RecordSearch.MailingAddress.AddressID, RecordSearch.ClientModel.AddressModel);
             else if (destination == "Billing")
-                RecordSearch.BillingAddress = RecordSearch.ClientModel.AddressModel;
+                RecordSearch.BillingAddress = new Address(RecordSearch.BillingAddress.AddressID, RecordSearch.ClientModel.AddressModel);
         }
 
         private void LoadNewRequestor(int value)
