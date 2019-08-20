@@ -116,7 +116,7 @@ namespace mPersonList.ViewModels
 
             if (PersonNameSearchText != null && AffiliationSearchText != null)
             {
-                if (name.Contains(PersonNameSearchText.ToLower()) && affiliation.Contains(AffiliationSearchText.ToLower()))
+                if (name.Contains(PersonNameSearchText.ToLower()) && !string.IsNullOrWhiteSpace(affiliation) && affiliation.Contains(AffiliationSearchText.ToLower()))
                 {
                     return true;
                 }
@@ -132,7 +132,7 @@ namespace mPersonList.ViewModels
             }
             else if (PersonNameSearchText == null && AffiliationSearchText != null)
             {
-                if (affiliation.Contains(AffiliationSearchText.ToLower()))
+                if (!string.IsNullOrWhiteSpace(affiliation) && affiliation.Contains(AffiliationSearchText.ToLower()))
                 {
                     return true;
                 }

@@ -46,7 +46,11 @@ namespace mClientList.ViewModels
         public string OldPEIDSearchText
         {
             get { return _oldPEIDSearchText; }
-            set { SetProperty(ref _oldPEIDSearchText, value); }
+            set
+            {
+                SetProperty(ref _oldPEIDSearchText, value);
+                ClientView.Refresh();
+            }
         }
 
         public string ClientNameSearchText
@@ -118,7 +122,7 @@ namespace mClientList.ViewModels
 
             int passedTests = 0;
 
-            if (ClientNameSearchText != null)
+            if (!string.IsNullOrWhiteSpace(ClientNameSearchText))
             {
                 if (client.ClientName.ToLower().Contains(ClientNameSearchText.ToLower()))
                     passedTests++;
@@ -127,21 +131,23 @@ namespace mClientList.ViewModels
             }
             else passedTests++;
 
-            if (PEIDSearchText != null)
+            if (!string.IsNullOrWhiteSpace(PEIDSearchText))
             {
-                if (client.NewPEID.ToLower().Contains(PEIDSearchText.ToLower()))
+                if (!string.IsNullOrWhiteSpace(client.NewPEID) && client.NewPEID.ToLower().Contains(PEIDSearchText.ToLower()))
+                {
                     passedTests++;
-                else
-                    return false;
+                }
+                else return false;
             }
             else passedTests++;
 
-            if (OldPEIDSearchText != null)
+            if (!string.IsNullOrWhiteSpace(OldPEIDSearchText))
             {
-                if (client.OldPEID.ToLower().Contains(OldPEIDSearchText.ToLower()))
+                if (!string.IsNullOrWhiteSpace(client.OldPEID) && client.OldPEID.ToLower().Contains(OldPEIDSearchText.ToLower()))
+                {
                     passedTests++;
-                else
-                    return false;
+                } 
+                else return false;
             }
             else passedTests++;
 
