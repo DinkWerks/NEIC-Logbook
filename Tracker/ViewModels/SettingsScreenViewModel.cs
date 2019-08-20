@@ -61,6 +61,9 @@ namespace Tracker.ViewModels
                 _fs.SetConnectionString();
                 _cs.SetConnectionString();
                 _as.SetConnectionString();
+
+                _cs.CompleteClientList = _cs.GetAllPartialClients();
+                _ps.CompletePeopleList = _ps.GetAllPartialPeople();
             }
         }
 

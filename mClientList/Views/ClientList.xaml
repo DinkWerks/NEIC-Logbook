@@ -24,12 +24,19 @@
         </prism:InteractionRequestTrigger>
     </i:Interaction.Triggers>
     
-    <StackPanel Margin="5">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
         <ToolBar Margin="0,0,0,10" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
             <Button Content="Add New" Command="{Binding NewClientCommand}"/>
         </ToolBar>
         
-        <Grid HorizontalAlignment="Stretch">
+        <Grid Grid.Row="1" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="100"/>
@@ -41,7 +48,7 @@
             <TextBox Grid.Column="2" Text="{Binding ClientNameSearchText, UpdateSourceTrigger=PropertyChanged}"/>
         </Grid>
 		
-        <Grid HorizontalAlignment="Stretch">
+        <Grid Grid.Row="2" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="100"/>
@@ -54,7 +61,8 @@
             <TextBlock Grid.Column="3" Text="Status" Style="{StaticResource ColumnTitle}"/>
         </Grid>
 		
-        <ListBox x:Name="ClientListBox" ItemsSource="{Binding ClientView}" HorizontalContentAlignment="Stretch">
+        
+        <ListBox Grid.Row="3" x:Name="ClientListBox" ItemsSource="{Binding ClientView}" HorizontalContentAlignment="Stretch">
             <ListBox.ItemContainerStyle>
 				<Style TargetType="ListBoxItem">
 					<EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
@@ -84,5 +92,5 @@
 				</DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-    </StackPanel>
+    </Grid>
 </UserControl>

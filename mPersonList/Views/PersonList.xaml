@@ -25,13 +25,19 @@
         </prism:InteractionRequestTrigger>
     </i:Interaction.Triggers>
 
-    <StackPanel Margin="10">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        
         <ToolBar>
             <Button Content="Add New" Command="{Binding NewClientCommand}"/>
         </ToolBar>
         
 		<!--Column Headers and Search Bars-->
-		<Grid>
+		<Grid Grid.Row="1">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="3*"/>
 				<ColumnDefinition Width="2*"/>
@@ -50,7 +56,7 @@
         </Grid>
 
 		<!--List Box-->
-		<ListBox x:Name="PersonListBox" ItemsSource="{Binding PeopleView}" HorizontalContentAlignment="Stretch">
+		<ListBox x:Name="PersonListBox" Grid.Row="2" ItemsSource="{Binding PeopleView}" HorizontalContentAlignment="Stretch">
 			<ListBox.ItemContainerStyle>
 				<Style TargetType="ListBoxItem">
 					<EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
@@ -78,5 +84,5 @@
 				</DataTemplate>
 			</ListBox.ItemTemplate>
 		</ListBox>
-	</StackPanel>
+	</Grid>
 </UserControl>
