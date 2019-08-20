@@ -89,15 +89,12 @@ namespace mPersonList.ViewModels
             int addressID = _as.UpdateAddress(PersonModel.AddressModel);
             PersonModel.AddressID = addressID;
             PersonModel.AddressModel.AddressID = addressID;
-            PersonModel.CurrentAssociationID = SelectedClient.ID;
 
-            //Add in person's affiliation
-            if (SelectedClient.ID > 0)
+            //Add in Person's Affiliation
+            if (SelectedClient != null)
             {
-                if (string.IsNullOrWhiteSpace(SelectedClient.OfficeName))
-                    PersonModel.CurrentAssociation = SelectedClient.ClientName;
-                else
-                    PersonModel.CurrentAssociation = SelectedClient.ClientName + " - " + SelectedClient.OfficeName;
+                PersonModel.CurrentAssociationID = SelectedClient.ID;
+                PersonModel.CurrentAssociation = SelectedClient.ToString();
             }
 
             _ps.UpdatePersonInformation(PersonModel);
