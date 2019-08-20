@@ -16,15 +16,16 @@ namespace mPersonList.ViewModels
     {
         private IRegionManager _rm;
         private IPersonService _ps;
+        private IClientService _cs;
         private IAddressService _as;
         private IRecordSearchService _rss;
         private Person _person;
         private ObservableCollection<RecordSearch> _recordSearches = new ObservableCollection<RecordSearch>();
-        private int _selectedClient;
+        private Client _selectedClient;
 
         public List<Client> ClientList { get; set; }
 
-        public int SelectedClient
+        public Client SelectedClient
         {
             get { return _selectedClient; }
             set
@@ -62,6 +63,7 @@ namespace mPersonList.ViewModels
         {
             _rm = regionManager;
             _ps = personService;
+            _cs = clientService;
             _as = addressService;
             _rss = recordSearchService;
 
@@ -83,15 +85,17 @@ namespace mPersonList.ViewModels
             int addressID = _as.UpdateAddress(PersonModel.AddressModel);
             PersonModel.AddressID = addressID;
             PersonModel.AddressModel.AddressID = addressID;
-            PersonModel.CurrentAssociationID = SelectedClient;
-            if (SelectedClient > 0)
+            PersonModel.CurrentAssociationID = SelectedClient.ID;
+
+            //Add in person's affiliation
+            if (SelectedClient.ID > 0)
             {
-                Client selectedClientModel = ClientList[SelectedClient - 2];
-                if (string.IsNullOrWhiteSpace(selectedClientModel.OfficeName))
-                    PersonModel.CurrentAssociation = selectedClientModel.ClientName;
+                if (string.IsNullOrWhiteSpace(SelectedClient.OfficeName))
+                    PersonModel.CurrentAssociation = SelectedClient.ClientName;
                 else
-                    PersonModel.CurrentAssociation = selectedClientModel.ClientName + " - " + selectedClientModel.OfficeName;
+                    PersonModel.CurrentAssociation = SelectedClient.ClientName + " - " + SelectedClient.OfficeName;
             }
+
             _ps.UpdatePersonInformation(PersonModel);
         }
 
@@ -118,10 +122,10 @@ namespace mPersonList.ViewModels
         {
             var parameters = new NavigationParameters
             {
-                { "id", SelectedClient }
+                { "id", SelectedClient.ID }
             };
 
-            if (SelectedClient > 0)
+            if (SelectedClient.ID > 0)
                 _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
         }
 
@@ -142,7 +146,7 @@ namespace mPersonList.ViewModels
             if (personID > 0)
             {
                 PersonModel = _ps.GetPersonByID(personID);
-                SelectedClient = PersonModel.CurrentAssociationID;
+                SelectedClient = _cs.GetClientByID(PersonModel.CurrentAssociationID);
                 PersonModel.AddressModel = _as.GetAddressByID(PersonModel.AddressID);
                 RecordSearches = new ObservableCollection<RecordSearch>(
                     _rss.GetPartialRecordSearchesByCriteria("WHERE RequestorID = " + personID)

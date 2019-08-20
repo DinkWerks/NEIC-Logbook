@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.OleDb;
-using System.IO;
 using System.Linq;
 using Tracker.Core.Extensions;
 using Tracker.Core.Models;

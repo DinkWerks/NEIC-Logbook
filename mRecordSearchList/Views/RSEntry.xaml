@@ -391,7 +391,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Text="Processor:" Style="{StaticResource Line Header}"/>
-                                <ComboBox Grid.Column="1" ItemsSource="{Binding Source={x:Static static:StaticData.Staff}}"/>
+								<ComboBox Grid.Column="1" ItemsSource="{Binding Source={x:Static static:StaticData.Staff}}" SelectedItem="{Binding RecordSearch.Processor}"/>
 
                                 <TextBlock Grid.Row="1" Text="Recommendation:" Style="{StaticResource Line Header}"/>
                                 <ComboBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordSearch.Recommendation}" IsEditable="True"
