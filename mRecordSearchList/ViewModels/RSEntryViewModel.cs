@@ -88,6 +88,7 @@ namespace mRecordSearchList.ViewModels
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
+            
 
             ChangeFileNumCommand = new DelegateCommand(ChangeFileNum);
             NavigateCommand = new DelegateCommand<string>(Navigate);

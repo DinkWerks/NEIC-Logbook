@@ -14,6 +14,7 @@ namespace Tracker.Core.StaticTypes
 
         public static List<string> Staff = new List<string>()
         {
+            "",
             "Adrienne Springsteen",
             "Amy Huberland",
             "Ashlyn Weaver",
@@ -45,6 +46,7 @@ namespace Tracker.Core.StaticTypes
         public static List<string> DisclosureLevels = new List<string>()
         {
             "Confidential Information Qualified",
+            "Registered Forester",
             "Public Information Only"
         };
     }

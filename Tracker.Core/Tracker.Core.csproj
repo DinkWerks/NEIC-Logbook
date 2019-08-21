@@ -82,6 +82,7 @@
     <Compile Include="Extensions\OleDbDataReaderExtensions.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Client.cs" />
+    <Compile Include="Models\FeeSchedule.cs" />
     <Compile Include="Models\Fees\BooleanCharge.cs" />
     <Compile Include="Models\Fees\CategoricalCharge.cs" />
     <Compile Include="Models\Fees\CategorySubcharge.cs" />
