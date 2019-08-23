@@ -13,12 +13,13 @@ using Tracker.Core.CompositeCommands;
 using mFeeCalculator.Views;
 using mRecordSearchList.Views;
 using mRecordSearchList.Notifications;
-
+using Tracker.Core;
 
 namespace mRecordSearchList.ViewModels
 {
     public class RSEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
+        private IEventAggregator _ea;
         private IRegionManager _rm;
         private IRecordSearchService _rss;
         private IPersonService _ps;
@@ -78,6 +79,7 @@ namespace mRecordSearchList.ViewModels
         public RSEntryViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IPersonService personService, IClientService clientService,
             IRecordSearchService recordSearchService, IApplicationCommands applicationCommands) : base(applicationCommands)
         {
+            _ea = eventAggregator;
             _rm = regionManager;
             _rss = recordSearchService;
             _ps = personService;
@@ -108,6 +110,7 @@ namespace mRecordSearchList.ViewModels
         public override void SaveEntry()
         {
             _rss.UpdateRecordSearch(RecordSearch);
+            _ea.GetEvent<SaveCompleteEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()

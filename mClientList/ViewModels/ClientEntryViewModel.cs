@@ -3,9 +3,11 @@ using Prism.Events;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Regions;
 using System.Collections.ObjectModel;
+using Tracker.Core;
 using Tracker.Core.BaseClasses;
 using Tracker.Core.CompositeCommands;
 using Tracker.Core.Events;
+using Tracker.Core.Events.CustomPayloads;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
 
@@ -14,6 +16,7 @@ namespace mClientList.ViewModels
     public class ClientEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
         private IRegionManager _rm;
+        private IEventAggregator _ea;
         private IClientService _cs;
         private IPersonService _ps;
         private IAddressService _as;
@@ -41,6 +44,7 @@ namespace mClientList.ViewModels
             IPersonService personService, IAddressService addressService, IApplicationCommands applicationCommands) : base(applicationCommands)
         {
             _rm = regionManager;
+            _ea = eventAggregator;
             _cs = clientService;
             _ps = personService;
             _as = addressService;
@@ -58,6 +62,7 @@ namespace mClientList.ViewModels
             ClientModel.AddressID = addressID;
             ClientModel.AddressModel.AddressID = addressID;
             _cs.UpdateClientInformation(ClientModel);
+            _ea.GetEvent<SaveCompleteEvent>().Publish(new StatusPayload("Client entry successfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()

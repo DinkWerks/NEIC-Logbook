@@ -8,6 +8,8 @@ using Tracker.Core.CompositeCommands;
 using Prism.Events;
 using Tracker.Core.Events;
 using System;
+using Tracker.Core.Events.CustomPayloads;
+using Tracker.Core;
 
 namespace Tracker.ViewModels
 {
@@ -18,7 +20,7 @@ namespace Tracker.ViewModels
         private IRegionManager _rm;
         private IRegionNavigationJournal _journal;
         private IApplicationCommands applicationCommands;
-        private string _statusText;
+        private StatusPayload _status;
 
         public string Title
         {
@@ -38,10 +40,10 @@ namespace Tracker.ViewModels
             set { SetProperty(ref applicationCommands, value); }
         }
 
-        public string StatusText
+        public StatusPayload Status
         {
-            get { return _statusText; }
-            set { SetProperty(ref _statusText, value); }
+            get { return _status; }
+            set { SetProperty(ref _status, value); }
         }
 
         //Commands
@@ -74,14 +76,14 @@ namespace Tracker.ViewModels
 
         private void TestStatus()
         {
-            StatusText = "";
-            StatusText = "test";
+            Status = null;
+            Status = new StatusPayload("This is a test.", Palette.AlertRed);
         }
 
-        private void ChangeStatusText(string obj)
+        private void ChangeStatusText(StatusPayload statusPayload)
         {
-            StatusText = "";
-            StatusText = obj;
+            Status = null;
+            Status = statusPayload;
         }
 
         private void Navigate(string navigationTarget)

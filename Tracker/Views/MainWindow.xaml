@@ -100,7 +100,7 @@
                 </StatusBar.ItemsPanel>
 
                 <StatusBarItem Margin="2" x:Name="StatusContainer" Background="Transparent">
-                    <TextBlock x:Name="SText" Text="{Binding StatusText, NotifyOnTargetUpdated=True}">
+                    <TextBlock x:Name="SText" Text="{Binding Status.Message, NotifyOnTargetUpdated=True}">
                         <TextBlock.Foreground>
                             <SolidColorBrush Opacity="1" Color="Black"/>
                         </TextBlock.Foreground>
@@ -110,8 +110,8 @@
                                     <Storyboard>
                                         <ColorAnimationUsingKeyFrames Storyboard.TargetName="StatusContainer" 
                                                                       Storyboard.TargetProperty="(StatusBarItem.Background).(SolidColorBrush.Color)">
-                                            <DiscreteColorKeyFrame Value="#9ecf99" KeyTime="0:0:0"/>
-                                            <DiscreteColorKeyFrame Value="#9ecf99" KeyTime="0:0:1"/>
+                                            <DiscreteColorKeyFrame Value="#aed581" KeyTime="0:0:0"/>
+                                            <DiscreteColorKeyFrame Value="#aed581" KeyTime="0:0:1"/>
                                             <LinearColorKeyFrame Value="Transparent" KeyTime="0:0:6"/>
                                         </ColorAnimationUsingKeyFrames>
                                         <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Opacity)">

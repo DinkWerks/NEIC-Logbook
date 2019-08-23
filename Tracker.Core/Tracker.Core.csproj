@@ -75,12 +75,14 @@
     <Compile Include="Events\CalculatorCostChangedEvent.cs" />
     <Compile Include="Events\ClientListSelectEvent.cs" />
     <Compile Include="Events\CustomPayloads\AdditionalCountySelectionPayload.cs" />
+    <Compile Include="Events\CustomPayloads\StatusPayload.cs" />
     <Compile Include="Events\PersonListSelectEvent.cs" />
     <Compile Include="Events\RecordSearchListSelectEvent.cs" />
     <Compile Include="Events\SaveCompleteEvent.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\OleDbDataReaderExtensions.cs" />
+    <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\FeeSchedule.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\RecordSearchService.cs" />
     <Compile Include="Services\IRecordSearchService.cs" />
+    <Compile Include="Settings\Palette.cs" />
     <Compile Include="Settings\Settings.cs" />
     <Compile Include="StaticTypes\ClientStandings.cs" />
     <Compile Include="StaticTypes\Counties.cs" />

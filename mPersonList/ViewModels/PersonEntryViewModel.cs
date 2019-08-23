@@ -4,9 +4,11 @@ using Prism.Interactivity.InteractionRequest;
 using Prism.Regions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Tracker.Core;
 using Tracker.Core.BaseClasses;
 using Tracker.Core.CompositeCommands;
 using Tracker.Core.Events;
+using Tracker.Core.Events.CustomPayloads;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
 
@@ -100,7 +102,7 @@ namespace mPersonList.ViewModels
             }
 
             _ps.UpdatePersonInformation(PersonModel);
-            _ea.GetEvent<SaveCompleteEvent>().Publish("Person Entry Saved");
+            _ea.GetEvent<SaveCompleteEvent>().Publish(new StatusPayload("Person entry successfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()
