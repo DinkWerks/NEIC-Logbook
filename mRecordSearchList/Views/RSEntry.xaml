@@ -189,7 +189,7 @@
 							<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Phone1}"/>
 
 							<TextBlock Grid.Row="4" Grid.Column="0" Text="Secondary Phone:" Style="{StaticResource Line Header}"/>
-							<TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Phone1}"/>
+							<TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Phone2}"/>
 
 							<TextBlock Grid.Row="5" Text="Email:" Style="{StaticResource Line Header}"/>
 							<TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Email}"/>

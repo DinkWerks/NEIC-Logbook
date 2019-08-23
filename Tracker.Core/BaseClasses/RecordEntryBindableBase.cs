@@ -29,7 +29,7 @@ namespace Tracker.Core.BaseClasses
         public DelegateCommand SaveCommand { get; protected set; }
         public DelegateCommand DeleteCommand { get; protected set; }
 
-        public bool KeepAlive => false;
+        public bool KeepAlive => true;
 
         public event EventHandler IsActiveChanged;
 

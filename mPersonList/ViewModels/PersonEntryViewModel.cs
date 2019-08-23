@@ -15,6 +15,7 @@ namespace mPersonList.ViewModels
     public class PersonEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
         private IRegionManager _rm;
+        private IEventAggregator _ea;
         private IPersonService _ps;
         private IClientService _cs;
         private IAddressService _as;
@@ -66,6 +67,7 @@ namespace mPersonList.ViewModels
             IApplicationCommands applicationCommands) : base(applicationCommands)
         {
             _rm = regionManager;
+            _ea = eventAggregator;
             _ps = personService;
             _cs = clientService;
             _as = addressService;
@@ -98,6 +100,7 @@ namespace mPersonList.ViewModels
             }
 
             _ps.UpdatePersonInformation(PersonModel);
+            _ea.GetEvent<SaveCompleteEvent>().Publish("Person Entry Saved");
         }
 
         public override void DeleteEntry()

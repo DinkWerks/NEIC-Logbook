@@ -5,6 +5,9 @@ using Tracker.Views;
 using Prism.Interactivity.InteractionRequest;
 using System.Windows;
 using Tracker.Core.CompositeCommands;
+using Prism.Events;
+using Tracker.Core.Events;
+using System;
 
 namespace Tracker.ViewModels
 {
@@ -15,7 +18,8 @@ namespace Tracker.ViewModels
         private IRegionManager _rm;
         private IRegionNavigationJournal _journal;
         private IApplicationCommands applicationCommands;
-        
+        private string _statusText;
+
         public string Title
         {
             get { return _title; }
@@ -34,16 +38,23 @@ namespace Tracker.ViewModels
             set { SetProperty(ref applicationCommands, value); }
         }
 
+        public string StatusText
+        {
+            get { return _statusText; }
+            set { SetProperty(ref _statusText, value); }
+        }
+
         //Commands
         public DelegateCommand<string> NavigateCommand { get; private set; }
         public DelegateCommand GoToGithubCommand { get; private set; }
         public DelegateCommand ExitCommand { get; private set; }
         public DelegateCommand GoBackCommand { get; set; }
+        public DelegateCommand TestStatusCommand { get; set; }
 
         public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
 
         //Constructor
-        public MainWindowViewModel(IRegionManager regionManager, RegionNavigationService regionNavigationService, IApplicationCommands applicationCommands)
+        public MainWindowViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, RegionNavigationService regionNavigationService, IApplicationCommands applicationCommands)
         {
             _rm = regionManager;
             _journal = regionNavigationService.Journal;
@@ -55,8 +66,22 @@ namespace Tracker.ViewModels
             GoToGithubCommand = new DelegateCommand(GoToGithub);
             ExitCommand = new DelegateCommand(Exit);
             GoBackCommand = new DelegateCommand(GoBack);
+            TestStatusCommand = new DelegateCommand(TestStatus);
 
             ConfirmationRequest = new InteractionRequest<IConfirmation>();
+            eventAggregator.GetEvent<SaveCompleteEvent>().Subscribe(ChangeStatusText);
+        }
+
+        private void TestStatus()
+        {
+            StatusText = "";
+            StatusText = "test";
+        }
+
+        private void ChangeStatusText(string obj)
+        {
+            StatusText = "";
+            StatusText = obj;
         }
 
         private void Navigate(string navigationTarget)
