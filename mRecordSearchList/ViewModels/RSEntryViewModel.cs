@@ -235,6 +235,7 @@ namespace mRecordSearchList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _isLoaded = false;
             _journal = navigationContext.NavigationService.Journal;
             int rsID = (int)navigationContext.Parameters["id"];
             if (rsID > 0)
