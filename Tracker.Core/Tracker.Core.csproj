@@ -74,11 +74,13 @@
     <Compile Include="Events\AdditionalCountySelectionOpenedEvent.cs" />
     <Compile Include="Events\CalculatorCostChangedEvent.cs" />
     <Compile Include="Events\ClientListSelectEvent.cs" />
-    <Compile Include="Events\CustomPayloads\AdditionalCountySelectionPayload.cs" />
-    <Compile Include="Events\CustomPayloads\StatusPayload.cs" />
+    <Compile Include="Events\Payloads\AdditionalCountySelectionPayload.cs" />
+    <Compile Include="Events\Payloads\RSListModificationPayload.cs" />
+    <Compile Include="Events\Payloads\StatusPayload.cs" />
     <Compile Include="Events\PersonListSelectEvent.cs" />
     <Compile Include="Events\RecordSearchListSelectEvent.cs" />
     <Compile Include="Events\RSEntryChangedEvent.cs" />
+    <Compile Include="Events\RSListModifiedEvent.cs" />
     <Compile Include="Events\SaveCompleteEvent.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />

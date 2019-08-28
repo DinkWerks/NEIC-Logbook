@@ -8,7 +8,7 @@ using Tracker.Core.CompositeCommands;
 using Prism.Events;
 using Tracker.Core.Events;
 using System;
-using Tracker.Core.Events.CustomPayloads;
+using Tracker.Core.Events.Payloads;
 using Tracker.Core;
 
 namespace Tracker.ViewModels
@@ -16,7 +16,7 @@ namespace Tracker.ViewModels
     public class MainWindowViewModel : BindableBase
     {
         private string _title = "NEIC Logbook";
-        private string _version = "Version 0.5.4";
+        private string _version = "Version 0.5.5";
         private IRegionManager _rm;
         private IRegionNavigationJournal _journal;
         private IApplicationCommands applicationCommands;

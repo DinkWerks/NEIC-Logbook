@@ -31,8 +31,8 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
-        <ToolBar>
+
+        <ToolBar Margin="0,0,0,10">
             <Button Content="Add New" Command="{Binding NewClientCommand}"/>
         </ToolBar>
         
@@ -49,7 +49,7 @@
 			</Grid.RowDefinitions>
 
 			<TextBox Text="{Binding PersonNameSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,2,0"/>
-            <TextBox Grid.Column="1" Text="{Binding AffiliationSearchText, UpdateSourceTrigger=PropertyChanged}"/>
+            <TextBox Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding AffiliationSearchText, UpdateSourceTrigger=PropertyChanged}"/>
 
 			<TextBlock Grid.Row="1" Text="Name" Style="{StaticResource ColumnTitle}"/>
             <TextBlock Grid.Row="1" Grid.Column="1" Text="Affiliation" Style="{StaticResource ColumnTitle}"/>

@@ -5,7 +5,7 @@ using Prism.Events;
 using Prism.Regions;
 using Tracker.Core.Models;
 using Tracker.Core.BaseClasses;
-using Tracker.Core.Events.CustomPayloads;
+using Tracker.Core.Events.Payloads;
 using Tracker.Core.Events;
 using Tracker.Core.Services;
 using Tracker.Core.CompositeCommands;
@@ -124,6 +124,7 @@ namespace mRecordSearchList.ViewModels
                     if (r.Confirmed)
                     {
                         _deleting = true;
+                        _ea.GetEvent<RSListModifiedEvent>().Publish(new ListModificationPayload("delete", RecordSearch.ID));
                         _rss.RemoveRecordSearch(RecordSearch.ID,
                             RecordSearch.MailingAddress.AddressID,
                             RecordSearch.BillingAddress.AddressID,

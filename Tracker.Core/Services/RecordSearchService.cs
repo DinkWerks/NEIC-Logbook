@@ -232,6 +232,36 @@ namespace Tracker.Core.Services
             }
         }
 
+        public RecordSearch GetPartialRecordSearchesByCriteria(int id)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = @"SELECT ID, ICPrefix, ICYear, ICEnumeration, ICSuffix, ProjectName, Status, LastUpdated FROM tblRecordSearches WHERE ID = " + id;
+                    connection.Open();
+
+                    OleDbDataReader reader = sqlCommand.ExecuteReader();
+
+                    int index = 0;
+                    RecordSearch returnValue = new RecordSearch()
+                    {
+                        ID = reader.GetInt32Safe(index++),
+                        ICTypePrefix = reader.GetStringSafe(index++),
+                        ICYear = reader.GetStringSafe(index++),
+                        ICEnumeration = reader.GetInt32Safe(index++),
+                        ICSuffix = reader.GetStringSafe(index++),
+                        ProjectName = reader.GetStringSafe(index++),
+                        Status = reader.GetStringSafe(index++),
+                        LastUpdated = reader.GetDateTimeSafe(index++)
+                    };
+
+                    return returnValue;
+                }
+            }
+        }
+
+
         public List<RecordSearch> GetPartialRecordSearchesByCriteria(string criteria)
         {
             using (OleDbConnection connection = new OleDbConnection(ConnectionString))

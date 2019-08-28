@@ -3,7 +3,7 @@ using Tracker.Core.StaticTypes;
 
 namespace Tracker.Core.Events
 {
-    public class AdditionalCountySelectionEvent : PubSubEvent<CustomPayloads.AdditionalCountySelectionPayload>
+    public class AdditionalCountySelectionEvent : PubSubEvent<Payloads.AdditionalCountySelectionPayload>
     {
     }
 }

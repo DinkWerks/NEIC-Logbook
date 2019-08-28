@@ -70,8 +70,6 @@
 
         <Separator Margin="10"/>
 
-        <TextBlock HorizontalAlignment="Right" Text="{Binding FeeModel.ID, StringFormat={}Fee #: {0}}"/>
-        
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>

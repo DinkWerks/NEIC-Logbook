@@ -1,6 +1,6 @@
 ﻿using Tracker.Core.StaticTypes;
 
-namespace Tracker.Core.Events.CustomPayloads
+namespace Tracker.Core.Events.Payloads
 {
     public class AdditionalCountySelectionPayload
     {

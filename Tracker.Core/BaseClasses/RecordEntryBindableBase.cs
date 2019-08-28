@@ -11,9 +11,8 @@ namespace Tracker.Core.BaseClasses
     public abstract class RecordEntryBindableBase : BindableBase, IActiveAware, IRegionMemberLifetime
     {
         private bool _isActive;
-        private IApplicationCommands _applicationCommands;
+        private readonly IApplicationCommands _applicationCommands;
         protected bool _deleting = false;
-
 
         public bool IsActive
         {
@@ -65,8 +64,6 @@ namespace Tracker.Core.BaseClasses
         {
             if (!_deleting)
                 SaveCommand.Execute();
-            _applicationCommands.SaveCompCommand.UnregisterCommand(SaveCommand);
-            _applicationCommands.DeleteCompCommand.UnregisterCommand(DeleteCommand);
         }
     }
 }

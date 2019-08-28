@@ -11,7 +11,7 @@ using Tracker.Core;
 using Tracker.Core.Services;
 using Tracker.Core.CompositeCommands;
 using Tracker.Core.Events;
-using Tracker.Core.Events.CustomPayloads;
+using Tracker.Core.Events.Payloads;
 
 namespace Tracker.ViewModels
 {

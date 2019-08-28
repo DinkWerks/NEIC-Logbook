@@ -1,7 +1,7 @@
 ﻿using System.Windows.Media;
 using Tracker.Core.Extensions;
 
-namespace Tracker.Core.Events.CustomPayloads
+namespace Tracker.Core.Events.Payloads
 {
     public class StatusPayload
     {

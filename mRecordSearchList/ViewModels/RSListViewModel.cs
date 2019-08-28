@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
 using Tracker.Core.Events;
+using Tracker.Core.Events.Payloads;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
 using Tracker.Core.StaticTypes;
@@ -25,19 +26,23 @@ namespace mRecordSearchList.ViewModels
         private string _rsidEnumerationSearch;
         private string _projectNameSearchText;
         private IRegionNavigationJournal _journal;
+        private ICollectionView _recordSearchesView;
 
         public List<RecordSearch> RecordSearches
         {
             get { return _recordSearches; }
-            set { SetProperty(ref _recordSearches, value); }
+            set
+            {
+                SetProperty(ref _recordSearches, value);
+            }
         }
-
-        public List<Prefix> PrefixChoices { get; private set; }
 
         public ICollectionView RecordSearchesView
         {
-            get { return CollectionViewSource.GetDefaultView(RecordSearches); }
+            get { return _recordSearchesView; }
         }
+
+        public List<Prefix> PrefixChoices { get; private set; }
 
         public string RSIDPrefixSearch
         {
@@ -91,6 +96,7 @@ namespace mRecordSearchList.ViewModels
             PrefixChoices = new List<Prefix>(RecordSearchPrefixes.Values);
 
             RecordSearches = _rss.GetAllPartialRecordSearches();
+            _recordSearchesView = CollectionViewSource.GetDefaultView(RecordSearches);
 
             RecordSearchesView.Filter = RecordSearchViewFilter;
             NewRSRequest = new InteractionRequest<ICreateNewRSNotification>();
@@ -98,6 +104,7 @@ namespace mRecordSearchList.ViewModels
             GoBackCommand = new DelegateCommand(GoBack);
 
             eventAggregator.GetEvent<RecordSearchListSelectEvent>().Subscribe(NavigateToRecordSearchEntry);
+            eventAggregator.GetEvent<RSListModifiedEvent>().Subscribe(ModifyRSList);
         }
 
         //Methods
@@ -132,10 +139,26 @@ namespace mRecordSearchList.ViewModels
                      newRSData[5] = DateTime.Now.Date;
                      newRSData[6] = DateTime.Now.Date;
                      int lastEntryID = _rss.AddNewRecordSearch(newRSData);
+                     ModifyRSList(new ListModificationPayload("add", lastEntryID));
+
                      NavigateToRecordSearchEntry(lastEntryID);
                  }
              }
             );
+        }
+
+        private void ModifyRSList(ListModificationPayload payload)
+        {
+            switch (payload.Action)
+            {
+                case "add":
+                    RecordSearches.Add(_rss.GetRecordSearchByID(payload.ID));
+                    break;
+                case "delete":
+                    RecordSearches.RemoveAll(rs => rs.ID == payload.ID);
+                    break;
+            }
+            RecordSearchesView.Refresh();
         }
 
         public bool RecordSearchViewFilter(object filterable)
@@ -194,6 +217,9 @@ namespace mRecordSearchList.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             _journal = navigationContext.NavigationService.Journal;
+            //RecordSearches = _rss.GetAllPartialRecordSearches();
+            //_recordSearchesView = CollectionViewSource.GetDefaultView(RecordSearches);
+            //RecordSearchesView.Filter = RecordSearchViewFilter;
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
