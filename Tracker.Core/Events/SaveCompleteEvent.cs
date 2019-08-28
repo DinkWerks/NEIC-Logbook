@@ -3,7 +3,7 @@ using Tracker.Core.Events.CustomPayloads;
 
 namespace Tracker.Core.Events
 {
-    public class SaveCompleteEvent : PubSubEvent<StatusPayload>
+    public class StatusUpdateEvent : PubSubEvent<StatusPayload>
     {
     }
 }

@@ -78,6 +78,7 @@
     <Compile Include="Events\CustomPayloads\StatusPayload.cs" />
     <Compile Include="Events\PersonListSelectEvent.cs" />
     <Compile Include="Events\RecordSearchListSelectEvent.cs" />
+    <Compile Include="Events\RSEntryChangedEvent.cs" />
     <Compile Include="Events\SaveCompleteEvent.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
     <Compile Include="Extensions\DateTimeExtensions.cs" />

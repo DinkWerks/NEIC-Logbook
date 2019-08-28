@@ -62,7 +62,7 @@ namespace mClientList.ViewModels
             ClientModel.AddressID = addressID;
             ClientModel.AddressModel.AddressID = addressID;
             _cs.UpdateClientInformation(ClientModel);
-            _ea.GetEvent<SaveCompleteEvent>().Publish(new StatusPayload("Client entry successfully saved.", Palette.AlertGreen));
+            _ea.GetEvent<StatusUpdateEvent>().Publish(new StatusPayload("Client entry successfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()

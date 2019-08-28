@@ -15,10 +15,10 @@ using Tracker.Core.StaticTypes;
 
 namespace mRecordSearchList.ViewModels
 {
-    public class RSListViewModel : BindableBase, IRegionMemberLifetime, INavigationAware
+    public class RSListViewModel : BindableBase, INavigationAware
     {
-        private IRecordSearchService _rss;
-        private IRegionManager _rm;
+        private readonly IRecordSearchService _rss;
+        private readonly IRegionManager _rm;
         private List<RecordSearch> _recordSearches = new List<RecordSearch>();
         private string _rsidPrefixSearch;
         private string _rsidYearSearch;
@@ -82,7 +82,6 @@ namespace mRecordSearchList.ViewModels
         public InteractionRequest<ICreateNewRSNotification> NewRSRequest { get; private set; }
         public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand CreateNewRSCommand { get; private set; }
-        public bool KeepAlive => false;
 
         //Constructor
         public RSListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IRecordSearchService recordSearchService)

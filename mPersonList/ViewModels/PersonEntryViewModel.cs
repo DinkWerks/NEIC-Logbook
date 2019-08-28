@@ -102,7 +102,7 @@ namespace mPersonList.ViewModels
             }
 
             _ps.UpdatePersonInformation(PersonModel);
-            _ea.GetEvent<SaveCompleteEvent>().Publish(new StatusPayload("Person entry successfully saved.", Palette.AlertGreen));
+            _ea.GetEvent<StatusUpdateEvent>().Publish(new StatusPayload("Person entry successfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()

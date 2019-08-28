@@ -51,7 +51,6 @@ namespace Tracker.ViewModels
         public DelegateCommand GoToGithubCommand { get; private set; }
         public DelegateCommand ExitCommand { get; private set; }
         public DelegateCommand GoBackCommand { get; set; }
-        public DelegateCommand TestStatusCommand { get; set; }
 
         public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
 
@@ -68,16 +67,9 @@ namespace Tracker.ViewModels
             GoToGithubCommand = new DelegateCommand(GoToGithub);
             ExitCommand = new DelegateCommand(Exit);
             GoBackCommand = new DelegateCommand(GoBack);
-            TestStatusCommand = new DelegateCommand(TestStatus);
 
             ConfirmationRequest = new InteractionRequest<IConfirmation>();
-            eventAggregator.GetEvent<SaveCompleteEvent>().Subscribe(ChangeStatusText);
-        }
-
-        private void TestStatus()
-        {
-            Status = null;
-            Status = new StatusPayload("This is a test.", Palette.AlertRed);
+            eventAggregator.GetEvent<StatusUpdateEvent>().Subscribe(ChangeStatusText);
         }
 
         private void ChangeStatusText(StatusPayload statusPayload)

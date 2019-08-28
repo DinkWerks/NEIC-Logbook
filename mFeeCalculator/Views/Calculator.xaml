@@ -66,11 +66,12 @@
         <TextBlock Text="Fee Calculator" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center"/>
 
         <TextBlock Text="Fee Structure Version:" Margin="10,20,10,0"/>
-        <!--WORK HERE-->
         <ComboBox ItemsSource="{Binding Versions}" SelectedItem="{Binding SelectedVersion}" Margin="10,0"/>
 
         <Separator Margin="10"/>
 
+        <TextBlock HorizontalAlignment="Right" Text="{Binding FeeModel.ID, StringFormat={}Fee #: {0}}"/>
+        
         <Grid>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>

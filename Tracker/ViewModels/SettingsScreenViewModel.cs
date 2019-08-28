@@ -105,7 +105,7 @@ namespace Tracker.ViewModels
         private void SaveSettings()
         {
             Settings.SaveSettings();
-            _ea.GetEvent<SaveCompleteEvent>().Publish(new StatusPayload("Settings saved.", Palette.AlertGreen));
+            _ea.GetEvent<StatusUpdateEvent>().Publish(new StatusPayload("Settings saved.", Palette.AlertGreen));
         }
 
         private void OnIsActiveChanged()

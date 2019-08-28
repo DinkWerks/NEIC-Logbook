@@ -1,5 +1,4 @@
-﻿using System.Windows;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Commands;
 using Prism.Events;
@@ -19,11 +18,11 @@ namespace mRecordSearchList.ViewModels
 {
     public class RSEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
-        private IEventAggregator _ea;
-        private IRegionManager _rm;
-        private IRecordSearchService _rss;
-        private IPersonService _ps;
-        private IClientService _cs;
+        private readonly IEventAggregator _ea;
+        private readonly IRegionManager _rm;
+        private readonly IRecordSearchService _rss;
+        private readonly IPersonService _ps;
+        private readonly IClientService _cs;
         private RecordSearch _recordSearch;
         private int _selectedRequestor;
         private int _selectedClient;
@@ -110,7 +109,7 @@ namespace mRecordSearchList.ViewModels
         public override void SaveEntry()
         {
             _rss.UpdateRecordSearch(RecordSearch);
-            _ea.GetEvent<SaveCompleteEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));
+            _ea.GetEvent<StatusUpdateEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()
@@ -154,15 +153,19 @@ namespace mRecordSearchList.ViewModels
         {
             if (destination == "Requestor")
             {
-                NavigationParameters parameters = new NavigationParameters();
-                parameters.Add("id", SelectedRequestor);
+                NavigationParameters parameters = new NavigationParameters
+                {
+                    { "id", SelectedRequestor }
+                };
                 if (SelectedClient > 0)
                     _rm.RequestNavigate("ContentRegion", "PersonEntry", parameters);
             }
             else if (destination == "Client")
             {
-                NavigationParameters parameters = new NavigationParameters();
-                parameters.Add("id", SelectedClient);
+                NavigationParameters parameters = new NavigationParameters
+                {
+                    { "id", SelectedClient }
+                };
                 if (SelectedClient > 0)
                     _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
             }
@@ -243,9 +246,13 @@ namespace mRecordSearchList.ViewModels
                 _rss.GetRecordSearchByID(rsID, true);
                 RecordSearch = _rss.CurrentRecordSearch;
                 RecordSearch.Status = RecordSearch.CalculateStatus();
+
+                //Sets the Dropdown menu for requestor and client
                 SelectedRequestor = RecordSearch.RequestorID;
                 SelectedClient = RecordSearch.ClientID;
+
                 _isLoaded = true;
+                _ea.GetEvent<RSEntryChangedEvent>().Publish();
             }
         }
     }
