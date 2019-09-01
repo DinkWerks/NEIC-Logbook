@@ -148,6 +148,7 @@
                 </RowDefinition>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
             <TextBlock Text="Discretionary Adjustment:" Margin="0,0,5,0"/>
@@ -158,7 +159,9 @@
 
             <CheckBox Grid.Row="3" Content="Priority/Rapid Response (50% surcharge)" IsChecked="{Binding FeeModel.IsPriority}" 
                       Checked="CostChangedEvent" Unchecked="CostChangedEvent" Margin="0,5"/>
-            <CheckBox Grid.Row="4" Content="Emergency Response (100% surcharge)" IsChecked="{Binding FeeModel.IsEmergency}"
+            <CheckBox Grid.Row="4" Content="Rapid Response (50% surcharge on staff time)" IsChecked="{Binding FeeModel.IsRapidResponse}"
+                      Checked="CostChangedEvent" Unchecked="CostChangedEvent" Margin="0,0,0,5"/>
+            <CheckBox Grid.Row="5" Content="Emergency Response (100% surcharge)" IsChecked="{Binding FeeModel.IsEmergency}"
                       Checked="CostChangedEvent" Unchecked="CostChangedEvent"/>
         </Grid>
 

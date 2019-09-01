@@ -12,10 +12,11 @@ using Tracker.Core.Services;
 using Tracker.Core.CompositeCommands;
 using Tracker.Core.Events;
 using Tracker.Core.Events.Payloads;
+using Prism.Regions;
 
 namespace Tracker.ViewModels
 {
-    public class SettingsScreenViewModel : BindableBase, IActiveAware
+    public class SettingsScreenViewModel : BindableBase, IActiveAware, INavigationAware
     {
         private List<string> _feeStructures = new List<string>();
         private IEventAggregator _ea;
@@ -112,6 +113,21 @@ namespace Tracker.ViewModels
         {
             SaveSettingsCommand.IsActive = IsActive;
             IsActiveChanged?.Invoke(this, new EventArgs());
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            SaveSettings();
         }
     }
 }

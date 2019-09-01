@@ -85,5 +85,13 @@ namespace Tracker.Core.Models
             ZIP = oldAddress.ZIP;
             Notes = oldAddress.Notes;
         }
+
+        public bool ValidateMinimalCompleteness()
+        {
+            return !(string.IsNullOrWhiteSpace(AddressLine1) &&
+                string.IsNullOrWhiteSpace(City) &&
+                string.IsNullOrWhiteSpace(State) &&
+                string.IsNullOrWhiteSpace(ZIP));
+        }
     }
 }

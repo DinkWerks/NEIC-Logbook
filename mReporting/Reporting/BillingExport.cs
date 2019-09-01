@@ -18,6 +18,7 @@ namespace mReporting.Reporting
         private object missing;
         private Word.Document document;
         private ObservableCollection<object> _parameterPayload = new ObservableCollection<object>();
+        private int _errorCount;
 
         public string Name { get; set; }
         public string Description { get; set; }
@@ -77,6 +78,9 @@ namespace mReporting.Reporting
                     MessageBox.Show(exception.Message);
                 }
             }
+
+            if (_errorCount > 0)
+                MessageBox.Show(_errorCount + " error(s) found in last export");
         }
 
         public bool VerifyParameters()
@@ -120,7 +124,17 @@ namespace mReporting.Reporting
             //Date
             Word.Paragraph dateHeader = document.Content.Paragraphs.Add(ref missing);
             dateHeader.Range.Paragraphs.SpaceAfter = 0;
-            dateHeader.Range.Text = record.DateOfResponse.ToDateString() + "\n";
+            try
+            {
+                dateHeader.Range.Text = record.DateOfResponse.ToDateString() + "\n";
+            }
+            catch
+            {
+                dateHeader.Range.Text = "Missing date of response.";
+                dateHeader.Range.Font.Bold = 1;
+                dateHeader.Range.Font.Color = Word.WdColor.wdColorDarkRed;
+                _errorCount++;
+            }
             dateHeader.Range.InsertParagraphAfter();
 
 
@@ -133,17 +147,41 @@ namespace mReporting.Reporting
             iTable.Columns[2].PreferredWidthType = Word.WdPreferredWidthType.wdPreferredWidthPercent;
             iTable.Columns[2].PreferredWidth = 30;
 
-            if (string.IsNullOrWhiteSpace(record.BillingAddress.AddressLine2))
-                iTable.Rows[1].Cells[1].Range.Text = string.Format("{0}\r\n{1}\r\n{2}, {3} {4}",
-                   record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
+            //--Address
+            if (record.BillingAddress.ValidateMinimalCompleteness())
+            {
+                if (string.IsNullOrWhiteSpace(record.BillingAddress.AddressLine2))
+                    iTable.Rows[1].Cells[1].Range.Text = string.Format("{0}\r\n{1}\r\n{2}, {3} {4}",
+                       record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
+                else
+                    iTable.Rows[1].Cells[1].Range.Text = string.Format("{0}\r\n{1}\r\n{2}\r\n{3}, {4} {5}",
+                       record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.AddressLine2, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
+            }
             else
-                iTable.Rows[1].Cells[1].Range.Text = string.Format("{0}\r\n{1}\r\n{2}\r\n{3}, {4} {5}",
-                   record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.AddressLine2, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
+            {
+                iTable.Rows[1].Cells[1].Range.Text = "Missing billing address information.";
+                iTable.Rows[1].Cells[1].Range.Font.Bold = 1;
+                iTable.Rows[1].Cells[1].Range.Font.Color = Word.WdColor.wdColorDarkRed;
+                _errorCount++;
+            }
 
-            iTable.Rows[1].Cells[2].Range.Text = string.Format("PEID # " + record.ClientModel.OldPEID.PadLeft(6, '0'));
+            //--PEID
+            if (!string.IsNullOrWhiteSpace(record.ClientModel.NewPEID))
+                iTable.Rows[1].Cells[2].Range.Text = string.Format("PEID # " + record.ClientModel.NewPEID);
+            else if (!string.IsNullOrWhiteSpace(record.ClientModel.OldPEID))
+                iTable.Rows[1].Cells[2].Range.Text = string.Format("PEID # " + record.ClientModel.OldPEID);
+            else
+            {
+                iTable.Rows[1].Cells[2].Range.Text = "Missing PEID.";
+                iTable.Rows[1].Cells[2].Range.Font.Bold = 1;
+                iTable.Rows[1].Cells[2].Range.Font.Color = Word.WdColor.wdColorDarkRed;
+                _errorCount++;
+            }
             iTable.Rows[1].Cells[2].Range.Bold = 1;
             iTable.Rows[1].Cells[2].Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
 
+
+            //--Invoice #
             iTable.Rows[1].Cells[3].Range.Text = "Invoice #";
             iTable.Rows[1].Cells[3].Range.Bold = 1;
             iTable.Range.InsertParagraphAfter();
@@ -157,7 +195,7 @@ namespace mReporting.Reporting
                 attentionTo = "";
             else
                 attentionTo = "\r\nATTN: " + record.BillingAddress.AttentionTo;
-            string fileNumber = "IC File # " + record.ICTypePrefix + record.ICYear + "-" + record.ICEnumeration + record.ICSuffix;
+            string fileNumber = "IC File # " + record.GetFileNumberFormatted();
 
             if (string.IsNullOrWhiteSpace(record.Requestor.FirstName))
                 projectInfo.Range.Text = string.Format("{0}\r\n>>\r\nRE: {1}; {2}\r\n>>",
@@ -180,9 +218,22 @@ namespace mReporting.Reporting
             bTable.Columns[1].PreferredWidthType = Word.WdPreferredWidthType.wdPreferredWidthPercent;
             bTable.Columns[1].PreferredWidth = 25;
 
-            bTable.Rows[1].Cells[1].Range.Text = "Amount Due: $" + record.Fee.TotalProjectCost;
+            //--Total
+            try
+            {
+                bTable.Rows[1].Cells[1].Range.Text = "Amount Due: $" + record.Fee.TotalProjectCost;
+            }
+            catch
+            {
+                bTable.Rows[1].Cells[1].Range.Text = "Missing PEID.";
+                bTable.Rows[1].Cells[1].Range.Font.Bold = 1;
+                bTable.Rows[1].Cells[1].Range.Font.Color = Word.WdColor.wdColorDarkRed;
+                _errorCount++;
+            }
 
+            //--Fees & Surcharge
             string chargeInformation = "";
+            decimal runningTotal = 0;
             foreach (ICharge charge in record.Fee.Charges)
             {
                 if (charge.TotalCost <= 0)
@@ -193,20 +244,30 @@ namespace mReporting.Reporting
                         VariableCharge vCharge = (VariableCharge)charge;
                         chargeInformation += string.Format("  {0} - {1} {2} @ ${3} per {4}\n",
                             vCharge.Name, vCharge.Count, vCharge.UnitNamePlural, vCharge.Cost, vCharge.UnitName);
+                        runningTotal += vCharge.TotalCost;
                         break;
                     case "boolean":
                         BooleanCharge bCharge = (BooleanCharge)charge;
                         chargeInformation += string.Format("  {0} - ${1}\n", bCharge.Name, bCharge.TotalCost);
+                        runningTotal += bCharge.TotalCost;
                         break;
                     case "categorical":
                         CategoricalCharge cCharge = (CategoricalCharge)charge;
                         chargeInformation += string.Format("  {0} - {1} {2} - ${3}\n", cCharge.Name, cCharge.Count, cCharge.UnitNamePlural, cCharge.TotalCost);
+                        runningTotal += cCharge.TotalCost;
                         break;
                     default:
                         break;
                 }
             }
-            bTable.Rows[1].Cells[2].Range.Text = "Information\n" + chargeInformation + "Please include the invoice number on your remittance";
+
+            string surcharge = "";
+            if (record.Fee.IsPriority)
+                surcharge += "  Priority Surcharge Fee: $" + (record.Fee.TotalProjectCost - runningTotal) + "\n";
+            if (record.Fee.IsEmergency)
+                surcharge += "  Emergency Surcharge Fee: $" + record.Fee.TotalProjectCost + "\n";
+
+            bTable.Rows[1].Cells[2].Range.Text = "Information\n" + chargeInformation + surcharge + "Please include the invoice number on your remittance";
             bTable.Range.InsertParagraphAfter();
 
             //Finish with line

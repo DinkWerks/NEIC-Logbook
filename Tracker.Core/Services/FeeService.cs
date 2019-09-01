@@ -33,7 +33,7 @@ namespace Tracker.Core.Services
                 {
                     string fields = returnValue.GetFieldNames();
 
-                    sqlCommand.CommandText = "SELECT " + fields + ", Adjustment, AdjustmentExplanation, IsPriority, IsEmergency FROM tblFees WHERE ID = " + returnValue.ID;
+                    sqlCommand.CommandText = "SELECT " + fields + ", Adjustment, AdjustmentExplanation, IsPriority, IsEmergency, IsRapidResponse FROM tblFees WHERE ID = " + returnValue.ID;
                     connection.Open();
 
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
@@ -62,6 +62,7 @@ namespace Tracker.Core.Services
                     returnValue.AdjustmentExplanation = reader.GetStringSafe(index++);
                     returnValue.IsPriority = reader.GetBooleanSafe(index++);
                     returnValue.IsEmergency = reader.GetBooleanSafe(index++);
+                    returnValue.IsRapidResponse = reader.GetBooleanSafe(index++);
 
                     returnValue.CalculateProjectCost();
                     return returnValue;
@@ -103,7 +104,7 @@ namespace Tracker.Core.Services
                             using (OleDbCommand updateCommand = connection2.CreateCommand())
                             {
                                 updateCommand.CommandText = "UPDATE tblFees SET " + f.GetFieldNames("update") +
-                                    ", Adjustment = @adj, AdjustmentExplanation = @adjexp, IsPriority=@priority, IsEmergency=@emergency " +
+                                    ", Adjustment = @adj, AdjustmentExplanation = @adjexp, IsPriority=@priority, IsEmergency=@emergency, IsRapidResponse=@rapid " +
                                     "WHERE ID = @id";
 
                                 foreach (ICharge charge in f.Charges)
@@ -129,6 +130,7 @@ namespace Tracker.Core.Services
                                 updateCommand.Parameters.AddWithValue("@adjexp", f.AdjustmentExplanation ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@priority", f.IsPriority);
                                 updateCommand.Parameters.AddWithValue("@emergency", f.IsEmergency);
+                                updateCommand.Parameters.AddWithValue("@rapid", f.IsRapidResponse);
                                 updateCommand.Parameters.AddWithValue("@id", f.ID);
 
                                 connection2.Open();

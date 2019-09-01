@@ -15,6 +15,7 @@ namespace Tracker.Core.Models.Fees
         private decimal _adjustment = 0;
         public string _adjustmentExplanation;
         private bool _isPriority;
+        private bool _isRapidResponse;
         private bool _isEmergency;
 
         public int ID
@@ -50,6 +51,12 @@ namespace Tracker.Core.Models.Fees
         {
             get { return _isPriority; }
             set { SetProperty(ref _isPriority, value); }
+        }
+
+        public bool IsRapidResponse
+        {
+            get { return _isRapidResponse; }
+            set { SetProperty(ref _isRapidResponse, value); }
         }
 
         public bool IsEmergency
@@ -132,12 +139,15 @@ namespace Tracker.Core.Models.Fees
         public void CalculateProjectCost()
         {
             decimal runningTotal = 0;
+            decimal surcharge = 0;
+
             foreach (ICharge charge in Charges)
             {
                 runningTotal += charge.TotalCost;
+                if (IsRapidResponse && charge.Name == "Staff Time")
+                    surcharge += charge.TotalCost * 0.5m;
             }
 
-            decimal surcharge = 0;
             if (IsPriority)
                 surcharge += runningTotal * 0.5m;
             if (IsEmergency)
@@ -169,7 +179,6 @@ namespace Tracker.Core.Models.Fees
                 default:
                     return string.Empty;
             }
-
         }
     }
 }
