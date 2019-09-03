@@ -36,6 +36,7 @@ namespace Tracker
             containerRegistry.RegisterSingleton<IPersonService, PersonService>();
             containerRegistry.RegisterSingleton<IAddressService, AddressService>();
             containerRegistry.RegisterSingleton<IFeeService, FeeService>();
+            containerRegistry.RegisterSingleton<IStaffService, StaffService>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
