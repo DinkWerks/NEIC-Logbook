@@ -7,6 +7,7 @@ namespace Tracker.Core.Models
         private int _id;
         private string _name;
         private bool _isActive;
+        private bool _isChanged = false;
         
         public int ID
         {
@@ -17,13 +18,32 @@ namespace Tracker.Core.Models
         public string Name
         {
             get { return _name; }
-            set { SetProperty(ref _name, value); }
+            set
+            {
+                SetProperty(ref _name, value);
+                IsChanged = true;
+            }
         }
 
         public bool IsActive
         {
             get { return _isActive; }
-            set { SetProperty(ref _isActive, value); }
+            set
+            {
+                SetProperty(ref _isActive, value);
+                IsChanged = true;
+            }
+        }
+
+        public bool IsChanged
+        {
+            get { return _isChanged; }
+            set { SetProperty(ref _isChanged, value); }
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

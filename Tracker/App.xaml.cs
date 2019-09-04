@@ -47,6 +47,7 @@ namespace Tracker
             moduleCatalog.AddModule<mRecordSearchList.mRecordSearchListModule>();
             moduleCatalog.AddModule<mFeeCalculator.mFeeCalculatorModule>();
             moduleCatalog.AddModule<mReporting.mReportingModule>();
+            moduleCatalog.AddModule<mStaffList.mStaffListModule>();
         }
     }
 }

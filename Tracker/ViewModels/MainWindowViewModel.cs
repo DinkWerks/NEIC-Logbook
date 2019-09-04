@@ -69,7 +69,7 @@ namespace Tracker.ViewModels
             GoBackCommand = new DelegateCommand(GoBack);
 
             ConfirmationRequest = new InteractionRequest<IConfirmation>();
-            eventAggregator.GetEvent<StatusUpdateEvent>().Subscribe(ChangeStatusText);
+            eventAggregator.GetEvent<StatusEvent>().Subscribe(ChangeStatusText);
         }
 
         private void ChangeStatusText(StatusPayload statusPayload)

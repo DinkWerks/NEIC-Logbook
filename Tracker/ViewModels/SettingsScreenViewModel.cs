@@ -25,6 +25,7 @@ namespace Tracker.ViewModels
         private IFeeService _fs;
         private IClientService _cs;
         private IAddressService _as;
+        private IStaffService _ss;
         private bool _isActive;
         
 
@@ -52,7 +53,9 @@ namespace Tracker.ViewModels
 
         public event EventHandler IsActiveChanged;
         //Constructor
-        public SettingsScreenViewModel(IEventAggregator eventAggregator, IRecordSearchService recordSearchService, IPersonService personService, IFeeService feeService, IClientService clientService, IAddressService addressService, IApplicationCommands applicationCommands)
+        public SettingsScreenViewModel(IEventAggregator eventAggregator, IRecordSearchService recordSearchService, IPersonService personService,
+            IFeeService feeService, IClientService clientService, IAddressService addressService, IApplicationCommands applicationCommands,
+            IStaffService staffService)
         {
             _ea = eventAggregator;
             _rs = recordSearchService;
@@ -60,6 +63,7 @@ namespace Tracker.ViewModels
             _fs = feeService;
             _cs = clientService;
             _as = addressService;
+            _ss = staffService;
             Settings = Settings.Instance;
             ListFeeStructures();
 
@@ -85,6 +89,7 @@ namespace Tracker.ViewModels
                 _fs.SetConnectionString();
                 _cs.SetConnectionString();
                 _as.SetConnectionString();
+                _ss.SetConnectionString();
 
                 _cs.CompleteClientList = _cs.GetAllPartialClients();
                 _ps.CompletePeopleList = _ps.GetAllPartialPeople();
@@ -106,7 +111,7 @@ namespace Tracker.ViewModels
         private void SaveSettings()
         {
             Settings.SaveSettings();
-            _ea.GetEvent<StatusUpdateEvent>().Publish(new StatusPayload("Settings saved.", Palette.AlertGreen));
+            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Settings saved.", Palette.AlertGreen));
         }
 
         private void OnIsActiveChanged()

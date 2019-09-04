@@ -23,6 +23,7 @@ namespace mRecordSearchList.ViewModels
         private readonly IRecordSearchService _rss;
         private readonly IPersonService _ps;
         private readonly IClientService _cs;
+        private readonly IStaffService _ss;
         private RecordSearch _recordSearch;
         private int _selectedRequestor;
         private int _selectedClient;
@@ -31,6 +32,7 @@ namespace mRecordSearchList.ViewModels
 
         public List<Person> PeopleList { get; set; }
         public List<Client> ClientList { get; set; }
+        public List<Staff> StaffList { get; set; }
 
         public RecordSearch RecordSearch
         {
@@ -76,15 +78,17 @@ namespace mRecordSearchList.ViewModels
 
         // Constructor
         public RSEntryViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IPersonService personService, IClientService clientService,
-            IRecordSearchService recordSearchService, IApplicationCommands applicationCommands) : base(applicationCommands)
+            IRecordSearchService recordSearchService, IStaffService staffService, IApplicationCommands applicationCommands) : base(applicationCommands)
         {
             _ea = eventAggregator;
             _rm = regionManager;
             _rss = recordSearchService;
             _ps = personService;
             _cs = clientService;
+            _ss = staffService;
             PeopleList = personService.CompletePeopleList;
             ClientList = clientService.CompleteClientList;
+            StaffList = staffService.CompleteStaffList;
 
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
@@ -109,7 +113,7 @@ namespace mRecordSearchList.ViewModels
         public override void SaveEntry()
         {
             _rss.UpdateRecordSearch(RecordSearch);
-            _ea.GetEvent<StatusUpdateEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));
+            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()

@@ -122,6 +122,7 @@ namespace Tracker.Core.Services
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "Select @@identity";
                     int newID = (int)sqlCommand.ExecuteScalar();
+
                     CompleteClientList = GetAllPartialClients();
                     return newID;
                 }
@@ -157,8 +158,8 @@ namespace Tracker.Core.Services
                     connection.Open();
                     sqlCommand.ExecuteNonQuery();
                 }
-                CompleteClientList = GetAllPartialClients();
             }
+            CompleteClientList = GetAllPartialClients();
         }
 
         public void RemoveClient(int id, int addressID)

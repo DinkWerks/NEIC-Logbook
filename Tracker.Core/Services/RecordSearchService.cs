@@ -12,10 +12,10 @@ namespace Tracker.Core.Services
 {
     public class RecordSearchService : IRecordSearchService
     {
-        private IClientService _cs;
-        private IPersonService _ps;
-        private IAddressService _as;
-        private IFeeService _fs;
+        private readonly IClientService _cs;
+        private readonly IPersonService _ps;
+        private readonly IAddressService _as;
+        private readonly IFeeService _fs;
 
         public RecordSearch CurrentRecordSearch { get; set; }
 

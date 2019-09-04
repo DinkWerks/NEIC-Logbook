@@ -49,6 +49,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Converter\BoolToActiveStatus.cs" />
+    <Compile Include="Converter\ICFileNumberConverter.cs" />
     <Compile Include="mStaffListModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

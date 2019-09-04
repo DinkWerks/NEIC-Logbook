@@ -2,7 +2,7 @@
 using System.Globalization;
 using System.Windows.Data;
 
-namespace mPersonList.Converters
+namespace mStaffList.Converter
 {
     public class ICFileNumberConverter : IMultiValueConverter
     {
