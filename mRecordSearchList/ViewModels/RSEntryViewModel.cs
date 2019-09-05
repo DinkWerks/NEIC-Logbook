@@ -1,28 +1,29 @@
-﻿using System.Windows;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Prism.Interactivity.InteractionRequest;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Regions;
 using Tracker.Core.Models;
 using Tracker.Core.BaseClasses;
-using Tracker.Core.Events.CustomPayloads;
+using Tracker.Core.Events.Payloads;
 using Tracker.Core.Events;
 using Tracker.Core.Services;
 using Tracker.Core.CompositeCommands;
 using mFeeCalculator.Views;
 using mRecordSearchList.Views;
 using mRecordSearchList.Notifications;
-
+using Tracker.Core;
 
 namespace mRecordSearchList.ViewModels
 {
     public class RSEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
-        private IRegionManager _rm;
-        private IRecordSearchService _rss;
-        private IPersonService _ps;
-        private IClientService _cs;
+        private readonly IEventAggregator _ea;
+        private readonly IRegionManager _rm;
+        private readonly IRecordSearchService _rss;
+        private readonly IPersonService _ps;
+        private readonly IClientService _cs;
+        private readonly IStaffService _ss;
         private RecordSearch _recordSearch;
         private int _selectedRequestor;
         private int _selectedClient;
@@ -31,6 +32,7 @@ namespace mRecordSearchList.ViewModels
 
         public List<Person> PeopleList { get; set; }
         public List<Client> ClientList { get; set; }
+        public List<Staff> StaffList { get; set; }
 
         public RecordSearch RecordSearch
         {
@@ -67,7 +69,7 @@ namespace mRecordSearchList.ViewModels
         public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand CountySelectPopupCommand { get; private set; }
         public DelegateCommand<string> CopyRequestorCommand { get; private set; }
-        public DelegateCommand<string> CopyAffiliationCommand { get; private set; }
+        public DelegateCommand<string> CopyClientCommand { get; private set; }
 
         //Requests
         public InteractionRequest<IChangeICFileNumberNotification> ChangeFileNumRequest { get; set; }
@@ -76,25 +78,30 @@ namespace mRecordSearchList.ViewModels
 
         // Constructor
         public RSEntryViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IPersonService personService, IClientService clientService,
-            IRecordSearchService recordSearchService, IApplicationCommands applicationCommands) : base(applicationCommands)
+            IRecordSearchService recordSearchService, IStaffService staffService, IApplicationCommands applicationCommands) : base(applicationCommands)
         {
+            _ea = eventAggregator;
             _rm = regionManager;
             _rss = recordSearchService;
             _ps = personService;
             _cs = clientService;
+            _ss = staffService;
             PeopleList = personService.CompletePeopleList;
             ClientList = clientService.CompleteClientList;
+            StaffList = staffService.CompleteStaffList;
+            StaffList.Insert(0, new Staff());
 
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
+            
 
             ChangeFileNumCommand = new DelegateCommand(ChangeFileNum);
             NavigateCommand = new DelegateCommand<string>(Navigate);
             GoBackCommand = new DelegateCommand(GoBack);
             CountySelectPopupCommand = new DelegateCommand(RaiseCountySelectPopup);
             CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
-            CopyAffiliationCommand = new DelegateCommand<string>(CopyAffiliation);
+            CopyClientCommand = new DelegateCommand<string>(CopyAffiliation);
 
             ChangeFileNumRequest = new InteractionRequest<IChangeICFileNumberNotification>();
             CountySelectRequest = new InteractionRequest<IAdditionalCountyNotification>();
@@ -107,6 +114,7 @@ namespace mRecordSearchList.ViewModels
         public override void SaveEntry()
         {
             _rss.UpdateRecordSearch(RecordSearch);
+            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()
@@ -121,6 +129,7 @@ namespace mRecordSearchList.ViewModels
                     if (r.Confirmed)
                     {
                         _deleting = true;
+                        _ea.GetEvent<RSListModifiedEvent>().Publish(new ListModificationPayload("delete", RecordSearch.ID));
                         _rss.RemoveRecordSearch(RecordSearch.ID,
                             RecordSearch.MailingAddress.AddressID,
                             RecordSearch.BillingAddress.AddressID,
@@ -150,15 +159,19 @@ namespace mRecordSearchList.ViewModels
         {
             if (destination == "Requestor")
             {
-                NavigationParameters parameters = new NavigationParameters();
-                parameters.Add("id", SelectedRequestor);
+                NavigationParameters parameters = new NavigationParameters
+                {
+                    { "id", SelectedRequestor }
+                };
                 if (SelectedClient > 0)
                     _rm.RequestNavigate("ContentRegion", "PersonEntry", parameters);
             }
             else if (destination == "Client")
             {
-                NavigationParameters parameters = new NavigationParameters();
-                parameters.Add("id", SelectedClient);
+                NavigationParameters parameters = new NavigationParameters
+                {
+                    { "id", SelectedClient }
+                };
                 if (SelectedClient > 0)
                     _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
             }
@@ -172,17 +185,17 @@ namespace mRecordSearchList.ViewModels
         private void CopyRequestor(string destination)
         {
             if (destination == "Mailing")
-                RecordSearch.MailingAddress = RecordSearch.Requestor.AddressModel;
+                RecordSearch.MailingAddress = new Address(RecordSearch.MailingAddress.AddressID, RecordSearch.Requestor.AddressModel);
             else if (destination == "Billing")
-                RecordSearch.BillingAddress = RecordSearch.Requestor.AddressModel;
+                RecordSearch.BillingAddress = new Address(RecordSearch.BillingAddress.AddressID, RecordSearch.Requestor.AddressModel);
         }
 
         private void CopyAffiliation(string destination)
         {
             if (destination == "Mailing")
-                RecordSearch.MailingAddress = RecordSearch.ClientModel.AddressModel;
+                RecordSearch.MailingAddress = new Address(RecordSearch.MailingAddress.AddressID, RecordSearch.ClientModel.AddressModel);
             else if (destination == "Billing")
-                RecordSearch.BillingAddress = RecordSearch.ClientModel.AddressModel;
+                RecordSearch.BillingAddress = new Address(RecordSearch.BillingAddress.AddressID, RecordSearch.ClientModel.AddressModel);
         }
 
         private void LoadNewRequestor(int value)
@@ -231,6 +244,7 @@ namespace mRecordSearchList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _isLoaded = false;
             _journal = navigationContext.NavigationService.Journal;
             int rsID = (int)navigationContext.Parameters["id"];
             if (rsID > 0)
@@ -238,9 +252,13 @@ namespace mRecordSearchList.ViewModels
                 _rss.GetRecordSearchByID(rsID, true);
                 RecordSearch = _rss.CurrentRecordSearch;
                 RecordSearch.Status = RecordSearch.CalculateStatus();
+
+                //Sets the Dropdown menu for requestor and client
                 SelectedRequestor = RecordSearch.RequestorID;
                 SelectedClient = RecordSearch.ClientID;
+
                 _isLoaded = true;
+                _ea.GetEvent<RSEntryChangedEvent>().Publish();
             }
         }
     }

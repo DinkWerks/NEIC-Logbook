@@ -185,7 +185,6 @@
 					 HorizontalAlignment="Stretch"/>
             </DockPanel>
 
-            <Button Grid.Row="3" Grid.Column="2" Content="Delete Entry" Command="{Binding DeleteEntryCommand}"/>
         </Grid>
     </StackPanel>
 </UserControl>

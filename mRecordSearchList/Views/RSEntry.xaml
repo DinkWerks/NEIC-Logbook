@@ -128,7 +128,7 @@
 					<StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">
 						<DockPanel LastChildFill="False">
 							<TextBlock Text="Record Search Type: " Style="{StaticResource Line Header}"/>
-							<ComboBox ItemsSource="{Binding Source={x:Static static:StaticData.RecordSearchTypes}}" Width="200"/>
+							<ComboBox ItemsSource="{Binding Source={x:Static static:StaticData.RecordSearchTypes}}" SelectedItem="{Binding RecordSearch.RSType}" Width="200"/>
 						</DockPanel>
 					</StackPanel>
 				</Grid>
@@ -183,13 +183,13 @@
 							<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordSearch.AdditionalRequestors}"/>
 
 							<TextBlock Grid.Row="2" Text="Current Affiliation:" Style="{StaticResource Line Header}"/>
-							<TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.Requestor}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.Requestor.CurrentAssociation}"/>
 
 							<TextBlock Grid.Row="3" Text="Primary Phone:" Style="{StaticResource Line Header}"/>
 							<TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Phone1}"/>
 
 							<TextBlock Grid.Row="4" Grid.Column="0" Text="Secondary Phone:" Style="{StaticResource Line Header}"/>
-							<TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Phone1}"/>
+							<TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Phone2}"/>
 
 							<TextBlock Grid.Row="5" Text="Email:" Style="{StaticResource Line Header}"/>
 							<TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Email}"/>
@@ -290,7 +290,7 @@
 									<DockPanel Grid.Column="1" Margin="0,10">
 										<Button Content="Copy Requestor" Command="{Binding CopyRequestorCommand}" 
 												CommandParameter="Mailing" Width="100" Margin="0,0,10,0"/>
-										<Button Content="Copy Affiliation" Command="{Binding CopyAffiliationCommand}" 
+                                        <Button Content="Copy Client" Command="{Binding CopyClientCommand}" 
 												CommandParameter="Mailing" Width="100" Margin="0,0,10,0"/>
 										<CheckBox Grid.Column="2" Content="Billing Same as Mailing" IsChecked="{Binding RecordSearch.IsMailingSameAsBilling}" HorizontalAlignment="Right"/>
 									</DockPanel>
@@ -315,7 +315,7 @@
 									<DockPanel Grid.Column="1" Margin="0,10" LastChildFill="False">
 										<Button Content="Copy Requestor" Command="{Binding CopyRequestorCommand}" 
 												CommandParameter="Billing" Width="100" Margin="0,0,10,0"/>
-										<Button Content="Copy Affiliation" Command="{Binding CopyAffiliationCommand}" 
+                                        <Button Content="Copy Client" Command="{Binding CopyClientCommand}" 
 												CommandParameter="Billing" Width="100" Margin="0,0,10,0"/>
 									</DockPanel>
 
@@ -391,7 +391,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Text="Processor:" Style="{StaticResource Line Header}"/>
-                                <ComboBox Grid.Column="1" ItemsSource="{Binding Source={x:Static static:StaticData.Staff}}"/>
+								<ComboBox Grid.Column="1" ItemsSource="{Binding StaffList}" SelectedItem="{Binding RecordSearch.Processor}"/>
 
                                 <TextBlock Grid.Row="1" Text="Recommendation:" Style="{StaticResource Line Header}"/>
                                 <ComboBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordSearch.Recommendation}" IsEditable="True"

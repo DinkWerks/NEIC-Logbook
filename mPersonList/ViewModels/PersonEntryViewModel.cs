@@ -4,9 +4,11 @@ using Prism.Interactivity.InteractionRequest;
 using Prism.Regions;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using Tracker.Core;
 using Tracker.Core.BaseClasses;
 using Tracker.Core.CompositeCommands;
 using Tracker.Core.Events;
+using Tracker.Core.Events.Payloads;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
 
@@ -15,22 +17,28 @@ namespace mPersonList.ViewModels
     public class PersonEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
         private IRegionManager _rm;
+        private IEventAggregator _ea;
         private IPersonService _ps;
+        private IClientService _cs;
         private IAddressService _as;
         private IRecordSearchService _rss;
         private Person _person;
         private ObservableCollection<RecordSearch> _recordSearches = new ObservableCollection<RecordSearch>();
-        private int _selectedClient;
+        private Client _selectedClient;
 
         public List<Client> ClientList { get; set; }
 
-        public int SelectedClient
+        private int _initialClient;
+        public int InitialClient
+        {
+            get { return _initialClient; }
+            set { SetProperty(ref _initialClient, value); }
+        }
+
+        public Client SelectedClient
         {
             get { return _selectedClient; }
-            set
-            {
-                SetProperty(ref _selectedClient, value);
-            }
+            set { SetProperty(ref _selectedClient, value); }
         }
 
         public Person PersonModel
@@ -61,7 +69,9 @@ namespace mPersonList.ViewModels
             IApplicationCommands applicationCommands) : base(applicationCommands)
         {
             _rm = regionManager;
+            _ea = eventAggregator;
             _ps = personService;
+            _cs = clientService;
             _as = addressService;
             _rss = recordSearchService;
 
@@ -83,16 +93,16 @@ namespace mPersonList.ViewModels
             int addressID = _as.UpdateAddress(PersonModel.AddressModel);
             PersonModel.AddressID = addressID;
             PersonModel.AddressModel.AddressID = addressID;
-            PersonModel.CurrentAssociationID = SelectedClient;
-            if (SelectedClient > 0)
+
+            //Add in Person's Affiliation
+            if (SelectedClient != null)
             {
-                Client selectedClientModel = ClientList[SelectedClient - 1];
-                if (string.IsNullOrWhiteSpace(selectedClientModel.OfficeName))
-                    PersonModel.CurrentAssociation = selectedClientModel.ClientName;
-                else
-                    PersonModel.CurrentAssociation = selectedClientModel.ClientName + " - " + selectedClientModel.OfficeName;
+                PersonModel.CurrentAssociationID = SelectedClient.ID;
+                PersonModel.CurrentAssociation = SelectedClient.ToString();
             }
+
             _ps.UpdatePersonInformation(PersonModel);
+            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Person entry successfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()
@@ -118,10 +128,10 @@ namespace mPersonList.ViewModels
         {
             var parameters = new NavigationParameters
             {
-                { "id", SelectedClient }
+                { "id", SelectedClient.ID }
             };
 
-            if (SelectedClient > 0)
+            if (SelectedClient.ID > 0)
                 _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
         }
 
@@ -142,7 +152,8 @@ namespace mPersonList.ViewModels
             if (personID > 0)
             {
                 PersonModel = _ps.GetPersonByID(personID);
-                SelectedClient = PersonModel.CurrentAssociationID;
+                SelectedClient = _cs.GetClientByID(PersonModel.CurrentAssociationID);
+                InitialClient = ClientList.FindIndex(c => c.ToString() == SelectedClient.ToString());
                 PersonModel.AddressModel = _as.GetAddressByID(PersonModel.AddressID);
                 RecordSearches = new ObservableCollection<RecordSearch>(
                     _rss.GetPartialRecordSearchesByCriteria("WHERE RequestorID = " + personID)

@@ -1,0 +1,152 @@
+﻿<UserControl x:Class="mStaffList.Views.StaffList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:converter="clr-namespace:mStaffList.Converter">
+
+    <UserControl.Resources>
+        <converter:BoolToActiveStatus x:Key="ActiveConverter"/>
+        <converter:ICFileNumberConverter x:Key="ICFileNumberConverter"/>
+        <CollectionViewSource x:Key="StaffGrouped" Source="{Binding StaffMembers}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="IsActive"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+       
+    <Grid Margin="10">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="Auto"/>
+            <ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition />
+		</Grid.RowDefinitions>
+
+         <!--Add New User-->
+        <Grid Margin="0,0,0,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Add New Staff Member:"/>
+
+            <TextBox Grid.Row="1" x:Name="PersonName" Text="{Binding NewPersonName}"  Margin="0,0,5,0">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                        <Style.Resources>
+                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                <VisualBrush.Visual>
+                                    <Label Content="Name" Foreground="Gray" />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter Property="Background" Value="White" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <Button Grid.Row="1" Grid.Column="1" Command="{Binding AddPersonCommand}" 
+                    CommandParameter="{Binding Text, ElementName=PersonName}">
+                <Button.Content>
+                    <Image Source="/Tracker.Core;component/Resources/Icons/add.png" Height="16" Width="16"/>
+                </Button.Content>
+            </Button>
+        </Grid>
+        
+        <!--Staff List-->
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Source={StaticResource StaffGrouped}}" 
+                  SelectedItem="{Binding SelectedStaff, Mode=TwoWay}" CanUserAddRows="False" AutoGenerateColumns="False"
+                  IsSynchronizedWithCurrentItem="True">
+            <DataGrid.InputBindings>
+                <KeyBinding Key="Delete" Command="{Binding DeletePersonCommand}" />
+            </DataGrid.InputBindings>
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding Name}" MinWidth="400"/>
+                <DataGridCheckBoxColumn Header="Is Active" Binding="{Binding IsActive}"/>
+            </DataGrid.Columns>
+
+            <DataGrid.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Path=Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+
+                    <GroupStyle.ContainerStyle>
+                        <Style TargetType="{x:Type GroupItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GroupItem}">
+                                        <Expander IsExpanded="{Binding Path=Name, Mode=OneWay}">
+                                            <Expander.Header>
+                                                <TextBlock Text="{Binding Path=Name, Converter={StaticResource ActiveConverter}}"/>
+                                            </Expander.Header>
+                                            <Expander.Content>
+                                                <ItemsPresenter/>
+                                            </Expander.Content>
+                                        </Expander>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </GroupStyle.ContainerStyle>
+                </GroupStyle>
+            </DataGrid.GroupStyle>
+        </DataGrid>
+        
+        <!--Record Search List-->
+        <ListBox Grid.Column="1" Grid.RowSpan="2" x:Name="RSListBox" ItemsSource="{Binding StaffRecordSearches}" HorizontalContentAlignment="Stretch" Margin="10,0,0,0">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="1*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding Converter="{StaticResource ICFileNumberConverter}">
+                                    <Binding Path="ICTypePrefix"/>
+                                    <Binding Path="ICYear"/>
+                                    <Binding Path="ICEnumeration"/>
+                                    <Binding Path="ICSuffix"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        
+                        <TextBlock Grid.Column="1" Text="{Binding LastUpdated, StringFormat=d}" Margin="0,0,10,0"/>
+                        <TextBlock Grid.Column="2" Text="{Binding Status}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

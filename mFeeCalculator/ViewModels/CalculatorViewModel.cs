@@ -1,39 +1,44 @@
 ﻿using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
+using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
+using System.Xml.Linq;
 using Tracker.Core.Events;
+using Tracker.Core.Models;
 using Tracker.Core.Models.Fees;
 using Tracker.Core.Services;
 
 namespace mFeeCalculator.ViewModels
 {
-    public class CalculatorViewModel : BindableBase, IRegionMemberLifetime
+    public class CalculatorViewModel : BindableBase
     {
-        private ObservableCollection<string> _versions = new ObservableCollection<string>();
+        private ObservableCollection<FeeSchedule> _versions = new ObservableCollection<FeeSchedule>();
         private ObservableCollection<ICharge> _charges = new ObservableCollection<ICharge>();
         private Fee _fee;
-        private string _selectedVersion;
+        private FeeSchedule _selectedVersion;
         private IRecordSearchService _rs;
-        private bool _loaded = false;
+        private bool _isLoaded = false;
 
-        public ObservableCollection<string> Versions
+        public ObservableCollection<FeeSchedule> Versions
         {
             get { return _versions; }
             set { SetProperty(ref _versions, value); }
         }
 
-        public string SelectedVersion
+        public FeeSchedule SelectedVersion
         {
             get { return _selectedVersion; }
             set
             {
                 SetProperty(ref _selectedVersion, value);
-                if (_loaded)
+                //Clears all fee data if the RS Version is changed, keeps the same ID
+                if (_isLoaded)
                 {
                     int oldFeeID = FeeModel.ID;
-                    FeeModel = new Fee(value) { ID = oldFeeID };
+                    FeeModel = new Fee(value.Version) { ID = oldFeeID };
                     _rs.CurrentRecordSearch.Fee = FeeModel;
                 }
             }
@@ -54,22 +59,16 @@ namespace mFeeCalculator.ViewModels
             }
         }
 
-        public bool KeepAlive => false;
-
+        //Constructor
         public CalculatorViewModel(IEventAggregator eventAggregator, IRecordSearchService recordSearchService)
         {
             _rs = recordSearchService;
-            LoadFeeStructures();
-            if (Versions.Contains(recordSearchService.CurrentRecordSearch.Fee.FeeVersion))
-            {
-                SelectedVersion = recordSearchService.CurrentRecordSearch.Fee.FeeVersion;
-                if (recordSearchService.CurrentRecordSearch != null && recordSearchService.CurrentRecordSearch.Fee != null)
-                {
-                    FeeModel = recordSearchService.CurrentRecordSearch.Fee;
-                }
-            }
 
-            _loaded = true;
+            LoadFeeStructures();
+            LoadFeeData();
+
+            _isLoaded = true;
+            eventAggregator.GetEvent<RSEntryChangedEvent>().Subscribe(LoadFeeData);
             eventAggregator.GetEvent<CalculatorCostChangedEvent>().Subscribe(UpdateTotalCost);
         }
 
@@ -78,16 +77,47 @@ namespace mFeeCalculator.ViewModels
             FeeModel.CalculateProjectCost();
         }
 
+        /// <summary>
+        /// Gathers the metadata for all fee structure documents in the appropriate directory.
+        /// </summary>
         public void LoadFeeStructures()
         {
             var currentDirectory = Directory.GetCurrentDirectory();
             var filePath = Path.Combine(currentDirectory, @"Resources\FeeStructures\");
             var feeStructures = Directory.GetFiles(filePath);
-            foreach (string feeStructure in feeStructures)
+            foreach (string path in feeStructures)
             {
-                string fileName = Path.GetFileName(feeStructure);
-                Versions.Add(fileName.Remove(fileName.Length - 4));
+                XElement xmlFile = XElement.Load(path);
+                FeeSchedule newItem = (from fs in xmlFile.Descendants("Meta")
+                                       select new FeeSchedule(
+                                           path,
+                                           (string)fs.Element("Version"),
+                                           (string)fs.Element("Name"),
+                                           DateTime.Parse((string)fs.Element("Date"))
+                                           )
+                                       ).Single();
+                Versions.Add(newItem);
             }
+        }
+
+        /// <summary>
+        /// Event driven loading for updating the FeeModel and SelectedVersion properties with the currently open record search.
+        /// </summary>
+        private void LoadFeeData()
+        {
+            _isLoaded = false;
+            FeeSchedule fs = Versions.Where(v => v.Version == _rs.CurrentRecordSearch.Fee.FeeVersion).First();
+
+            if (fs != null)
+            {
+                SelectedVersion = fs;
+                if (_rs.CurrentRecordSearch != null && _rs.CurrentRecordSearch.Fee != null)
+                {
+                    FeeModel = _rs.CurrentRecordSearch.Fee;
+                }
+            }
+
+            _isLoaded = true;
         }
     }
 }

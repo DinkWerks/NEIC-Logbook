@@ -14,6 +14,9 @@ namespace Tracker.Core.Models.Fees
         private decimal _totalProjectCost;
         private decimal _adjustment = 0;
         public string _adjustmentExplanation;
+        private bool _isPriority;
+        private bool _isRapidResponse;
+        private bool _isEmergency;
 
         public int ID
         {
@@ -42,6 +45,24 @@ namespace Tracker.Core.Models.Fees
         {
             get { return _adjustmentExplanation; }
             set { SetProperty(ref _adjustmentExplanation, value); }
+        }
+
+        public bool IsPriority
+        {
+            get { return _isPriority; }
+            set { SetProperty(ref _isPriority, value); }
+        }
+
+        public bool IsRapidResponse
+        {
+            get { return _isRapidResponse; }
+            set { SetProperty(ref _isRapidResponse, value); }
+        }
+
+        public bool IsEmergency
+        {
+            get { return _isEmergency; }
+            set { SetProperty(ref _isEmergency, value); }
         }
 
         public decimal TotalProjectCost
@@ -118,11 +139,21 @@ namespace Tracker.Core.Models.Fees
         public void CalculateProjectCost()
         {
             decimal runningTotal = 0;
+            decimal surcharge = 0;
+
             foreach (ICharge charge in Charges)
             {
                 runningTotal += charge.TotalCost;
+                if (IsRapidResponse && charge.Name == "Staff Time")
+                    surcharge += charge.TotalCost * 0.5m;
             }
-            TotalProjectCost = runningTotal + Adjustment;
+
+            if (IsPriority)
+                surcharge += runningTotal * 0.5m;
+            if (IsEmergency)
+                surcharge += runningTotal;
+
+            TotalProjectCost = runningTotal + Adjustment + surcharge;
         }
 
         public string GetFieldNames(string queryType = "select")
@@ -148,7 +179,6 @@ namespace Tracker.Core.Models.Fees
                 default:
                     return string.Empty;
             }
-
         }
     }
 }

@@ -1,7 +1,6 @@
 ﻿using mFeeCalculator.Views;
 using Prism.Ioc;
 using Prism.Modularity;
-using Prism.Regions;
 
 namespace mFeeCalculator
 {
@@ -14,7 +13,7 @@ namespace mFeeCalculator
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.Register<Calculator>();
+            containerRegistry.RegisterForNavigation<Calculator>();
         }
     }
 }

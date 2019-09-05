@@ -20,6 +20,7 @@ namespace mClientList.ViewModels
         private List<Client> _clients = new List<Client>();
         private string _clientNameSearchText;
         private string _peidSearchText;
+        private string _oldPEIDSearchText;
 
         public List<Client> Clients
         {
@@ -38,6 +39,16 @@ namespace mClientList.ViewModels
             set
             {
                 SetProperty(ref _peidSearchText, value);
+                ClientView.Refresh();
+            }
+        }
+        
+        public string OldPEIDSearchText
+        {
+            get { return _oldPEIDSearchText; }
+            set
+            {
+                SetProperty(ref _oldPEIDSearchText, value);
                 ClientView.Refresh();
             }
         }
@@ -108,31 +119,39 @@ namespace mClientList.ViewModels
             {
                 return false;
             }
-            if (ClientNameSearchText != null && PEIDSearchText != null)
-            {
-                if (client.ClientName.ToLower().Contains(ClientNameSearchText.ToLower()) && client.OldPEID.ToString().Contains(PEIDSearchText.ToLower()))
-                {
-                    return true;
-                }
-                return false;
-            }
-            else if (ClientNameSearchText != null && PEIDSearchText == null)
+
+            int passedTests = 0;
+
+            if (!string.IsNullOrWhiteSpace(ClientNameSearchText))
             {
                 if (client.ClientName.ToLower().Contains(ClientNameSearchText.ToLower()))
-                {
-                    return true;
-                }
-                return false;
+                    passedTests++;
+                else
+                    return false;
             }
-            else if (ClientNameSearchText == null && PEIDSearchText != null)
+            else passedTests++;
+
+            if (!string.IsNullOrWhiteSpace(PEIDSearchText))
             {
-                if (client.OldPEID.ToString().Contains(PEIDSearchText.ToLower()))
+                if (!string.IsNullOrWhiteSpace(client.NewPEID) && client.NewPEID.ToLower().Contains(PEIDSearchText.ToLower()))
                 {
-                    return true;
+                    passedTests++;
                 }
-                return false;
+                else return false;
             }
-            return true;
+            else passedTests++;
+
+            if (!string.IsNullOrWhiteSpace(OldPEIDSearchText))
+            {
+                if (!string.IsNullOrWhiteSpace(client.OldPEID) && client.OldPEID.ToLower().Contains(OldPEIDSearchText.ToLower()))
+                {
+                    passedTests++;
+                } 
+                else return false;
+            }
+            else passedTests++;
+
+            return passedTests >= 3;
         }
     }
 }

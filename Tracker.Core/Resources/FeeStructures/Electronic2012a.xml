@@ -1,5 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <FeeStructure version="Electronic2012a">
+  <Meta>
+    <Version>Electronic2012a</Version>
+    <Name>Electronic 2012 w/ Custom Map Charges</Name>
+    <Date>8/21/2019</Date>
+  </Meta>
   <Fee type="variable">
     <Index>1</Index>
     <Name>Staff Time</Name>
@@ -232,16 +237,6 @@
     <UnitNamePlural>pages</UnitNamePlural>
     <Description>Pages copied or printed for the product.</Description>
     <Cost>0.15</Cost>
-  </Fee>
-
-  <Fee type="variable">
-    <Index>13</Index>
-    <Name>Color Pages</Name>
-    <DBField>ColorPages</DBField>
-    <UnitName>page</UnitName>
-    <UnitNamePlural>pages</UnitNamePlural>
-    <Description>Pages copied or printed for the product using color.</Description>
-    <Cost>1</Cost>
   </Fee>
   
   <Fee type="variable">

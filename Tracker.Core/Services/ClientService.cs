@@ -115,13 +115,16 @@ namespace Tracker.Core.Services
                     sqlCommand.CommandText = "INSERT INTO tblClients (ClientName, OfficeName, Standing) " +
                         "VALUES (?,?,?)";
                     sqlCommand.Parameters.AddWithValue("ClientName", newClient.ClientName);
-                    sqlCommand.Parameters.AddWithValue("OfficeName", newClient.OfficeName);
+                    sqlCommand.Parameters.AddWithValue("OfficeName", newClient.OfficeName ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("Standing", "Good Standing");
 
                     connection.Open();
                     sqlCommand.ExecuteNonQuery();
                     sqlCommand.CommandText = "Select @@identity";
-                    return (int)sqlCommand.ExecuteScalar();
+                    int newID = (int)sqlCommand.ExecuteScalar();
+
+                    CompleteClientList = GetAllPartialClients();
+                    return newID;
                 }
             }
         }
@@ -156,6 +159,7 @@ namespace Tracker.Core.Services
                     sqlCommand.ExecuteNonQuery();
                 }
             }
+            CompleteClientList = GetAllPartialClients();
         }
 
         public void RemoveClient(int id, int addressID)

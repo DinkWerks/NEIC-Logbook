@@ -54,6 +54,6 @@
         <TextBox Grid.Row="4" Grid.Column="5" Text="{Binding Address.ZIP}"/>
 
         <TextBlock Grid.Row="5" Text="Notes:" Style="{StaticResource Line Header}"/>
-        <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="5" TextWrapping="Wrap"/>
+        <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Address.Notes}" TextWrapping="Wrap"/>
     </Grid>
 </UserControl>

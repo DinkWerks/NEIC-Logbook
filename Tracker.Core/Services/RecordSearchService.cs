@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Data.OleDb;
-using System.IO;
 using System.Linq;
 using Tracker.Core.Extensions;
 using Tracker.Core.Models;
@@ -13,10 +12,10 @@ namespace Tracker.Core.Services
 {
     public class RecordSearchService : IRecordSearchService
     {
-        private IClientService _cs;
-        private IPersonService _ps;
-        private IAddressService _as;
-        private IFeeService _fs;
+        private readonly IClientService _cs;
+        private readonly IPersonService _ps;
+        private readonly IAddressService _as;
+        private readonly IFeeService _fs;
 
         public RecordSearch CurrentRecordSearch { get; set; }
 
@@ -232,6 +231,36 @@ namespace Tracker.Core.Services
                 }
             }
         }
+
+        public RecordSearch GetPartialRecordSearchesByCriteria(int id)
+        {
+            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            {
+                using (OleDbCommand sqlCommand = connection.CreateCommand())
+                {
+                    sqlCommand.CommandText = @"SELECT ID, ICPrefix, ICYear, ICEnumeration, ICSuffix, ProjectName, Status, LastUpdated FROM tblRecordSearches WHERE ID = " + id;
+                    connection.Open();
+
+                    OleDbDataReader reader = sqlCommand.ExecuteReader();
+
+                    int index = 0;
+                    RecordSearch returnValue = new RecordSearch()
+                    {
+                        ID = reader.GetInt32Safe(index++),
+                        ICTypePrefix = reader.GetStringSafe(index++),
+                        ICYear = reader.GetStringSafe(index++),
+                        ICEnumeration = reader.GetInt32Safe(index++),
+                        ICSuffix = reader.GetStringSafe(index++),
+                        ProjectName = reader.GetStringSafe(index++),
+                        Status = reader.GetStringSafe(index++),
+                        LastUpdated = reader.GetDateTimeSafe(index++)
+                    };
+
+                    return returnValue;
+                }
+            }
+        }
+
 
         public List<RecordSearch> GetPartialRecordSearchesByCriteria(string criteria)
         {

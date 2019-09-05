@@ -4,7 +4,8 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="720" Width="1280">
+        Title="{Binding Title}" WindowStartupLocation="CenterScreen"
+        Background="FloralWhite" Foreground="Black" Icon="/Tracker;component/LogBookIcon.ico">
 
     <i:Interaction.Triggers>
         <prism:InteractionRequestTrigger SourceObject="{Binding ConfirmationRequest}">
@@ -17,7 +18,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <Menu>
@@ -48,7 +49,7 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        
+
         <Grid Grid.Row="1" Margin="5,5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
@@ -69,8 +70,8 @@
             <Button Grid.Column="1" Command="{Binding GoBackCommand}" IsEnabled="False" Margin="0,0,5,0">
                 <Image Source="/Tracker.Core;component/Resources/Icons/arrow_left.png"/>
             </Button>
-			<Button Grid.Column="2" IsEnabled="False">
-				<Image Source="/Tracker.Core;component/Resources/Icons/arrow_right.png"/>
+            <Button Grid.Column="2" IsEnabled="False">
+                <Image Source="/Tracker.Core;component/Resources/Icons/arrow_right.png"/>
             </Button>
 
             <Button Grid.Column="4" Command="{Binding ApplicationCommands.SaveCompCommand}" Margin="0,0,5,0">
@@ -83,10 +84,53 @@
 
         <ContentControl Grid.Row="2" prism:RegionManager.RegionName="ContentRegion"/>
 
-        <StatusBar Grid.Row="3" Background="AliceBlue">
-            <StatusBarItem HorizontalAlignment="Right">
-                <TextBlock Text="{Binding Version}"/>
-            </StatusBarItem>
-        </StatusBar>
+
+        <Border Grid.Row="3" x:Name="TopAndLeft" BorderThickness="0,2" BorderBrush="{x:Static SystemColors.ControlDarkBrush}">
+            <StatusBar Background="AliceBlue">
+                <StatusBar.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                        </Grid>
+                    </ItemsPanelTemplate>
+                </StatusBar.ItemsPanel>
+
+                <StatusBarItem Margin="2" x:Name="StatusContainer" Background="Transparent">
+                    <TextBlock x:Name="SText" Text="{Binding Status.Message, NotifyOnTargetUpdated=True}">
+                        <TextBlock.Foreground>
+                            <SolidColorBrush Opacity="1" Color="Black"/>
+                        </TextBlock.Foreground>
+                        <TextBlock.Triggers>
+                            <EventTrigger RoutedEvent="Binding.TargetUpdated">
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ColorAnimationUsingKeyFrames Storyboard.TargetName="StatusContainer" 
+                                                                      Storyboard.TargetProperty="(StatusBarItem.Background).(SolidColorBrush.Color)">
+                                            <DiscreteColorKeyFrame Value="#aed581" KeyTime="0:0:0"/>
+                                            <DiscreteColorKeyFrame Value="#aed581" KeyTime="0:0:1"/>
+                                            <LinearColorKeyFrame Value="Transparent" KeyTime="0:0:6"/>
+                                        </ColorAnimationUsingKeyFrames>
+                                        <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(TextBlock.Foreground).(SolidColorBrush.Opacity)">
+                                            <DiscreteDoubleKeyFrame Value="1" KeyTime="0:0:0"/>
+                                            <DiscreteDoubleKeyFrame Value="1" KeyTime="0:0:1"/>
+                                            <LinearDoubleKeyFrame Value="0" KeyTime="0:0:3"/>
+                                        </DoubleAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger>
+                        </TextBlock.Triggers>
+                    </TextBlock>
+                </StatusBarItem>
+
+                <StatusBarItem Grid.Column="2" HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding Version}"/>
+                </StatusBarItem>
+            </StatusBar>
+        </Border>
+
     </Grid>
 </Window>
