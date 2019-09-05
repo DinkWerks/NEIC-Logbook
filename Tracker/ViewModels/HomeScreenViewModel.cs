@@ -1,17 +1,18 @@
 ﻿using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Regions;
+using Tracker.Core.BaseClasses;
+using Tracker.Core.CompositeCommands;
 
 namespace Tracker.ViewModels
 {
-    public class HomeScreenViewModel : BindableBase, INavigationAware
+    public class HomeScreenViewModel : NavigatableBindableBase, INavigationAware
     {
         private IRegionManager _rm;
         private IRegionNavigationJournal _journal;
 
         public DelegateCommand<string> NavigateCommand { get; private set; }
 
-        public HomeScreenViewModel(IRegionManager regionManager)
+        public HomeScreenViewModel(IRegionManager regionManager, IApplicationCommands applicationCommands) : base(applicationCommands)
         {
             _rm = regionManager;
             NavigateCommand = new DelegateCommand<string>(Navigate);

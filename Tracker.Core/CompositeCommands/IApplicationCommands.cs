@@ -6,5 +6,7 @@ namespace Tracker.Core.CompositeCommands
     {
         CompositeCommand SaveCompCommand { get; }
         CompositeCommand DeleteCompCommand { get; }
+        CompositeCommand BackCompCommand { get; }
+        CompositeCommand ForwardCompCommand { get; }
     }
 }

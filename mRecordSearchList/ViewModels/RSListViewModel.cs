@@ -2,12 +2,13 @@
 using Prism.Commands;
 using Prism.Events;
 using Prism.Interactivity.InteractionRequest;
-using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Data;
+using Tracker.Core.BaseClasses;
+using Tracker.Core.CompositeCommands;
 using Tracker.Core.Events;
 using Tracker.Core.Events.Payloads;
 using Tracker.Core.Models;
@@ -16,7 +17,7 @@ using Tracker.Core.StaticTypes;
 
 namespace mRecordSearchList.ViewModels
 {
-    public class RSListViewModel : BindableBase, INavigationAware
+    public class RSListViewModel : NavigatableBindableBase, INavigationAware
     {
         private readonly IRecordSearchService _rss;
         private readonly IRegionManager _rm;
@@ -85,11 +86,11 @@ namespace mRecordSearchList.ViewModels
         }
 
         public InteractionRequest<ICreateNewRSNotification> NewRSRequest { get; private set; }
-        public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand CreateNewRSCommand { get; private set; }
 
         //Constructor
-        public RSListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IRecordSearchService recordSearchService)
+        public RSListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IRecordSearchService recordSearchService, 
+            IApplicationCommands applicationCommands) :base(applicationCommands)
         {
             _rm = regionManager;
             _rss = recordSearchService;
@@ -101,7 +102,6 @@ namespace mRecordSearchList.ViewModels
             RecordSearchesView.Filter = RecordSearchViewFilter;
             NewRSRequest = new InteractionRequest<ICreateNewRSNotification>();
             CreateNewRSCommand = new DelegateCommand(CreateNewRecordSearch);
-            GoBackCommand = new DelegateCommand(GoBack);
 
             eventAggregator.GetEvent<RecordSearchListSelectEvent>().Subscribe(NavigateToRecordSearchEntry);
             eventAggregator.GetEvent<RSListModifiedEvent>().Subscribe(ModifyRSList);
@@ -117,11 +117,6 @@ namespace mRecordSearchList.ViewModels
 
             if (navTargetID >= 0)
                 _rm.RequestNavigate("ContentRegion", "RSEntry", parameters);
-        }
-
-        private void GoBack()
-        {
-            _journal.GoBack();
         }
 
         public void CreateNewRecordSearch()

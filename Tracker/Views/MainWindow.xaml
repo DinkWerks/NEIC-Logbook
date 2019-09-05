@@ -67,10 +67,10 @@
                 <Image Source="/Tracker.Core;component/Resources/Icons/house.png"/>
             </Button>
 
-            <Button Grid.Column="1" Command="{Binding GoBackCommand}" IsEnabled="False" Margin="0,0,5,0">
+            <Button Grid.Column="1" Command="{Binding ApplicationCommands.BackCompCommand}" Margin="0,0,5,0">
                 <Image Source="/Tracker.Core;component/Resources/Icons/arrow_left.png"/>
             </Button>
-            <Button Grid.Column="2" IsEnabled="False">
+            <Button Grid.Column="2">
                 <Image Source="/Tracker.Core;component/Resources/Icons/arrow_right.png"/>
             </Button>
 
