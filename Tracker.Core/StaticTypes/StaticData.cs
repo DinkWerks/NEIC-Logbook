@@ -6,27 +6,11 @@ namespace Tracker.Core.StaticTypes
     {
         public static List<string> Recommendations = new List<string>()
         {
+            string.Empty,
             "Sensitive for prehistoric, protohistoric, and/or historic cultural resources",
             "Contact appropriate local Native American representatives for information regarding traditional cultural properties",
             "Survey/Contact prof Archaeologist to survey entire project area prior to impact and ground disturbing activities, contact Nat Amer Reps re trad cult props, consult GLO map",
             "The project archaeologist should also contact the appropriate local Native American representatives for information regarding traditional properties that may be located within project boundries"
-        };
-
-        public static List<string> Staff = new List<string>()
-        {
-            "",
-            "Adrienne Springsteen",
-            "Amy Huberland",
-            "Ashlyn Weaver",
-            "Casey Hegel",
-            "Cecily Merwin",
-            "In House",
-            "Intern",
-            "Katie Jorgenson",
-            "Kyle Piercy",
-            "Noel Jones",
-            "Rob McCann",
-            "Ryan Bradshaw"
         };
 
         public static List<string> RecordSearchTypes = new List<string>()
@@ -45,6 +29,7 @@ namespace Tracker.Core.StaticTypes
 
         public static List<string> DisclosureLevels = new List<string>()
         {
+            string.Empty,
             "Confidential Information Qualified",
             "Registered Forester",
             "Public Information Only"

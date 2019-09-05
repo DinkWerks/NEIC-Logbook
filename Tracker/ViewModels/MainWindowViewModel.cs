@@ -21,6 +21,20 @@ namespace Tracker.ViewModels
         private IRegionNavigationJournal _journal;
         private IApplicationCommands applicationCommands;
         private StatusPayload _status;
+        private double _windowHeight;
+        private double _windowWidth;
+
+        public double WindowHeight
+        {
+            get { return _windowHeight; }
+            set { SetProperty(ref _windowHeight, value); }
+        }
+
+        public double WindowWidth
+        {
+            get { return _windowWidth; }
+            set { SetProperty(ref _windowWidth, value); }
+        }
 
         public string Title
         {
@@ -57,6 +71,8 @@ namespace Tracker.ViewModels
         //Constructor
         public MainWindowViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, RegionNavigationService regionNavigationService, IApplicationCommands applicationCommands)
         {
+            WindowWidth = SystemParameters.PrimaryScreenHeight;
+
             _rm = regionManager;
             _journal = regionNavigationService.Journal;
             ApplicationCommands = applicationCommands;
@@ -93,7 +109,7 @@ namespace Tracker.ViewModels
             ConfirmationRequest.Raise(new Confirmation
             {
                 Title = "Exit",
-                Content = "Are you sure you would like to exit? Unsaved work will be lost. Return the home screen to save."
+                Content = "Are you sure you would like to exit? Unsaved work will be lost."
             },
                 r =>
                 {

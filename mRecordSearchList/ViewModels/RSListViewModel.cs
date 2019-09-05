@@ -217,9 +217,6 @@ namespace mRecordSearchList.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             _journal = navigationContext.NavigationService.Journal;
-            //RecordSearches = _rss.GetAllPartialRecordSearches();
-            //_recordSearchesView = CollectionViewSource.GetDefaultView(RecordSearches);
-            //RecordSearchesView.Filter = RecordSearchViewFilter;
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

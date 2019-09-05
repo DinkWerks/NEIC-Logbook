@@ -89,6 +89,7 @@ namespace mRecordSearchList.ViewModels
             PeopleList = personService.CompletePeopleList;
             ClientList = clientService.CompleteClientList;
             StaffList = staffService.CompleteStaffList;
+            StaffList.Insert(0, new Staff());
 
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));

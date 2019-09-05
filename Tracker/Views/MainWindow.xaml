@@ -4,8 +4,8 @@
         xmlns:prism="http://prismlibrary.com/"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         prism:ViewModelLocator.AutoWireViewModel="True"
-        Title="{Binding Title}" Height="720" Width="1280"
-        Background="FloralWhite">
+        Title="{Binding Title}" WindowStartupLocation="CenterScreen"
+        Background="FloralWhite" Foreground="Black" Icon="/Tracker;component/LogBookIcon.ico">
 
     <i:Interaction.Triggers>
         <prism:InteractionRequestTrigger SourceObject="{Binding ConfirmationRequest}">
