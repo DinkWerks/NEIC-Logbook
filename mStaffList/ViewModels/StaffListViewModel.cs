@@ -3,6 +3,7 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Tracker.Core;
 using Tracker.Core.Events;
 using Tracker.Core.Events.Payloads;
@@ -17,6 +18,7 @@ namespace mStaffList.ViewModels
         private readonly IRecordSearchService _rss;
         private readonly IEventAggregator _ea;
         private readonly IRegionManager _rm;
+        private readonly IEFService _ef;
         private ObservableCollection<Staff> _staffMembers;
         private Staff _selectedStaff;
         private ObservableCollection<RecordSearch> _staffRecordSearches;
@@ -57,14 +59,16 @@ namespace mStaffList.ViewModels
         public bool KeepAlive => false;
 
         //Constructor
-        public StaffListViewModel(IStaffService staffService, IRecordSearchService recordSearchService, IEventAggregator eventAggregator, IRegionManager regionManager)
+        public StaffListViewModel(IStaffService staffService, IEFService efService, IRecordSearchService recordSearchService, IEventAggregator eventAggregator, IRegionManager regionManager)
         {
             _ss = staffService;
             _rss = recordSearchService;
             _ea = eventAggregator;
             _rm = regionManager;
+            _ef = efService;
 
             StaffMembers = new ObservableCollection<Staff>(staffService.CompleteStaffList);
+            //StaffMembers = new ObservableCollection<Staff>(_ef.tblStaff.ToList());
 
             AddPersonCommand = new DelegateCommand<string>(AddPerson);
             DeletePersonCommand = new DelegateCommand(DeletePerson);

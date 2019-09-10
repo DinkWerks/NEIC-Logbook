@@ -17,6 +17,7 @@ namespace Tracker
         {
             FrameworkCompatibilityPreferences.KeepTextBoxDisplaySynchronizedWithTextProperty = false;
         }
+
         protected override Window CreateShell()
         {
             return Container.Resolve<MainWindow>();
@@ -37,6 +38,7 @@ namespace Tracker
             containerRegistry.RegisterSingleton<IAddressService, AddressService>();
             containerRegistry.RegisterSingleton<IFeeService, FeeService>();
             containerRegistry.RegisterSingleton<IStaffService, StaffService>();
+            containerRegistry.RegisterSingleton<IEFService, EFService>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)
