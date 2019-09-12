@@ -1,15 +1,12 @@
 ﻿using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Commands;
-using Tracker.Views;
 using Prism.Interactivity.InteractionRequest;
 using System.Windows;
 using Tracker.Core.CompositeCommands;
 using Prism.Events;
 using Tracker.Core.Events;
-using System;
 using Tracker.Core.Events.Payloads;
-using Tracker.Core;
 
 namespace Tracker.ViewModels
 {
@@ -18,7 +15,6 @@ namespace Tracker.ViewModels
         private string _title = "NEIC Logbook";
         private string _version = "Version 0.5.5";
         private IRegionManager _rm;
-        private IRegionNavigationJournal _journal;
         private IApplicationCommands applicationCommands;
         private StatusPayload _status;
         private double _windowHeight;
@@ -64,30 +60,27 @@ namespace Tracker.ViewModels
         public DelegateCommand<string> NavigateCommand { get; private set; }
         public DelegateCommand GoToGithubCommand { get; private set; }
         public DelegateCommand ExitCommand { get; private set; }
-        public DelegateCommand GoBackCommand { get; set; }
 
         public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
 
         //Constructor
-        public MainWindowViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, RegionNavigationService regionNavigationService, IApplicationCommands applicationCommands)
+        public MainWindowViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IRegionNavigationJournal journal, IApplicationCommands applicationCommands)
         {
             WindowWidth = SystemParameters.PrimaryScreenHeight;
 
             _rm = regionManager;
-            _journal = regionNavigationService.Journal;
+            
             ApplicationCommands = applicationCommands;
-
-            regionManager.RegisterViewWithRegion("ContentRegion", typeof(HomeScreen));
 
             NavigateCommand = new DelegateCommand<string>(Navigate);
             GoToGithubCommand = new DelegateCommand(GoToGithub);
             ExitCommand = new DelegateCommand(Exit);
-            GoBackCommand = new DelegateCommand(GoBack);
 
             ConfirmationRequest = new InteractionRequest<IConfirmation>();
             eventAggregator.GetEvent<StatusEvent>().Subscribe(ChangeStatusText);
         }
 
+        //Methods
         private void ChangeStatusText(StatusPayload statusPayload)
         {
             Status = null;
@@ -118,11 +111,5 @@ namespace Tracker.ViewModels
                 }
             );
         }
-
-        private void GoBack()
-        {
-            _journal.GoBack();
-        }
-
     }
 }

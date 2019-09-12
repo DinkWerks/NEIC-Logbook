@@ -1,6 +1,7 @@
 ﻿using mStaffList.Views;
 using Prism.Ioc;
 using Prism.Modularity;
+using Prism.Regions;
 
 namespace mStaffList
 {
@@ -8,7 +9,7 @@ namespace mStaffList
     {
         public void OnInitialized(IContainerProvider containerProvider)
         {
- 
+
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)

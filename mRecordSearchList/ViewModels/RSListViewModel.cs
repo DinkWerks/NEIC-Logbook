@@ -1,7 +1,9 @@
 ﻿using mRecordSearchList.Notifications;
+using Prism;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Interactivity.InteractionRequest;
+using Prism.Mvvm;
 using Prism.Regions;
 using System;
 using System.Collections.Generic;
@@ -17,7 +19,7 @@ using Tracker.Core.StaticTypes;
 
 namespace mRecordSearchList.ViewModels
 {
-    public class RSListViewModel : NavigatableBindableBase, INavigationAware
+    public class RSListViewModel : BindableBase
     {
         private readonly IRecordSearchService _rss;
         private readonly IRegionManager _rm;
@@ -26,7 +28,6 @@ namespace mRecordSearchList.ViewModels
         private string _rsidYearSearch;
         private string _rsidEnumerationSearch;
         private string _projectNameSearchText;
-        private IRegionNavigationJournal _journal;
         private ICollectionView _recordSearchesView;
 
         public List<RecordSearch> RecordSearches
@@ -85,12 +86,19 @@ namespace mRecordSearchList.ViewModels
             }
         }
 
+        private string _navJou;
+        public string NavJou
+        {
+            get { return _navJou; }
+            set { SetProperty(ref _navJou, value); }
+        }
+
         public InteractionRequest<ICreateNewRSNotification> NewRSRequest { get; private set; }
         public DelegateCommand CreateNewRSCommand { get; private set; }
 
         //Constructor
         public RSListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IRecordSearchService recordSearchService, 
-            IApplicationCommands applicationCommands) :base(applicationCommands)
+            IApplicationCommands applicationCommands)
         {
             _rm = regionManager;
             _rss = recordSearchService;
@@ -207,21 +215,6 @@ namespace mRecordSearchList.ViewModels
             else passedTests++;
 
             return passedTests >= 4;
-        }
-
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            _journal = navigationContext.NavigationService.Journal;
-        }
-
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            return true;
-        }
-
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
-
         }
     }
 }

@@ -28,7 +28,6 @@ namespace mRecordSearchList.ViewModels
         private int _selectedRequestor;
         private int _selectedClient;
         private bool _isLoaded = false;
-        private IRegionNavigationJournal _journal;
 
         public List<Person> PeopleList { get; set; }
         public List<Client> ClientList { get; set; }
@@ -66,7 +65,6 @@ namespace mRecordSearchList.ViewModels
         //Commands
         public DelegateCommand ChangeFileNumCommand { get; private set; }
         public DelegateCommand<string> NavigateCommand { get; private set; }
-        public DelegateCommand GoBackCommand { get; private set; }
         public DelegateCommand CountySelectPopupCommand { get; private set; }
         public DelegateCommand<string> CopyRequestorCommand { get; private set; }
         public DelegateCommand<string> CopyClientCommand { get; private set; }
@@ -98,7 +96,6 @@ namespace mRecordSearchList.ViewModels
 
             ChangeFileNumCommand = new DelegateCommand(ChangeFileNum);
             NavigateCommand = new DelegateCommand<string>(Navigate);
-            GoBackCommand = new DelegateCommand(GoBack);
             CountySelectPopupCommand = new DelegateCommand(RaiseCountySelectPopup);
             CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
             CopyClientCommand = new DelegateCommand<string>(CopyAffiliation);
@@ -177,11 +174,6 @@ namespace mRecordSearchList.ViewModels
             }
         }
 
-        private void GoBack()
-        {
-            _journal.GoBack();
-        }
-
         private void CopyRequestor(string destination)
         {
             if (destination == "Mailing")
@@ -245,7 +237,6 @@ namespace mRecordSearchList.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             _isLoaded = false;
-            _journal = navigationContext.NavigationService.Journal;
             int rsID = (int)navigationContext.Parameters["id"];
             if (rsID > 0)
             {

@@ -3,7 +3,6 @@ using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.ObjectModel;
-using System.Linq;
 using Tracker.Core;
 using Tracker.Core.Events;
 using Tracker.Core.Events.Payloads;
