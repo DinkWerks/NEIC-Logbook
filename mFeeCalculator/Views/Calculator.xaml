@@ -63,8 +63,6 @@
     </UserControl.Resources>
 
     <StackPanel HorizontalAlignment="Stretch" Margin="10">
-        <TextBlock Text="Fee Calculator" FontSize="18" FontWeight="SemiBold" HorizontalAlignment="Center"/>
-
         <TextBlock Text="Fee Structure Version:" Margin="10,20,10,0"/>
         <ComboBox ItemsSource="{Binding Versions}" SelectedItem="{Binding SelectedVersion}" Margin="10,0"/>
 
@@ -168,6 +166,12 @@
         
 
         <Rectangle Fill="Black" Height="1" Margin="0,10"/>
-        <TextBlock Text="{Binding FeeModel.TotalProjectCost, StringFormat={}Total: ${0}, FallbackValue=Total: $0}" FontWeight="Bold" FontSize="18" HorizontalAlignment="Right"/>
+        <TextBlock Text="{Binding FeeModel.TotalProjectCost, StringFormat={}Total: ${0}, FallbackValue=Total: $0}" 
+                   FontWeight="Bold" FontSize="18" HorizontalAlignment="Right" Margin="0,0,0,20"/>
+        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Content="Export">
+                
+            </Button>
+        </StackPanel>
     </StackPanel>
 </UserControl>
