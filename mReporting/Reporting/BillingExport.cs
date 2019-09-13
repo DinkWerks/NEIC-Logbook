@@ -225,7 +225,7 @@ namespace mReporting.Reporting
             }
             catch
             {
-                bTable.Rows[1].Cells[1].Range.Text = "Missing PEID.";
+                bTable.Rows[1].Cells[1].Range.Text = "Missing Total Project Cost.";
                 bTable.Rows[1].Cells[1].Range.Font.Bold = 1;
                 bTable.Rows[1].Cells[1].Range.Font.Color = Word.WdColor.wdColorDarkRed;
                 _errorCount++;

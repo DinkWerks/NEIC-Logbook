@@ -1,4 +1,6 @@
-﻿using Prism.Events;
+﻿using mFeeCalculator.Reports;
+using Prism.Commands;
+using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using System;
@@ -59,6 +61,8 @@ namespace mFeeCalculator.ViewModels
             }
         }
 
+
+        public DelegateCommand ExportCommand { get; set; }
         //Constructor
         public CalculatorViewModel(IEventAggregator eventAggregator, IRecordSearchService recordSearchService)
         {
@@ -68,6 +72,8 @@ namespace mFeeCalculator.ViewModels
             LoadFeeData();
 
             _isLoaded = true;
+
+            ExportCommand = new DelegateCommand(ExportFee);
             eventAggregator.GetEvent<RSEntryChangedEvent>().Subscribe(LoadFeeData);
             eventAggregator.GetEvent<CalculatorCostChangedEvent>().Subscribe(UpdateTotalCost);
         }
@@ -77,8 +83,13 @@ namespace mFeeCalculator.ViewModels
             FeeModel.CalculateProjectCost();
         }
 
+        private void ExportFee()
+        {
+            Export report = new Export(FeeModel);
+        }
+
         /// <summary>
-        /// Gathers the metadata for all fee structure documents in the appropriate directory.
+        /// Gathers the metadata for all fee structure documents in the FeeStructure directory.
         /// </summary>
         public void LoadFeeStructures()
         {

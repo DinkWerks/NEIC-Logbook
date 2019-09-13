@@ -172,7 +172,7 @@
     <Resource Include="Resources\Icons\cancel.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Icons\report_go.png" />
+    <Resource Include="Resources\Icons\report_go.png" />
     <Content Include="Resources\Tracker_Backend_test.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
