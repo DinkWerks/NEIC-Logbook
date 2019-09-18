@@ -366,9 +366,9 @@
 								<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding RecordSearch.PLSS}" Grid.ColumnSpan="3"/>
 
 								<TextBlock Grid.Row="3" Text="Acres:" Style="{StaticResource Line Header}"/>
-								<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding RecordSearch.Acres}" Margin="0,0,4,0"/>
+								<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding RecordSearch.Acres, StringFormat={}{0:0.###}}" Margin="0,0,4,0"/>
 								<TextBlock Grid.Row="3" Grid.Column="2" Text="Linear Miles:" Style="{StaticResource Line Header}"/>
-								<TextBox Grid.Row="3" Grid.Column="3" Text="{Binding RecordSearch.LinearMiles}"/>
+                                <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding RecordSearch.LinearMiles, StringFormat={}{0:0.###}}"/>
 							</Grid>
 						</GroupBox>
 

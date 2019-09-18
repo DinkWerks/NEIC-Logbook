@@ -7,7 +7,6 @@ namespace Tracker.Core.Models.Fees
     {
         private int _index;
         private string _name;
-        private string _type = "boolean";
         private string _description;
         private bool _isIncurred;
         private decimal _cost;
@@ -32,10 +31,7 @@ namespace Tracker.Core.Models.Fees
             set { SetProperty(ref _dbField, value); }
         }
 
-        public string Type
-        {
-            get { return _type; }
-        }
+        public string Type { get; } = "boolean";
 
         public string Description
         {
@@ -64,9 +60,13 @@ namespace Tracker.Core.Models.Fees
 
         public decimal TotalCost
         {
-            get { return _totalCost; }
+            get { return RoundTotal(_totalCost); }
             set { SetProperty(ref _totalCost, value); }
         }
 
+        public decimal RoundTotal(decimal value)
+        {
+            return decimal.Round(value, 2, System.MidpointRounding.AwayFromZero);
+        }
     }
 }

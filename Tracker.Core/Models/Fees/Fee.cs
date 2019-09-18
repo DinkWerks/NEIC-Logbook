@@ -67,7 +67,7 @@ namespace Tracker.Core.Models.Fees
 
         public decimal TotalProjectCost
         {
-            get { return _totalProjectCost; }
+            get { return RoundTotal(_totalProjectCost); }
             set { SetProperty(ref _totalProjectCost, value); }
         }
 
@@ -179,6 +179,11 @@ namespace Tracker.Core.Models.Fees
                 default:
                     return string.Empty;
             }
+        }
+
+        private decimal RoundTotal(decimal value)
+        {
+            return decimal.Round(value, 2, System.MidpointRounding.AwayFromZero);
         }
     }
 }

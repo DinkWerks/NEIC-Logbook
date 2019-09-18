@@ -6,7 +6,6 @@ namespace Tracker.Core.Models.Fees
     {
         private int _index;
         private string _name;
-        private string _type = "variable";
         private string _description;
         private string _unitName;
         private string _unitNamePlural;
@@ -33,10 +32,7 @@ namespace Tracker.Core.Models.Fees
             set { SetProperty(ref _dbField, value); }
         }
 
-        public string Type
-        {
-            get { return _type; }
-        }
+        public string Type { get; } = "variable";
 
         public string Description
         {
@@ -73,8 +69,13 @@ namespace Tracker.Core.Models.Fees
 
         public decimal TotalCost
         {
-            get { return _totalCost;  }
+            get { return RoundTotal(_totalCost);  }
             private set { SetProperty(ref _totalCost, Count * Cost); }
+        }
+
+        public decimal RoundTotal(decimal value)
+        {
+            return decimal.Round(value, 2, System.MidpointRounding.AwayFromZero);
         }
     }
 }

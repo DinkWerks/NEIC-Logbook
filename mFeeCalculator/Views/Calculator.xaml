@@ -26,9 +26,9 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{Binding Name, StringFormat={}{0}:}" TextWrapping="Wrap"/>
-                <TextBox Grid.Column="1" Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}" TextChanged="CostChangedEvent"/>
+                <TextBox Grid.Column="1" Text="{Binding Count, StringFormat={}{0:0.###}, UpdateSourceTrigger=PropertyChanged}" TextChanged="CostChangedEvent"/>
                 <TextBlock Grid.Column="2" Text="{Binding Cost, StringFormat={}x ${0}}"/>
-                <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0}}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0:0.00}}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="BooleanChargeTemplate" DataType="{x:Type models:BooleanCharge}">
@@ -42,8 +42,8 @@
                 <CheckBox IsChecked="{Binding IsIncurred}" Checked="CostChangedEvent" Unchecked="CostChangedEvent">
                     <TextBlock Text="{Binding Name}" TextWrapping="Wrap"/>
                 </CheckBox>
-                <TextBlock Grid.Column="2" Text="{Binding Cost, StringFormat={}${0}}"/>
-                <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0}}" HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="2" Text="{Binding Cost, StringFormat={}   ${0}}"/>
+                <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0:0.00}}" HorizontalAlignment="Right"/>
             </Grid>
         </DataTemplate>
         <DataTemplate x:Key="CategoricalChargeTemplate" DataType="{x:Type models:CategoricalCharge}">
@@ -56,8 +56,8 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="{Binding Name, StringFormat={}{0}:}" TextWrapping="Wrap"/>
-                <TextBox Grid.Column="1" Text="{Binding Count, UpdateSourceTrigger=PropertyChanged}" TextChanged="CostChangedEvent"/>
-                <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0}}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+                <TextBox Grid.Column="1" Text="{Binding Count, StringFormat={}{0:0.###}, UpdateSourceTrigger=PropertyChanged}" TextChanged="CostChangedEvent"/>
+                <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0:0.00}}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
@@ -170,7 +170,7 @@
         <TextBlock Text="{Binding FeeModel.TotalProjectCost, StringFormat={}Total: ${0}, FallbackValue=Total: $0}" 
                    FontWeight="Bold" FontSize="18" HorizontalAlignment="Right" Margin="0,0,0,10"/>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-            <Button Command="{Binding ExportCommand}">
+            <Button Command="{Binding ExportCommand}" IsEnabled="False">
                 <Image Source="/Tracker.Core;component/Resources/Icons/report_go.png" Width="16" Height="16"/>
             </Button>
         </StackPanel>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -8,32 +9,32 @@ namespace Tracker.Core.StaticTypes
 {
     public class RecordSearchPrefixes
     {
-        public static readonly Prefix A = new Prefix("A", "Shasta County");
-        public static readonly Prefix B = new Prefix("B", "Plumas County");
-        public static readonly Prefix C = new Prefix("C", "Siskiyou County");
-        public static readonly Prefix D = new Prefix("D", "Private/Non-Arch.");
-        public static readonly Prefix E = new Prefix("E", "CFIP's & SIP's");
-        public static readonly Prefix F = new Prefix("F", "VMP's");
-        public static readonly Prefix G = new Prefix("G", "Feds - FMHA, US Army Corps, Etc.");
-        public static readonly Prefix H = new Prefix("H", "State - CALTRANS, DWR, Etc.");
-        public static readonly Prefix I = new Prefix("I", "Lassen County");
-        public static readonly Prefix J = new Prefix("J", "Misc. City/County");
-        public static readonly Prefix K = new Prefix("K", "THP's/CDF Project");
-        public static readonly Prefix L = new Prefix("L", "Butte County");
-        public static readonly Prefix M = new Prefix("M", "Trinity County");
-        public static readonly Prefix N = new Prefix("N", "Sierra County");
-        public static readonly Prefix O = new Prefix("O", "Town of Paradise");
-        public static readonly Prefix P = new Prefix("P", "Modoc County");
-        public static readonly Prefix Q = new Prefix("Q", "City of Oroville");
-        public static readonly Prefix R = new Prefix("R", "City of Chico");
-        public static readonly Prefix S = new Prefix("S", "City of Red Bluff");
-        public static readonly Prefix T = new Prefix("T", "City of Redding");
-        public static readonly Prefix U = new Prefix("U", "City of Shasta Lake");
-        public static readonly Prefix V = new Prefix("V", "City of Weed");
-        public static readonly Prefix W = new Prefix("W", "In-House/Confidentiality Form");
-        public static readonly Prefix X = new Prefix("X", "Tehama County");
-        public static readonly Prefix Y = new Prefix("Y", "Glenn County");
-        public static readonly Prefix Z = new Prefix("Z", "Sutter County");
+        public static readonly Prefix A = new Prefix("A", "Shasta County", "808008900");
+        public static readonly Prefix B = new Prefix("B", "Plumas County", "808008900");
+        public static readonly Prefix C = new Prefix("C", "Siskiyou County", "808008900");
+        public static readonly Prefix D = new Prefix("D", "Private/Non-Arch.", "808008900");
+        public static readonly Prefix E = new Prefix("E", "CFIP's & SIP's", "808008900");
+        public static readonly Prefix F = new Prefix("F", "VMP's", "808008900");
+        public static readonly Prefix G = new Prefix("G", "Feds - FMHA, US Army Corps, Etc.", "808008900");//
+        public static readonly Prefix H = new Prefix("H", "State - CALTRANS, DWR, Etc.", "808008900");
+        public static readonly Prefix I = new Prefix("I", "Lassen County", "808008900");
+        public static readonly Prefix J = new Prefix("J", "Misc. City/County", "808008900");
+        public static readonly Prefix K = new Prefix("K", "THP's/CDF Project", "808008900"); //
+        public static readonly Prefix L = new Prefix("L", "Butte County", "808008900");
+        public static readonly Prefix M = new Prefix("M", "Trinity County", "808008900");
+        public static readonly Prefix N = new Prefix("N", "Sierra County", "808008900");
+        public static readonly Prefix O = new Prefix("O", "Town of Paradise", "808008900");
+        public static readonly Prefix P = new Prefix("P", "Modoc County", "808008900");
+        public static readonly Prefix Q = new Prefix("Q", "City of Oroville", "808008900");
+        public static readonly Prefix R = new Prefix("R", "City of Chico", "808008900");
+        public static readonly Prefix S = new Prefix("S", "City of Red Bluff", "808008900");
+        public static readonly Prefix T = new Prefix("T", "City of Redding", "808008900");
+        public static readonly Prefix U = new Prefix("U", "City of Shasta Lake", "808008900");
+        public static readonly Prefix V = new Prefix("V", "City of Weed", "808008900");
+        public static readonly Prefix W = new Prefix("W", "In-House/Confidentiality Form", "808008900");
+        public static readonly Prefix X = new Prefix("X", "Tehama County", "808008900");
+        public static readonly Prefix Y = new Prefix("Y", "Glenn County", "808008900");
+        public static readonly Prefix Z = new Prefix("Z", "Sutter County", "808008900");
 
         public static IEnumerable<Prefix> Values
         {
@@ -66,17 +67,26 @@ namespace Tracker.Core.StaticTypes
                 yield return Z;
             }
         }
+
+        public static Prefix GetPrefix(string prefix)
+        {
+            Type type = typeof(RecordSearchPrefixes);
+            FieldInfo field = type.GetField(prefix.ToUpper());
+            return (Prefix)field.GetValue(null);
+        }
     }
 
     public class Prefix
     {
         public string Code { get; private set; }
         public string Name { get; private set; }
+        public string BillingCode { get; private set; }
 
-        public Prefix(string code, string name)
+        public Prefix(string code, string name, string billingCode)
         {
             Code = code;
             Name = name;
+            BillingCode = billingCode;
         }
 
         public override string ToString()

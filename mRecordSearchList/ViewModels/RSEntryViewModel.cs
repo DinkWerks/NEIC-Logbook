@@ -92,7 +92,7 @@ namespace mRecordSearchList.ViewModels
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
-            
+
 
             ChangeFileNumCommand = new DelegateCommand(ChangeFileNum);
             NavigateCommand = new DelegateCommand<string>(Navigate);
@@ -177,17 +177,29 @@ namespace mRecordSearchList.ViewModels
         private void CopyRequestor(string destination)
         {
             if (destination == "Mailing")
-                RecordSearch.MailingAddress = new Address(RecordSearch.MailingAddress.AddressID, RecordSearch.Requestor.AddressModel);
+                RecordSearch.MailingAddress = CopyAddress(RecordSearch.MailingAddress, RecordSearch.Requestor.AddressModel);
             else if (destination == "Billing")
-                RecordSearch.BillingAddress = new Address(RecordSearch.BillingAddress.AddressID, RecordSearch.Requestor.AddressModel);
+                RecordSearch.BillingAddress = CopyAddress(RecordSearch.BillingAddress, RecordSearch.Requestor.AddressModel);
         }
 
         private void CopyAffiliation(string destination)
         {
             if (destination == "Mailing")
-                RecordSearch.MailingAddress = new Address(RecordSearch.MailingAddress.AddressID, RecordSearch.ClientModel.AddressModel);
+                RecordSearch.MailingAddress = CopyAddress(RecordSearch.MailingAddress, RecordSearch.ClientModel.AddressModel);
             else if (destination == "Billing")
-                RecordSearch.BillingAddress = new Address(RecordSearch.BillingAddress.AddressID, RecordSearch.ClientModel.AddressModel);
+                RecordSearch.MailingAddress = CopyAddress(RecordSearch.BillingAddress, RecordSearch.ClientModel.AddressModel);
+        }
+
+        private Address CopyAddress(Address toReplace, Address toCopy)
+        {
+            try
+            {
+                return new Address(toReplace.AddressID, toCopy);
+            }
+            catch
+            {
+                return toReplace;
+            }
         }
 
         private void LoadNewRequestor(int value)

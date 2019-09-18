@@ -69,18 +69,21 @@ namespace mReporting.ViewModels
             object[] repParams = new object[] { _rss };
             foreach (Type t in reportTypes)
             {
-                IReport instance = (IReport)Activator.CreateInstance(t, repParams);
-
-                switch (instance.Category)
+                if (t.IsPublic)
                 {
-                    case ReportCategories.Billing:
-                        BillingReports.Add(instance);
-                        break;
-                    case ReportCategories.OHP:
-                        OHPReports.Add(instance);
-                        break;
-                    default:
-                        break;
+                    IReport instance = (IReport)Activator.CreateInstance(t, repParams);
+
+                    switch (instance.Category)
+                    {
+                        case ReportCategories.Billing:
+                            BillingReports.Add(instance);
+                            break;
+                        case ReportCategories.OHP:
+                            OHPReports.Add(instance);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
         }

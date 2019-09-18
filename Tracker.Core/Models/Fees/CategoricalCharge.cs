@@ -77,7 +77,7 @@ namespace Tracker.Core.Models.Fees
 
         public decimal TotalCost
         {
-            get { return _totalCost; }
+            get { return RoundTotal(_totalCost); }
             private set { SetProperty(ref _totalCost, value); }
         }
 
@@ -135,6 +135,11 @@ namespace Tracker.Core.Models.Fees
                 }
             }
             return 0;
+        }
+
+        public decimal RoundTotal(decimal value)
+        {
+            return decimal.Round(value, 2, System.MidpointRounding.AwayFromZero);
         }
     }
 }

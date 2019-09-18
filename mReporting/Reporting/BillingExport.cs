@@ -1,12 +1,14 @@
-﻿using Prism.Regions;
-using System;
+﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using Tracker.Core.Extensions;
 using Tracker.Core.Models;
 using Tracker.Core.Models.Fees;
 using Tracker.Core.Services;
+using Tracker.Core.StaticTypes;
 using Word = Microsoft.Office.Interop.Word;
 
 namespace mReporting.Reporting
@@ -14,12 +16,14 @@ namespace mReporting.Reporting
     public class BillingExport : IReport
     {
         private IRecordSearchService _rss;
-        private decimal _total;
+        private List<RecordSearch> _recordSearches;
+
         private object missing;
         private Word.Document document;
         private ObservableCollection<object> _parameterPayload = new ObservableCollection<object>();
         private int _errorCount;
 
+        //Properties
         public string Name { get; set; }
         public string Description { get; set; }
         public ReportCategories Category { get; set; }
@@ -49,7 +53,7 @@ namespace mReporting.Reporting
 
             if (VerifyParameters())
             {
-                List<RecordSearch> recordSearches = _rss.GetRecordSearchesByCriteria(
+                _recordSearches = _rss.GetRecordSearchesByCriteria(
                     string.Format("WHERE DateOfResponse BETWEEN #{0}# AND #{1}# AND Status = 'Awaiting Billing'",
                     StartDate.ToShortDateString(), EndDate.ToShortDateString()
                     ));
@@ -64,14 +68,9 @@ namespace mReporting.Reporting
                     document = wordApp.Documents.Add(ref missing, ref missing, ref missing, ref missing);
                     document.Paragraphs.SpaceAfter = 0;
 
-                    foreach (RecordSearch record in recordSearches)
-                        _total += record.TotalFee;
-
-                    AddHeader();
-                    foreach (RecordSearch record in recordSearches)
-                    {
-                        AddEntry(record);
-                    }
+                    GenerateAccountReport("808008900");
+                    document.Words.Last.InsertBreak(Word.WdBreakType.wdPageBreak);
+                    GenerateAccountReport("757050700");
                 }
                 catch (Exception exception)
                 {
@@ -96,14 +95,29 @@ namespace mReporting.Reporting
                 return false;
         }
 
-        private void AddHeader()
+        private void GenerateAccountReport(string account)
+        {
+            List<RecordSearch> recordSearchSelection = _recordSearches.Where(r => RecordSearchPrefixes.GetPrefix(r.ICTypePrefix).BillingCode == account).ToList();
+            decimal total = 0;
+
+            foreach (RecordSearch record in recordSearchSelection)
+                total += record.TotalFee;
+
+            AddHeader(account, total);
+            foreach (RecordSearch record in recordSearchSelection)
+            {
+                AddEntry(record);
+            }
+        }
+
+        private void AddHeader(string account, decimal total)
         {
             Word.Paragraph header = document.Content.Paragraphs.Add(ref missing);
             header.Range.Font.Bold = 1;
             header.Range.Font.Size = 14;
             header.Range.ParagraphFormat.SpaceAfter = 0;
             header.Range.Text = "Northeast Information Center - Billing Through " + DateTime.Now.Date.ToDateString() + Environment.NewLine +
-                "Credit Account 808008900   $" + _total;
+                "Credit Account " + account + "   $" + total;
             header.Range.InsertParagraphAfter();
             InsertLine();
         }

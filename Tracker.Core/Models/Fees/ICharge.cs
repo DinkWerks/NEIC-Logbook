@@ -15,5 +15,6 @@ namespace Tracker.Core.Models.Fees
         string Description { get; set; }
         decimal Cost { get; set; }
         decimal TotalCost { get; }
+        decimal RoundTotal(decimal value);
     }
 }

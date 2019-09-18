@@ -87,8 +87,8 @@ namespace Tracker.Core.Services
                         MainCounty = reader.GetStringSafe(index++),
                         AdditionalCounties = ParseAdditionalCounties(reader.GetStringSafe(index++)),
                         PLSS = reader.GetStringSafe(index++), //25
-                        Acres = reader.GetInt32Safe(index++),
-                        LinearMiles = reader.GetInt32Safe(index++),
+                        Acres = reader.GetDecimalSafe(index++),
+                        LinearMiles = reader.GetDecimalSafe(index++),
                         AreResourcesInProject = reader.GetBooleanSafe(index++),
                         Recommendation = reader.GetStringSafe(index++),
                         IsReportReceived = reader.GetBooleanSafe(index++), //30
@@ -170,8 +170,8 @@ namespace Tracker.Core.Services
                             MainCounty = reader.GetStringSafe(index++),
                             AdditionalCounties = ParseAdditionalCounties(reader.GetStringSafe(index++)),
                             PLSS = reader.GetStringSafe(index++), //25
-                            Acres = reader.GetInt32Safe(index++),
-                            LinearMiles = reader.GetInt32Safe(index++),
+                            Acres = reader.GetDecimalSafe(index++),
+                            LinearMiles = reader.GetDecimalSafe(index++),
                             AreResourcesInProject = reader.GetBooleanSafe(index++),
                             Recommendation = reader.GetStringSafe(index++),
                             IsReportReceived = reader.GetBooleanSafe(index++), //30

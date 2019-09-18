@@ -38,8 +38,8 @@ namespace Tracker.Core.Models
         private string _mainCounty;
         private ObservableCollection<County> _additionalCounties = new ObservableCollection<County>();
         private string _plss;
-        private int _acres;
-        private int _linearMiles;
+        private decimal _acres;
+        private decimal _linearMiles;
         //Results
         private bool _areResourcesInProject;
         private string _recommendation;
@@ -264,13 +264,13 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _plss, value); }
         }
 
-        public int Acres
+        public decimal Acres
         {
             get { return _acres; }
             set { SetProperty(ref _acres, value); }
         }
 
-        public int LinearMiles
+        public decimal LinearMiles
         {
             get { return _linearMiles; }
             set { SetProperty(ref _linearMiles, value); }
