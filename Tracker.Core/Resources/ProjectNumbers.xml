@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ProjectNumbers>
+  <Number IsActive="true">
+    <Name>808008900</Name>
+    <Description>Small Projects</Description>
+  </Number>
+  <Number IsActive="true">
+    <Name>757000600</Name>
+    <Description>State of California Projects</Description>
+  </Number>
+  <Number IsActive="true">
+    <Name>73132</Name>
+    <Description>Department of Water Resources</Description>
+  </Number>
+  <Number IsActive="true">
+    <Name>757050700</Name>
+    <Description>Federal Projects</Description>
+  </Number>
+  <Number IsActive="true">
+    <Name>CALFIRE</Name>
+    <Description>CALFIRE Projects (Special Template)</Description>
+  </Number>
+</ProjectNumbers>

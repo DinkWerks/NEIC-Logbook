@@ -64,13 +64,15 @@ namespace mReporting.Reporting
                         ShowAnimation = false,
                         Visible = true
                     };
-                    missing = System.Reflection.Missing.Value;
+                    missing = Missing.Value;
                     document = wordApp.Documents.Add(ref missing, ref missing, ref missing, ref missing);
                     document.Paragraphs.SpaceAfter = 0;
 
-                    GenerateAccountReport("808008900");
-                    document.Words.Last.InsertBreak(Word.WdBreakType.wdPageBreak);
-                    GenerateAccountReport("757050700");
+
+                    foreach (ProjectNumber account in ProjectNumbers.ActiveProjectNumbers)
+                    {
+                        GenerateAccountReport(account.ProjectID);
+                    }
                 }
                 catch (Exception exception)
                 {
@@ -97,9 +99,13 @@ namespace mReporting.Reporting
 
         private void GenerateAccountReport(string account)
         {
-            List<RecordSearch> recordSearchSelection = _recordSearches.Where(r => RecordSearchPrefixes.GetPrefix(r.ICTypePrefix).BillingCode == account).ToList();
-            decimal total = 0;
+            List<RecordSearch> recordSearchSelection = _recordSearches.Where(r => r.ProjectNumber.ProjectID == account).ToList();
 
+            //Skip if no entries with that 
+            if (recordSearchSelection.Count <= 0)
+                return;
+
+            decimal total = 0;
             foreach (RecordSearch record in recordSearchSelection)
                 total += record.TotalFee;
 
@@ -108,6 +114,7 @@ namespace mReporting.Reporting
             {
                 AddEntry(record);
             }
+            document.Words.Last.InsertBreak(Word.WdBreakType.wdPageBreak);
         }
 
         private void AddHeader(string account, decimal total)
@@ -212,10 +219,10 @@ namespace mReporting.Reporting
             string fileNumber = "IC File # " + record.GetFileNumberFormatted();
 
             if (string.IsNullOrWhiteSpace(record.Requestor.FirstName))
-                projectInfo.Range.Text = string.Format("{0}\r\n>>\r\nRE: {1}; {2}\r\n>>",
+                projectInfo.Range.Text = string.Format("{0}\r\nRE: {1}; {2}\r\n",
                     attentionTo, record.ProjectName, fileNumber);
             else
-                projectInfo.Range.Text = string.Format("{0}\r\n>>\r\nRE: {1} (Requested By: {2} {3}); {4}\r\n>>",
+                projectInfo.Range.Text = string.Format("{0}\r\nRE: {1} (Requested By: {2} {3}); {4}\r\n",
                     attentionTo, record.ProjectName, record.Requestor.FirstName, record.Requestor.LastName, fileNumber);
 
             object startRange = projectInfo.Range.End - (fileNumber.Length + 4);

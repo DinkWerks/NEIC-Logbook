@@ -13,6 +13,7 @@ using mFeeCalculator.Views;
 using mRecordSearchList.Views;
 using mRecordSearchList.Notifications;
 using Tracker.Core;
+using Tracker.Core.StaticTypes;
 
 namespace mRecordSearchList.ViewModels
 {
@@ -28,10 +29,12 @@ namespace mRecordSearchList.ViewModels
         private int _selectedRequestor;
         private int _selectedClient;
         private bool _isLoaded = false;
+        private ProjectNumber _selectedProjectNumber;
 
         public List<Person> PeopleList { get; set; }
         public List<Client> ClientList { get; set; }
         public List<Staff> StaffList { get; set; }
+        public List<ProjectNumber> ActiveProjectNumbers { get; set; }
 
         public RecordSearch RecordSearch
         {
@@ -62,6 +65,12 @@ namespace mRecordSearchList.ViewModels
             }
         }
 
+        public ProjectNumber SelectedProjectNumber
+        {
+            get { return _selectedProjectNumber; }
+            set { SetProperty(ref _selectedProjectNumber, value); }
+        }
+
         //Commands
         public DelegateCommand ChangeFileNumCommand { get; private set; }
         public DelegateCommand<string> NavigateCommand { get; private set; }
@@ -87,6 +96,7 @@ namespace mRecordSearchList.ViewModels
             PeopleList = personService.CompletePeopleList;
             ClientList = clientService.CompleteClientList;
             StaffList = staffService.CompleteStaffList;
+            ActiveProjectNumbers = ProjectNumbers.ActiveProjectNumbers;
             StaffList.Insert(0, new Staff());
 
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
@@ -259,6 +269,7 @@ namespace mRecordSearchList.ViewModels
                 //Sets the Dropdown menu for requestor and client
                 SelectedRequestor = RecordSearch.RequestorID;
                 SelectedClient = RecordSearch.ClientID;
+                SelectedProjectNumber = RecordSearch.ProjectNumber;
 
                 _isLoaded = true;
                 _ea.GetEvent<RSEntryChangedEvent>().Publish();

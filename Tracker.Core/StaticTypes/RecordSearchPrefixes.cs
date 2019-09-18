@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tracker.Core.StaticTypes
 {
@@ -15,11 +12,11 @@ namespace Tracker.Core.StaticTypes
         public static readonly Prefix D = new Prefix("D", "Private/Non-Arch.", "808008900");
         public static readonly Prefix E = new Prefix("E", "CFIP's & SIP's", "808008900");
         public static readonly Prefix F = new Prefix("F", "VMP's", "808008900");
-        public static readonly Prefix G = new Prefix("G", "Feds - FMHA, US Army Corps, Etc.", "808008900");//
+        public static readonly Prefix G = new Prefix("G", "Feds - FMHA, US Army Corps, Etc.", "808008900");
         public static readonly Prefix H = new Prefix("H", "State - CALTRANS, DWR, Etc.", "808008900");
         public static readonly Prefix I = new Prefix("I", "Lassen County", "808008900");
         public static readonly Prefix J = new Prefix("J", "Misc. City/County", "808008900");
-        public static readonly Prefix K = new Prefix("K", "THP's/CDF Project", "808008900"); //
+        public static readonly Prefix K = new Prefix("K", "THP's/CDF Project", "808008900");
         public static readonly Prefix L = new Prefix("L", "Butte County", "808008900");
         public static readonly Prefix M = new Prefix("M", "Trinity County", "808008900");
         public static readonly Prefix N = new Prefix("N", "Sierra County", "808008900");

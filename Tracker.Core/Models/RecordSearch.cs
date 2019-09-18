@@ -53,7 +53,7 @@ namespace Tracker.Core.Models
         private bool _isPrePaid;
         private decimal _totalFee;
         //Billing Information
-        private string _projectNumber;
+        private ProjectNumber _projectNumber;
         private string _invoiceNumber;
         private string _checkName;
         private string _checkNumber;
@@ -341,7 +341,7 @@ namespace Tracker.Core.Models
         #endregion
 
         #region Billing Information
-        public string ProjectNumber
+        public ProjectNumber ProjectNumber
         {
             get { return _projectNumber; }
             set { SetProperty(ref _projectNumber, value); }

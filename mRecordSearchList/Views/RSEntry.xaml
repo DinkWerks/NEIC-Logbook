@@ -116,8 +116,22 @@
 
 						<DockPanel LastChildFill="False">
 							<TextBlock Text="Project #: " Style="{StaticResource Line Header}"/>
-							<TextBox Text="{Binding RecordSearch.ProjectNumber}" Width="200"/>
-						</DockPanel>
+                            <ComboBox SelectedItem="{Binding RecordSearch.ProjectNumber}"
+                                      ItemsSource="{Binding ActiveProjectNumbers}" Width="200">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding ProjectID}"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Description}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ComboBox>
+                        </DockPanel>
 
 						<DockPanel LastChildFill="False" Margin="0,2,0,0">
 							<TextBlock Text="Invoice #: " Style="{StaticResource Line Header}"/>
@@ -220,23 +234,22 @@
 								</Button>
 								<ComboBox ItemsSource="{Binding ClientList}" SelectedValue="{Binding SelectedClient}"  SelectedValuePath="ID" 
                                           IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" IsEditable="True">
-									<ComboBox.ItemTemplate>
-										<DataTemplate>
-											<StackPanel Orientation="Horizontal">
-												<Image Source="{Binding Standing.Icon, Converter={StaticResource StandingToImageConverter}}"/>
-												<TextBlock>
-													<TextBlock.Text>
-														<MultiBinding Converter="{StaticResource ClientNameConverter}">
-															<Binding Path="ClientName"/>
-															<Binding Path="OfficeName"/>
-														</MultiBinding>
-													</TextBlock.Text>
-												</TextBlock>
-											</StackPanel>
-										</DataTemplate>
-									</ComboBox.ItemTemplate>
-
-								</ComboBox>
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding Standing.Icon, Converter={StaticResource StandingToImageConverter}}"/>
+                                                <TextBlock>
+                                                    <TextBlock.Text>
+                                                        <MultiBinding Converter="{StaticResource ClientNameConverter}">
+                                                            <Binding Path="ClientName"/>
+                                                            <Binding Path="OfficeName"/>
+                                                        </MultiBinding>
+                                                    </TextBlock.Text>
+                                                </TextBlock>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
 							</DockPanel>
 
 							<TextBlock Grid.Row="1" Text="Status:" Style="{StaticResource Line Header}"/>

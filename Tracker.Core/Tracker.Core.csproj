@@ -144,6 +144,7 @@
     <Compile Include="StaticTypes\ClientStandings.cs" />
     <Compile Include="StaticTypes\Counties.cs" />
     <Compile Include="StaticTypes\DisclosureLevels.cs" />
+    <Compile Include="StaticTypes\ProjectNumbers.cs" />
     <Compile Include="StaticTypes\StaticData.cs" />
     <Compile Include="StaticTypes\RecordSearchPrefixes.cs" />
   </ItemGroup>
@@ -173,6 +174,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Icons\report_go.png" />
+    <Content Include="Resources\ProjectNumbers.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\Tracker_Backend_test.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

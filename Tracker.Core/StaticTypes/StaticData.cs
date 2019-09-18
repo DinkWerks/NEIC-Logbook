@@ -21,7 +21,7 @@ namespace Tracker.Core.StaticTypes
             "Project Review",
             "Record Search - Confidential",
             "Record Search - Non-Confidential",
-            "Priority Response",
+            "Priority/Rapid Response",
             "Emergency",
             "Ownership Wide/5 Year Update",
             "Subscription"

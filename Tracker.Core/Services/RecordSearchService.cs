@@ -97,7 +97,7 @@ namespace Tracker.Core.Services
                         FeeVersion = reader.GetStringSafe(index++),
                         FeeID = reader.GetInt32Safe(index++),
                         TotalFee = reader.GetDecimalSafe(index++),
-                        ProjectNumber = reader.GetStringSafe(index++),
+                        ProjectNumber = ParseProjectNumber(reader.GetStringSafe(index++)),
                         InvoiceNumber = reader.GetStringSafe(index++),
                         CheckName = reader.GetStringSafe(index++),
                         CheckNumber = reader.GetStringSafe(index++),
@@ -180,7 +180,7 @@ namespace Tracker.Core.Services
                             FeeVersion = reader.GetStringSafe(index++),
                             FeeID = reader.GetInt32Safe(index++),
                             TotalFee = reader.GetDecimalSafe(index++),
-                            ProjectNumber = reader.GetStringSafe(index++),
+                            ProjectNumber = ParseProjectNumber(reader.GetStringSafe(index++)),
                             InvoiceNumber = reader.GetStringSafe(index++),
                             CheckName = reader.GetStringSafe(index++),
                             CheckNumber = reader.GetStringSafe(index++),
@@ -383,7 +383,7 @@ namespace Tracker.Core.Services
                     sqlCommand.Parameters.AddWithValue("@FeeID", rs.FeeID);
                     sqlCommand.Parameters.AddWithValue("@TotalCost", rs.TotalFee);
 
-                    sqlCommand.Parameters.AddWithValue("@ProjectNumber", rs.ProjectNumber ?? Convert.DBNull);
+                    sqlCommand.Parameters.AddWithValue("@ProjectNumber", rs.ProjectNumber.ProjectID ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@InvoiceNumber", rs.InvoiceNumber ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@CheckName", rs.CheckName ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@CheckNumber", rs.CheckNumber ?? Convert.DBNull);
@@ -453,6 +453,11 @@ namespace Tracker.Core.Services
                 }
             }
             return returnCollection;
+        }
+
+        private ProjectNumber ParseProjectNumber(string projectNumber)
+        {
+            return ProjectNumbers.AllProjectNumbers.FirstOrDefault(pn => pn.ProjectID == projectNumber);
         }
 
         private string WriteAdditionalCounties(ObservableCollection<County> additionalCounties)
