@@ -16,6 +16,7 @@
         <DataTemplate x:Key="FeeSeparator" DataType="{x:Type models:FeeSeparator}">
             <Separator Margin="10"/>
         </DataTemplate>
+        
         <DataTemplate x:Key="VariableChargeTemplate" DataType="{x:Type models:VariableCharge}">
             <Grid Margin="0,4">
                 <Grid.ColumnDefinitions>
@@ -31,6 +32,7 @@
                 <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0:0.00}}" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
             </Grid>
         </DataTemplate>
+        
         <DataTemplate x:Key="BooleanChargeTemplate" DataType="{x:Type models:BooleanCharge}">
             <Grid Margin="0,4">
                 <Grid.ColumnDefinitions>
@@ -46,6 +48,7 @@
                 <TextBlock Grid.Column="3" Text="{Binding TotalCost, StringFormat={}${0:0.00}}" HorizontalAlignment="Right"/>
             </Grid>
         </DataTemplate>
+        
         <DataTemplate x:Key="CategoricalChargeTemplate" DataType="{x:Type models:CategoricalCharge}">
             <Grid Margin="0,4">
                 <Grid.ColumnDefinitions>
@@ -156,7 +159,7 @@
             <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="Adjustment Explanation:"/>
             <TextBox Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding FeeModel.AdjustmentExplanation}" TextChanged="CostChangedEvent"/>
 
-            <CheckBox Grid.Row="3" Content="Priority/Rapid Response (50% surcharge)" IsChecked="{Binding FeeModel.IsPriority}" 
+            <CheckBox Grid.Row="3" Content="Priority Response (50% surcharge)" IsChecked="{Binding FeeModel.IsPriority}" 
                       Checked="CostChangedEvent" Unchecked="CostChangedEvent" Margin="0,5"/>
             <CheckBox Grid.Row="4" Content="Rapid Response (50% surcharge on staff time)" IsChecked="{Binding FeeModel.IsRapidResponse}"
                       Checked="CostChangedEvent" Unchecked="CostChangedEvent" Margin="0,0,0,5"/>

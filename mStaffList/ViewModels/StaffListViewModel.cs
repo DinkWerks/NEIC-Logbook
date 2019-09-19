@@ -22,7 +22,7 @@ namespace mStaffList.ViewModels
         private Staff _selectedStaff;
         private ObservableCollection<RecordSearch> _staffRecordSearches;
         private string _newPersonName;
-        
+
         public ObservableCollection<Staff> StaffMembers
         {
             get { return _staffMembers; }
@@ -32,10 +32,11 @@ namespace mStaffList.ViewModels
         public Staff SelectedStaff
         {
             get { return _selectedStaff; }
-            set {
+            set
+            {
                 if (_selectedStaff != null)
                     UpdatePerson();
-                if (value != null)
+                if (value != null && value.Name != string.Empty)
                     StaffRecordSearches = new ObservableCollection<RecordSearch>(_rss.GetPartialRecordSearchesByCriteria("WHERE Processor = \"" + value.Name + "\""));
                 SetProperty(ref _selectedStaff, value);
             }
@@ -67,7 +68,6 @@ namespace mStaffList.ViewModels
             _ef = efService;
 
             StaffMembers = new ObservableCollection<Staff>(staffService.CompleteStaffList);
-            //StaffMembers = new ObservableCollection<Staff>(_ef.tblStaff.ToList());
 
             AddPersonCommand = new DelegateCommand<string>(AddPerson);
             DeletePersonCommand = new DelegateCommand(DeletePerson);

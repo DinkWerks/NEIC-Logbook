@@ -44,7 +44,7 @@
                         <Style.Resources>
                             <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
                                 <VisualBrush.Visual>
-                                    <Label Content="Name" Foreground="Gray" />
+                                    <Label Content="Name" Foreground="Gray"/>
                                 </VisualBrush.Visual>
                             </VisualBrush>
                         </Style.Resources>
@@ -127,9 +127,9 @@
                 <DataTemplate>
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="4*"/>
+                            <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="1*"/>
-                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock>
                             <TextBlock.Text>

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Prism.Interactivity.InteractionRequest;
+﻿using Prism.Interactivity.InteractionRequest;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Regions;
@@ -14,6 +13,9 @@ using mRecordSearchList.Views;
 using mRecordSearchList.Notifications;
 using Tracker.Core;
 using Tracker.Core.StaticTypes;
+using System.Collections.ObjectModel;
+using System.Windows.Data;
+using System.Linq;
 
 namespace mRecordSearchList.ViewModels
 {
@@ -25,16 +27,40 @@ namespace mRecordSearchList.ViewModels
         private readonly IPersonService _ps;
         private readonly IClientService _cs;
         private readonly IStaffService _ss;
+        private ObservableCollection<Person> _peopleList;
+        private ObservableCollection<Client> _clientList;
+        private ObservableCollection<Staff> _staffList;
+        private ObservableCollection<ProjectNumber> _activeProjectNumbers;
         private RecordSearch _recordSearch;
         private int _selectedRequestor;
         private int _selectedClient;
         private bool _isLoaded = false;
         private ProjectNumber _selectedProjectNumber;
 
-        public List<Person> PeopleList { get; set; }
-        public List<Client> ClientList { get; set; }
-        public List<Staff> StaffList { get; set; }
-        public List<ProjectNumber> ActiveProjectNumbers { get; set; }
+
+        public ObservableCollection<Person> PeopleList
+        {
+            get { return _peopleList; }
+            set { SetProperty(ref _peopleList, value); }
+        }
+
+        public ObservableCollection<Client> ClientList
+        {
+            get { return _clientList; }
+            set { SetProperty(ref _clientList, value); }
+        }
+
+        public ObservableCollection<Staff> StaffList
+        {
+            get { return _staffList; }
+            set { SetProperty(ref _staffList, value); }
+        }
+
+        public ObservableCollection<ProjectNumber> ActiveProjectNumbers
+        {
+            get { return _activeProjectNumbers; }
+            set { SetProperty(ref _activeProjectNumbers, value); }
+        }
 
         public RecordSearch RecordSearch
         {
@@ -93,16 +119,10 @@ namespace mRecordSearchList.ViewModels
             _ps = personService;
             _cs = clientService;
             _ss = staffService;
-            PeopleList = personService.CompletePeopleList;
-            ClientList = clientService.CompleteClientList;
-            StaffList = staffService.CompleteStaffList;
-            ActiveProjectNumbers = ProjectNumbers.ActiveProjectNumbers;
-            StaffList.Insert(0, new Staff());
 
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
-
 
             ChangeFileNumCommand = new DelegateCommand(ChangeFileNum);
             NavigateCommand = new DelegateCommand<string>(Navigate);
@@ -266,10 +286,17 @@ namespace mRecordSearchList.ViewModels
                 RecordSearch = _rss.CurrentRecordSearch;
                 RecordSearch.Status = RecordSearch.CalculateStatus();
 
-                //Sets the Dropdown menu for requestor and client
+                //Set dropdown menus here
+                PeopleList = new ObservableCollection<Person>(_ps.CompletePeopleList);
+                ClientList = new ObservableCollection<Client>(_cs.CompleteClientList);
+                StaffList = new ObservableCollection<Staff>(_ss.CompleteStaffList.OrderBy(s => s.Name));
+                ActiveProjectNumbers = new ObservableCollection<ProjectNumber>(ProjectNumbers.ActiveProjectNumbers);
+
+                //Sets the Dropdown menu selection for requestor and client
                 SelectedRequestor = RecordSearch.RequestorID;
                 SelectedClient = RecordSearch.ClientID;
                 SelectedProjectNumber = RecordSearch.ProjectNumber;
+                ActiveProjectNumbers = new ObservableCollection<ProjectNumber>(ProjectNumbers.ActiveProjectNumbers);
 
                 _isLoaded = true;
                 _ea.GetEvent<RSEntryChangedEvent>().Publish();

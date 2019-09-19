@@ -19,13 +19,13 @@ namespace Tracker.ViewModels
     public class SettingsScreenViewModel : BindableBase, IActiveAware, INavigationAware
     {
         private List<string> _feeStructures = new List<string>();
-        private IEventAggregator _ea;
-        private IRecordSearchService _rs;
-        private IPersonService _ps;
-        private IFeeService _fs;
-        private IClientService _cs;
-        private IAddressService _as;
-        private IStaffService _ss;
+        private readonly IEventAggregator _ea;
+        private readonly IRecordSearchService _rs;
+        private readonly IPersonService _ps;
+        private readonly IFeeService _fs;
+        private readonly IClientService _cs;
+        private readonly IAddressService _as;
+        private readonly IStaffService _ss;
         private bool _isActive;
         
 
@@ -93,6 +93,7 @@ namespace Tracker.ViewModels
 
                 _cs.CompleteClientList = _cs.GetAllPartialClients();
                 _ps.CompletePeopleList = _ps.GetAllPartialPeople();
+                _ss.CompleteStaffList = _ss.GetAllStaff();
             }
         }
 
@@ -101,6 +102,7 @@ namespace Tracker.ViewModels
             var currentDirectory = Directory.GetCurrentDirectory();
             var filePath = Path.Combine(currentDirectory, @"Resources\FeeStructures\");
             var feeStructures = Directory.GetFiles(filePath);
+
             foreach (string feeStructure in feeStructures)
             {
                 string fileName = Path.GetFileName(feeStructure);

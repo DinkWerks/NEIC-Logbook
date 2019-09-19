@@ -51,6 +51,7 @@
   <ItemGroup>
     <Compile Include="Converters\AdditionalCountyToBoolConverter.cs" />
     <Compile Include="Converters\AdditionalCountyToBoolInitialConverter.cs" />
+    <Compile Include="Converters\BoolToActiveConverter.cs" />
     <Compile Include="Converters\ClientNameConverter.cs" />
     <Compile Include="Converters\RSIDFormatter.cs" />
     <Compile Include="Converters\StandingToImageConverter.cs" />
