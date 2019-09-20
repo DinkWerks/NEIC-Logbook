@@ -383,7 +383,10 @@ namespace Tracker.Core.Services
                     sqlCommand.Parameters.AddWithValue("@FeeID", rs.FeeID);
                     sqlCommand.Parameters.AddWithValue("@TotalCost", rs.TotalFee);
 
-                    sqlCommand.Parameters.AddWithValue("@ProjectNumber", rs.ProjectNumber.ProjectID ?? Convert.DBNull);
+                    if (rs.ProjectNumber != null)
+                        sqlCommand.Parameters.AddWithValue("@ProjectNumber", rs.ProjectNumber.ProjectID ?? Convert.DBNull);
+                    else
+                        sqlCommand.Parameters.AddWithValue("@ProjectNumber", Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@InvoiceNumber", rs.InvoiceNumber ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@CheckName", rs.CheckName ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@CheckNumber", rs.CheckNumber ?? Convert.DBNull);
@@ -510,7 +513,7 @@ namespace Tracker.Core.Services
                 {
                     if (string.IsNullOrWhiteSpace(suffix))
                     {
-                        sqlCommand.CommandText = "SELECT ID FROM tblRecordSearches WHERE ICPrefix = @prefix AND ICYear = @year AND ICEnumeration = @enumeration";
+                        sqlCommand.CommandText = "SELECT ID FROM tblRecordSearches WHERE ICPrefix = @prefix AND ICYear = @year AND ICEnumeration = @enumeration AND ICSuffix = ''";
                         sqlCommand.Parameters.Add(new OleDbParameter("@prefix", prefix));
                         sqlCommand.Parameters.Add(new OleDbParameter("@year", year));
                         sqlCommand.Parameters.Add(new OleDbParameter("@enumeration", enumeration));

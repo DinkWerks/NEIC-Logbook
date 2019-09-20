@@ -97,6 +97,8 @@ namespace mRecordSearchList.ViewModels
             IsDistinctWarningVisible = "Hidden";
             Year = DateTime.Today.Year.ToString().ToString().Substring(2, 2);
         }
+
+        //Methods
         private void Cancel()
         {
             _notification.Confirmed = false;
