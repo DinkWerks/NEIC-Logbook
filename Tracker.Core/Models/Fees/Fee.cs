@@ -11,6 +11,7 @@ namespace Tracker.Core.Models.Fees
         private int _id;
         private string _feeVersion;
         private ObservableCollection<ICharge> _charges = new ObservableCollection<ICharge>();
+        private decimal _subtotal;
         private decimal _totalProjectCost;
         private decimal _adjustment = 0;
         public string _adjustmentExplanation;
@@ -69,6 +70,12 @@ namespace Tracker.Core.Models.Fees
         {
             get { return RoundTotal(_totalProjectCost); }
             set { SetProperty(ref _totalProjectCost, value); }
+        }
+
+        public decimal Subtotal
+        {
+            get { return _subtotal; }
+            set { SetProperty(ref _subtotal, value); }
         }
 
         public Fee(string version)
@@ -153,6 +160,7 @@ namespace Tracker.Core.Models.Fees
             if (IsEmergency)
                 surcharge += runningTotal;
 
+            Subtotal = runningTotal + Adjustment;
             TotalProjectCost = runningTotal + Adjustment + surcharge;
         }
 

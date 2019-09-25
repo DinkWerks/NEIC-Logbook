@@ -173,7 +173,7 @@
         <TextBlock Text="{Binding FeeModel.TotalProjectCost, StringFormat={}Total: ${0}, FallbackValue=Total: $0}" 
                    FontWeight="Bold" FontSize="18" HorizontalAlignment="Right" Margin="0,0,0,10"/>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal">
-            <Button Command="{Binding ExportCommand}" IsEnabled="False">
+            <Button Command="{Binding ExportCommand}">
                 <Image Source="/Tracker.Core;component/Resources/Icons/report_go.png" Width="16" Height="16"/>
             </Button>
         </StackPanel>

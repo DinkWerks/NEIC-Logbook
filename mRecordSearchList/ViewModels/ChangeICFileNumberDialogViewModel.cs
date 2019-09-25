@@ -19,9 +19,7 @@ namespace mRecordSearchList.ViewModels
         private string _suffix;
         private bool _isAcceptEnabled;
         private string _isDistinctWarningVisible;
-
         private IChangeICFileNumberNotification _notification;
-
         public List<Prefix> PrefixChoices { get; private set; }
 
         public bool IsAcceptEnabled
