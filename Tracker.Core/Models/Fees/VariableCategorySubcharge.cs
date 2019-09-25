@@ -2,6 +2,9 @@
 
 namespace Tracker.Core.Models.Fees
 {
+    /// <summary>
+    /// Variable subcharges' per unit cost is determined on if the value fits in specific ranges.
+    /// </summary>
     class VariableCategorySubcharge : BindableBase, ISubcharge
     {
         private int _minimum;
@@ -45,5 +48,7 @@ namespace Tracker.Core.Models.Fees
         {
             return (Cost * (count - Minimum + 1)) + _flatCost;
         }
+
+
     }
 }

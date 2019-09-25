@@ -2,6 +2,9 @@
 
 namespace Tracker.Core.Models.Fees
 {
+    /// <summary>
+    /// Hybrid subcharges total costs increase linearly as units fall between specific ranges. (Ex. Charges increase $400 for every 50 units.)
+    /// </summary>
     class HybridSubcharge : BindableBase, ISubcharge
     {
         private int _minimum;

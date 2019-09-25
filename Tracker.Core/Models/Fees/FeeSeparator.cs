@@ -45,6 +45,11 @@ namespace Tracker.Core.Models.Fees
 
         public decimal TotalCost { get; }
 
+        public string GetCostString()
+        {
+            return "";
+        }
+
         public decimal RoundTotal(decimal value)
         {
             return decimal.Round(value, 2);

@@ -9,7 +9,6 @@ namespace Tracker.Core.Models.Fees
     {
         private int _index;
         private string _name;
-        private string _type = "categorical";
         private string _description;
         private string _unitName;
         private string _unitNamePlural;
@@ -31,10 +30,7 @@ namespace Tracker.Core.Models.Fees
             set { SetProperty(ref _name, value); }
         }
 
-        public string Type
-        {
-            get { return _type; }
-        }
+        public string Type { get; } = "categorical";
 
         public string DBField
         {
@@ -140,6 +136,22 @@ namespace Tracker.Core.Models.Fees
         public decimal RoundTotal(decimal value)
         {
             return decimal.Round(value, 2, System.MidpointRounding.AwayFromZero);
+        }
+
+        public string GetCostString()
+        {
+            string returnValue = "";
+            foreach (ISubcharge sc in CostCategories)
+            {
+                switch (sc.GetType().ToString())
+                {
+                    case "VariableCategorySubcharge":
+
+                        break;
+                }
+            }
+
+            return returnValue;
         }
     }
 }

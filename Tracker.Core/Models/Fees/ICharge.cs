@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Tracker.Core.Models.Fees
+﻿namespace Tracker.Core.Models.Fees
 {
     public interface ICharge
     {
@@ -16,5 +10,6 @@ namespace Tracker.Core.Models.Fees
         decimal Cost { get; set; }
         decimal TotalCost { get; }
         decimal RoundTotal(decimal value);
+        string GetCostString();
     }
 }

@@ -2,6 +2,9 @@
 
 namespace Tracker.Core.Models.Fees
 {
+    /// <summary>
+    /// Category subcharges total cost increases if the unit count reaces falls between certain thresholds. (Ex. 1-2 units cost $200, 2-4 cost $350)
+    /// </summary>
     public class CategorySubcharge : BindableBase, ISubcharge
     {
         private int _minimumCount;

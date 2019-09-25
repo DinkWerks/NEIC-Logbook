@@ -64,6 +64,11 @@ namespace Tracker.Core.Models.Fees
             set { SetProperty(ref _totalCost, value); }
         }
 
+        public string GetCostString()
+        {
+            return Cost.ToString("C");
+        }
+
         public decimal RoundTotal(decimal value)
         {
             return decimal.Round(value, 2, System.MidpointRounding.AwayFromZero);

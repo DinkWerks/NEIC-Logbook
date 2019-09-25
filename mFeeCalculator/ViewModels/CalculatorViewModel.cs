@@ -19,6 +19,7 @@ namespace mFeeCalculator.ViewModels
     {
         private ObservableCollection<FeeSchedule> _versions = new ObservableCollection<FeeSchedule>();
         private ObservableCollection<ICharge> _charges = new ObservableCollection<ICharge>();
+        private string _icFileNum;
         private Fee _fee;
         private FeeSchedule _selectedVersion;
         private IRecordSearchService _rs;
@@ -85,7 +86,7 @@ namespace mFeeCalculator.ViewModels
 
         private void ExportFee()
         {
-            Export report = new Export(FeeModel);
+            Export report = new Export(FeeModel, _rs.CurrentRecordSearch.GetFileNumberFormatted());
         }
 
         /// <summary>
