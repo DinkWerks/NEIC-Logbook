@@ -40,24 +40,24 @@ namespace Tracker.Core.Models
         private string _plss;
         private decimal _acres;
         private decimal _linearMiles;
-        //Results
+        // Results
         private bool _areResourcesInProject;
         private string _recommendation;
         private bool _isReportReceived;
         private string _processor;
         private string _encryptionPassword;
-        //Fees
+        // Fees
         private string _feeVersion;
         private int _feeID;
         private Fees.Fee _fee;
         private bool _isPrePaid;
         private decimal _totalFee;
-        //Billing Information
+        // Billing Information
         private ProjectNumber _projectNumber;
         private string _invoiceNumber;
         private string _checkName;
         private string _checkNumber;
-        //Utility
+        // Utility
         private bool _isSelected;
         private string _notes;
 

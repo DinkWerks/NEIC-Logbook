@@ -6,11 +6,12 @@ namespace Tracker.Core.Services
 {
     public class EFService : DbContext, IEFService
     {
-        public EFService() : base(new JetConnection(@"Provider=Microsoft.ACE.OLEDB.12.0; Data Source=" + Settings.Settings.Instance.DatabaseAddress) + "; providerName = JetEntityFrameworkProvider;")
+        public EFService() : base("name=ConnString")
         {
-
+            
         }
 
+        public DbSet<RecordSearch> tblRecordSearches { get; set; }
         public DbSet<Staff> tblStaff { get; set; }
     }
 }

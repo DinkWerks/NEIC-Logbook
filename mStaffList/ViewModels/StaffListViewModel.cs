@@ -2,7 +2,9 @@
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
+using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using Tracker.Core;
 using Tracker.Core.Events;
 using Tracker.Core.Events.Payloads;
@@ -67,7 +69,8 @@ namespace mStaffList.ViewModels
             _rm = regionManager;
             _ef = efService;
 
-            StaffMembers = new ObservableCollection<Staff>(staffService.CompleteStaffList);
+            StaffMembers = new ObservableCollection<Staff>(_ef.tblStaff.ToList());
+            //StaffMembers = new ObservableCollection<Staff>(staffService.CompleteStaffList);
 
             AddPersonCommand = new DelegateCommand<string>(AddPerson);
             DeletePersonCommand = new DelegateCommand(DeletePerson);
@@ -77,6 +80,26 @@ namespace mStaffList.ViewModels
 
         //Methods
         private void AddPerson(string name)
+        {
+            using (var context = new EFService())
+            {
+                Staff newMember = new Staff()
+                {
+                    Name = name,
+                    IsActive = true
+                };
+
+                context.tblStaff.Add(newMember);
+                context.SaveChanges();
+                StaffMembers = new ObservableCollection<Staff>(_ef.tblStaff.ToList());
+            }
+
+            NewPersonName = "";
+            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Added.", Palette.AlertGreen));
+        }
+
+        [Obsolete]
+        private void AddPersonO(string name)
         {
             Staff newMember = new Staff()
             {
@@ -93,6 +116,17 @@ namespace mStaffList.ViewModels
 
         private void UpdatePerson()
         {
+            using (var context = new EFService())
+            {
+                context.Entry<Staff>(SelectedStaff).State = System.Data.Entity.EntityState.Modified;
+                context.SaveChanges();
+                _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Updated.", Palette.AlertGreen));
+            }
+        }
+
+        [Obsolete]
+        private void UpdatePersonO()
+        {
             if (SelectedStaff.IsChanged)
             {
                 _ss.UpdateStaffMember(SelectedStaff);
@@ -102,6 +136,19 @@ namespace mStaffList.ViewModels
         }
 
         private void DeletePerson()
+        {
+            using (var context = new EFService())
+            {
+                context.Entry(SelectedStaff).State = System.Data.Entity.EntityState.Deleted;
+                _selectedStaff = null;
+                context.SaveChanges();
+                StaffMembers = new ObservableCollection<Staff>(_ef.tblStaff.ToList());
+                _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Deleted.", Palette.AlertGreen));
+            }
+        }
+
+        [Obsolete]
+        private void DeletePersonO()
         {
             _ss.DeleteStaffMember(SelectedStaff.ID);
             StaffMembers = new ObservableCollection<Staff>(_ss.CompleteStaffList);
