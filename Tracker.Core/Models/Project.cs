@@ -1,14 +1,15 @@
 ﻿using Prism.Mvvm;
 using System;
 using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations;
 using Tracker.Core.StaticTypes;
 
 namespace Tracker.Core.Models
 {
-    public class RecordSearch : BindableBase
+    public class Project : BindableBase
     {
         private int _id;
-        // IC FileNumber
+        // IC File Number
         private string _icTypePrefix;
         private string _icYear;
         private int _icEnumeration;
@@ -21,17 +22,15 @@ namespace Tracker.Core.Models
         private DateTime? _datePaid;
         private DateTime? _lastUpdated;
         // Requestor
-        private int _requestorID;
         private Person _requestor;
         private string _additionalRequestors;
-        private int _clientID;
-        private Client _client;
+        private Organization _client;
         private Address _mailingAddress;
-        private bool _isRequestorSameAsBilling;
         private Address _billingAddress;
+        private bool _isRequestorSameAsBilling;
         // Meta
         private string _projectName;
-        private string _rsType;
+        private string _projectType;
         private string _status;
         private string _specialDetails;
         // Location
@@ -57,24 +56,23 @@ namespace Tracker.Core.Models
         private string _invoiceNumber;
         private string _checkName;
         private string _checkNumber;
-        // Utility
-        private bool _isSelected;
-        private string _notes;
 
-
-        public int ID
+        //Properties
+        public int Id
         {
             get { return _id; }
             set { SetProperty(ref _id, value); }
         }
 
         #region IC File Number Info
+        [MaxLength(1)]
         public string ICTypePrefix
         {
             get { return _icTypePrefix; }
             set { SetProperty(ref _icTypePrefix, value); }
         }
 
+        [MaxLength(2)]
         public string ICYear
         {
             get { return _icYear; }
@@ -87,12 +85,12 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _icEnumeration, value); }
         }
 
+        [MaxLength(3)]
         public string ICSuffix
         {
             get { return _icSuffix; }
             set { SetProperty(ref _icSuffix, value); }
         }
-
         #endregion
 
         #region Dates
@@ -156,12 +154,7 @@ namespace Tracker.Core.Models
 
         #region Requestor
 
-        public int RequestorID
-        {
-            get { return _requestorID; }
-            set { SetProperty(ref _requestorID, value); }
-        }
-
+        //Gets Converterted to RequestorID in DB
         public Person Requestor
         {
             get { return _requestor; }
@@ -174,18 +167,14 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _additionalRequestors, value); }
         }
 
-        public int ClientID
-        {
-            get { return _clientID; }
-            set { SetProperty(ref _clientID, value); }
-        }
-
-        public Client ClientModel
+        //Gets Converterted to RequestorID in DB
+        public Organization Client
         {
             get { return _client; }
             set { SetProperty(ref _client, value); }
         }
 
+        //Gets Converted to Individual Fields in DB
         public Address MailingAddress
         {
             get { return _mailingAddress; }
@@ -195,6 +184,13 @@ namespace Tracker.Core.Models
                 if (IsMailingSameAsBilling)
                     BillingAddress = value;
             }
+        }
+
+        //Gets Converted to Individual Fields in DB
+        public Address BillingAddress
+        {
+            get { return _billingAddress; }
+            set { SetProperty(ref _billingAddress, value); }
         }
 
         public bool IsMailingSameAsBilling
@@ -209,12 +205,6 @@ namespace Tracker.Core.Models
                     BillingAddress = new Address();
             }
         }
-
-        public Address BillingAddress
-        {
-            get { return _billingAddress; }
-            set { SetProperty(ref _billingAddress, value); }
-        }
         #endregion
 
         #region Meta
@@ -224,12 +214,14 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _projectName, value); }
         }
 
-        public string RSType
+        [MaxLength(100)]
+        public string ProjectType
         {
-            get { return _rsType; }
-            set { SetProperty(ref _rsType, value); }
+            get { return _projectType; }
+            set { SetProperty(ref _projectType, value); }
         }
 
+        [MaxLength(100)]
         public string Status
         {
             get { return _status; }
@@ -241,11 +233,10 @@ namespace Tracker.Core.Models
             get { return _specialDetails; }
             set { SetProperty(ref _specialDetails, value); }
         }
-
         #endregion
 
         #region Location
-
+        /*
         public County MainCounty
         {
             get { return _mainCounty; }
@@ -257,7 +248,7 @@ namespace Tracker.Core.Models
             get { return _additionalCounties; }
             set { SetProperty(ref _additionalCounties, value); }
         }
-
+        */
         public string PLSS
         {
             get { return _plss; }
@@ -284,6 +275,7 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _areResourcesInProject, value); }
         }
 
+        [MaxLength(1000)]
         public string Recommendation
         {
             get { return _recommendation; }
@@ -295,11 +287,13 @@ namespace Tracker.Core.Models
             get { return _isReportReceived; }
             set { SetProperty(ref _isReportReceived, value); }
         }
+
         public string EncryptionPassword
         {
             get { return _encryptionPassword; }
             set { SetProperty(ref _encryptionPassword, value); }
         }
+
         public string Processor
         {
             get { return _processor; }
@@ -308,6 +302,7 @@ namespace Tracker.Core.Models
         #endregion
 
         #region Fees
+        [MaxLength(50)]
         public string FeeVersion
         {
             get { return _feeVersion; }
@@ -337,7 +332,6 @@ namespace Tracker.Core.Models
             get { return _totalFee; }
             set { SetProperty(ref _totalFee, value); }
         }
-
         #endregion
 
         #region Billing Information
@@ -347,18 +341,21 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _projectNumber, value); }
         }
 
+        [MaxLength(50)]
         public string InvoiceNumber
         {
             get { return _invoiceNumber; }
             set { SetProperty(ref _invoiceNumber, value); }
         }
 
+        [MaxLength(100)]
         public string CheckName
         {
             get { return _checkName; }
             set { SetProperty(ref _checkName, value); }
         }
 
+        [MaxLength(50)]
         public string CheckNumber
         {
             get { return _checkNumber; }
@@ -366,20 +363,8 @@ namespace Tracker.Core.Models
         }
         #endregion
 
-        public bool IsSelected
-        {
-            get { return _isSelected; }
-            set { SetProperty(ref _isSelected, value); }
-        }
-
-        public string Notes
-        {
-            get { return _notes; }
-            set { SetProperty(ref _notes, value); }
-        }
-
         //Constructor
-        public RecordSearch()
+        public Project()
         {
 
         }

@@ -90,9 +90,9 @@ namespace mPersonList.ViewModels
         //Methods
         public override void SaveEntry()
         {
-            int addressID = _as.UpdateAddress(PersonModel.AddressModel);
+            int addressID = _as.UpdateAddress(PersonModel.Address);
             PersonModel.AddressID = addressID;
-            PersonModel.AddressModel.AddressID = addressID;
+            PersonModel.Address.Id = addressID;
 
             //Add in Person's Affiliation
             if (SelectedClient != null)
@@ -117,7 +117,7 @@ namespace mPersonList.ViewModels
                    if (r.Confirmed)
                    {
                        _deleting = true;
-                       _ps.RemovePerson(PersonModel.ID, PersonModel.AddressModel.AddressID);
+                       _ps.RemovePerson(PersonModel.ID, PersonModel.Address.Id);
                        _rm.RequestNavigate("ContentRegion", "PersonList");
                    }
                }
@@ -154,7 +154,7 @@ namespace mPersonList.ViewModels
                 PersonModel = _ps.GetPersonByID(personID);
                 SelectedClient = _cs.GetClientByID(PersonModel.CurrentAssociationID);
                 InitialClient = ClientList.FindIndex(c => c.ToString() == SelectedClient.ToString());
-                PersonModel.AddressModel = _as.GetAddressByID(PersonModel.AddressID);
+                PersonModel.Address = (PersonAddress)_as.GetAddressByID(PersonModel.AddressID);
                 RecordSearches = new ObservableCollection<RecordSearch>(
                     _rss.GetPartialRecordSearchesByCriteria("WHERE RequestorID = " + personID)
                     );

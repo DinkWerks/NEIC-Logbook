@@ -84,7 +84,7 @@ namespace Tracker.Core.Services
                         RSType = reader.GetStringSafe(index++), //20
                         Status = reader.GetStringSafe(index++),
                         SpecialDetails = reader.GetStringSafe(index++),
-                        MainCounty = reader.GetStringSafe(index++),
+                        //MainCounty = reader.GetStringSafe(index++),
                         AdditionalCounties = ParseAdditionalCounties(reader.GetStringSafe(index++)),
                         PLSS = reader.GetStringSafe(index++), //25
                         Acres = reader.GetDecimalSafe(index++),
@@ -167,7 +167,7 @@ namespace Tracker.Core.Services
                             RSType = reader.GetStringSafe(index++), //20
                             Status = reader.GetStringSafe(index++),
                             SpecialDetails = reader.GetStringSafe(index++),
-                            MainCounty = reader.GetStringSafe(index++),
+                            //MainCounty = reader.GetStringSafe(index++),
                             AdditionalCounties = ParseAdditionalCounties(reader.GetStringSafe(index++)),
                             PLSS = reader.GetStringSafe(index++), //25
                             Acres = reader.GetDecimalSafe(index++),
@@ -327,8 +327,8 @@ namespace Tracker.Core.Services
             {
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
-                    rs.MailingAddress.AddressID = _as.UpdateAddress(rs.MailingAddress);
-                    rs.BillingAddress.AddressID = _as.UpdateAddress(rs.BillingAddress);
+                    rs.MailingAddress.Id = _as.UpdateAddress(rs.MailingAddress);
+                    rs.BillingAddress.Id = _as.UpdateAddress(rs.BillingAddress);
                     rs.FeeID = _fs.UpdateFee(rs.Fee);
                     rs.FeeVersion = rs.Fee.FeeVersion;
                     rs.TotalFee = rs.Fee.TotalProjectCost;
@@ -358,9 +358,9 @@ namespace Tracker.Core.Services
                     sqlCommand.Parameters.AddWithValue("@RequestorID", rs.RequestorID);
                     sqlCommand.Parameters.AddWithValue("@AdditionalRequestors", rs.AdditionalRequestors ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@ClientID", rs.ClientID);
-                    sqlCommand.Parameters.AddWithValue("@MailingAddressID", rs.MailingAddress.AddressID);
+                    sqlCommand.Parameters.AddWithValue("@MailingAddressID", rs.MailingAddress.Id);
                     sqlCommand.Parameters.AddWithValue("@IsMailingAddressSameAsBilling", rs.IsMailingSameAsBilling);
-                    sqlCommand.Parameters.AddWithValue("@BillingAddressID", rs.BillingAddress.AddressID);
+                    sqlCommand.Parameters.AddWithValue("@BillingAddressID", rs.BillingAddress.Id);
 
                     sqlCommand.Parameters.AddWithValue("@ProjectName", rs.ProjectName ?? Convert.DBNull);
                     sqlCommand.Parameters.AddWithValue("@RecordSearchType", rs.RSType ?? Convert.DBNull);

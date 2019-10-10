@@ -55,7 +55,7 @@ namespace Tracker.Core.Services
                         CurrentAssociationID = reader.GetInt32Safe(index++),
                         CurrentAssociation = reader.GetStringSafe(index++),
                         AddressID = reader.GetInt32Safe(index),
-                        AddressModel = _as.GetAddressByID(reader.GetInt32(index++)),
+                        Address = (PersonAddress)_as.GetAddressByID(reader.GetInt32(index++)),
                         Phone1 = reader.GetStringSafe(index++),
                         Phone2 = reader.GetStringSafe(index++),
                         Email = reader.GetStringSafe(index++),

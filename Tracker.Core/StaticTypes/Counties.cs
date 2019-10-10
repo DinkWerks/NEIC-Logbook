@@ -1,4 +1,5 @@
 ﻿using Prism.Mvvm;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -133,6 +134,11 @@ namespace Tracker.Core.StaticTypes
         public static IEnumerable<County> regionCounties = from c in Values
                                                           where c.ICCurator is "NEIC"
                                                           select c;
+
+        public static County Parse(string name)
+        {
+            return Values.First(c => c.Name == name);
+        }
     }
 
     public class County : BindableBase

@@ -10,13 +10,13 @@ namespace Tracker.Core.Models
         private string _lastName;
         private int _currentAssociationID = 0;
         private string _currentAssociation;
-        private int _addressID;
-        private Address _address;
         private string _phone1;
         private string _phone2;
         private string _email;
         private string _disclosureLevel;
         private string _note;
+        private int _addressID;
+        private Address _address;
 
         public int ID
         {
@@ -48,18 +48,6 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _currentAssociation, value); }
         }
 
-        public int AddressID
-        {
-            get { return _addressID; }
-            set { SetProperty(ref _addressID, value); }
-        }
-
-        public Address AddressModel
-        {
-            get { return _address; }
-            set { SetProperty(ref _address, value); }
-        }
-
         public string Phone1
         {
             get { return _phone1; }
@@ -88,6 +76,18 @@ namespace Tracker.Core.Models
         {
             get { return _note; }
             set { SetProperty(ref _note, value); }
+        }
+
+        public int AddressID
+        {
+            get { return _addressID; }
+            set { SetProperty(ref _addressID, value); }
+        }
+
+        public Address Address
+        {
+            get { return _address; }
+            set { SetProperty(ref _address, value); }
         }
 
         public Person()

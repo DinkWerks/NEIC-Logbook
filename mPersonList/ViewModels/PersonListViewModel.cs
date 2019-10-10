@@ -6,6 +6,7 @@ using Prism.Mvvm;
 using Prism.Regions;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
@@ -57,12 +58,13 @@ namespace mPersonList.ViewModels
         public bool KeepAlive => false;
 
         //Constructor
-        public PersonListViewModel(IRegionManager regionManager, IEventAggregator eventAggregator, IPersonService personService)
+        public PersonListViewModel(IRegionManager regionManager, IEventAggregator eventAggregator,
+            IEFService efService)
         {
             _rm = regionManager;
-            _ps = personService;
 
-            People = personService.GetAllPartialPeople();
+            People = efService.People.ToList();
+            //People = personService.GetAllPartialPeople();
             PeopleView.Refresh();
             PeopleView.Filter = PersonNameSearchFilter;
 
@@ -89,13 +91,16 @@ namespace mPersonList.ViewModels
                 {
                     if (r.Confirmed)
                     {
-                        int newPersonID = _ps.AddNewPerson(new Person()
+                        using (var context = new EFService())
                         {
-                            FirstName = r.FirstName,
-                            LastName = r.LastName
-                        });
-
-                        NavigateToPersonEntry(newPersonID);
+                            Person newPerson = new Person()
+                            {
+                                FirstName = r.FirstName,
+                                LastName = r.LastName
+                            };
+                            context.Add(newPerson);
+                        }
+                        //NavigateToPersonEntry(newPersonID);
                     }
                 }
             );

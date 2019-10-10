@@ -69,7 +69,7 @@ namespace mStaffList.ViewModels
             _rm = regionManager;
             _ef = efService;
 
-            StaffMembers = new ObservableCollection<Staff>(_ef.tblStaff.ToList());
+            StaffMembers = new ObservableCollection<Staff>(_ef.Staffs.ToList());
             //StaffMembers = new ObservableCollection<Staff>(staffService.CompleteStaffList);
 
             AddPersonCommand = new DelegateCommand<string>(AddPerson);
@@ -89,9 +89,9 @@ namespace mStaffList.ViewModels
                     IsActive = true
                 };
 
-                context.tblStaff.Add(newMember);
+                context.Staffs.Add(newMember);
                 context.SaveChanges();
-                StaffMembers = new ObservableCollection<Staff>(_ef.tblStaff.ToList());
+                StaffMembers = new ObservableCollection<Staff>(_ef.Staffs.ToList());
             }
 
             NewPersonName = "";
@@ -118,7 +118,7 @@ namespace mStaffList.ViewModels
         {
             using (var context = new EFService())
             {
-                context.Entry<Staff>(SelectedStaff).State = System.Data.Entity.EntityState.Modified;
+                context.Update<Staff>(SelectedStaff);
                 context.SaveChanges();
                 _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Updated.", Palette.AlertGreen));
             }
@@ -139,10 +139,10 @@ namespace mStaffList.ViewModels
         {
             using (var context = new EFService())
             {
-                context.Entry(SelectedStaff).State = System.Data.Entity.EntityState.Deleted;
+                context.Remove(SelectedStaff);
                 _selectedStaff = null;
                 context.SaveChanges();
-                StaffMembers = new ObservableCollection<Staff>(_ef.tblStaff.ToList());
+                StaffMembers = new ObservableCollection<Staff>(_ef.Staffs.ToList());
                 _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Deleted.", Palette.AlertGreen));
             }
         }

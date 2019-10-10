@@ -158,8 +158,8 @@ namespace mRecordSearchList.ViewModels
                         _deleting = true;
                         _ea.GetEvent<RSListModifiedEvent>().Publish(new ListModificationPayload("delete", RecordSearch.ID));
                         _rss.RemoveRecordSearch(RecordSearch.ID,
-                            RecordSearch.MailingAddress.AddressID,
-                            RecordSearch.BillingAddress.AddressID,
+                            RecordSearch.MailingAddress.Id,
+                            RecordSearch.BillingAddress.Id,
                             RecordSearch.Fee.ID);
                         _rm.RequestNavigate("ContentRegion", "RSList");
                     }
@@ -207,9 +207,9 @@ namespace mRecordSearchList.ViewModels
         private void CopyRequestor(string destination)
         {
             if (destination == "Mailing")
-                RecordSearch.MailingAddress = CopyAddress(RecordSearch.MailingAddress, RecordSearch.Requestor.AddressModel);
+                RecordSearch.MailingAddress = CopyAddress(RecordSearch.MailingAddress, RecordSearch.Requestor.Address);
             else if (destination == "Billing")
-                RecordSearch.BillingAddress = CopyAddress(RecordSearch.BillingAddress, RecordSearch.Requestor.AddressModel);
+                RecordSearch.BillingAddress = CopyAddress(RecordSearch.BillingAddress, RecordSearch.Requestor.Address);
         }
 
         private void CopyAffiliation(string destination)
@@ -224,7 +224,18 @@ namespace mRecordSearchList.ViewModels
         {
             try
             {
-                return new Address(toReplace.AddressID, toCopy);
+                return new Address()
+                {
+                    Id = toReplace.Id,
+                    AddressName = toReplace.AddressName,
+                    AttentionTo = toReplace.AttentionTo,
+                    AddressLine1 = toReplace.AddressLine1,
+                    AddressLine2 = toReplace.AddressLine2,
+                    City = toReplace.City,
+                    State = toReplace.State,
+                    ZIP = toReplace.ZIP,
+                    Notes = toReplace.Notes,
+                };
             }
             catch
             {

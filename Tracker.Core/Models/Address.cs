@@ -1,10 +1,11 @@
-﻿using Prism.Mvvm;
+﻿using Microsoft.EntityFrameworkCore;
+using Prism.Mvvm;
 
 namespace Tracker.Core.Models
 {
+    [Owned]
     public class Address : BindableBase
     {
-        private int _addressID;
         private string _addressName;
         private string _attentionTo;
         private string _addressLine1;
@@ -13,12 +14,6 @@ namespace Tracker.Core.Models
         private string _state;
         private string _zip;
         private string _notes;
-
-        public int AddressID
-        {
-            get { return _addressID; }
-            set { SetProperty(ref _addressID, value); }
-        }
 
         public string AddressName
         {
@@ -71,19 +66,6 @@ namespace Tracker.Core.Models
         public Address()
         {
 
-        }
-
-        public Address(int id, Address oldAddress)
-        {
-            AddressID = id;
-            AddressName = oldAddress.AddressName;
-            AttentionTo = oldAddress.AttentionTo;
-            AddressLine1 = oldAddress.AddressLine1;
-            AddressLine2 = oldAddress.AddressLine2;
-            City = oldAddress.City;
-            State = oldAddress.State;
-            ZIP = oldAddress.ZIP;
-            Notes = oldAddress.Notes;
         }
 
         public bool ValidateMinimalCompleteness()
