@@ -116,8 +116,8 @@ namespace mPersonList.ViewModels
 
             string name = person.FirstName.ToLower() + " " + person.LastName.ToLower();
             string affiliation = string.Empty;
-            if (person.CurrentAssociation != null)
-                affiliation = person.CurrentAssociation.ToLower();
+            if (person.Affiliation != null)
+                affiliation = person.Affiliation.ClientName.ToLower();
 
             if (PersonNameSearchText != null && AffiliationSearchText != null)
             {

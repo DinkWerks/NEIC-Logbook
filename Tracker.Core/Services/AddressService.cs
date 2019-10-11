@@ -43,7 +43,6 @@ namespace Tracker.Core.Services
                     int index = 0;
                     Address returnValue = new Address()
                     {
-                        Id = reader.GetInt32Safe(index++),
                         AddressName = reader.GetStringSafe(index++),
                         AttentionTo = reader.GetStringSafe(index++),
                         AddressLine1 = reader.GetStringSafe(index++),
@@ -92,7 +91,7 @@ namespace Tracker.Core.Services
                 using (OleDbCommand sqlCommand = connection.CreateCommand())
                 {
                     sqlCommand.CommandText = "SELECT ID FROM tblAddresses WHERE ID = ?";
-                    sqlCommand.Parameters.AddWithValue("ID", a.Id);
+                    sqlCommand.Parameters.AddWithValue("ID", 0);
                     connection.Open();
                     OleDbDataReader reader = sqlCommand.ExecuteReader();
                     if (reader.HasRows)
@@ -112,11 +111,11 @@ namespace Tracker.Core.Services
                                 updateCommand.Parameters.AddWithValue("@state", a.State ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@zip", a.ZIP ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@notes", a.Notes ?? Convert.DBNull);
-                                updateCommand.Parameters.AddWithValue("@id", a.Id);
+                                updateCommand.Parameters.AddWithValue("@id", 0);
 
                                 connection2.Open();
                                 updateCommand.ExecuteNonQuery();
-                                return a.Id;
+                                return 0;
                             }
                         }
                     }

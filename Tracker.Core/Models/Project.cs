@@ -236,7 +236,7 @@ namespace Tracker.Core.Models
         #endregion
 
         #region Location
-        /*
+        
         public County MainCounty
         {
             get { return _mainCounty; }
@@ -248,7 +248,7 @@ namespace Tracker.Core.Models
             get { return _additionalCounties; }
             set { SetProperty(ref _additionalCounties, value); }
         }
-        */
+
         public string PLSS
         {
             get { return _plss; }
@@ -315,11 +315,13 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _feeID, value); }
         }
 
+        /*
         public Fees.Fee Fee
         {
             get { return _fee; }
             set { SetProperty(ref _fee, value); }
         }
+        */
 
         public bool IsPrePaid
         {
@@ -411,5 +413,7 @@ namespace Tracker.Core.Models
             else
                 return ICTypePrefix + ICYear + "-" + ICEnumeration + ICSuffix;
         }
+
+
     }
 }

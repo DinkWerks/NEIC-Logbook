@@ -50,8 +50,7 @@ namespace Tracker.Core.Services
                         {
                             ID = reader.GetInt32Safe(index++),
                             Name = reader.GetStringSafe(index++),
-                            IsActive = reader.GetBooleanSafe(index++),
-                            IsChanged = false
+                            IsActive = reader.GetBooleanSafe(index++)
                         };
                         returnCollection.Add(returnValue);
                     }

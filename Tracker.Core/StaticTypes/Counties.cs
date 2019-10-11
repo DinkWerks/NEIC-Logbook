@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Tracker.Core.Services;
 
 namespace Tracker.Core.StaticTypes
 {
@@ -132,30 +133,41 @@ namespace Tracker.Core.StaticTypes
         }
 
         public static IEnumerable<County> regionCounties = from c in Values
-                                                          where c.ICCurator is "NEIC"
-                                                          select c;
+                                                           where c.ICCurator is "NEIC"
+                                                           select c;
 
         public static County Parse(string name)
         {
             return Values.First(c => c.Name == name);
         }
+
+        public static void AddCountiesToDB()
+        {
+            using (var context = new EFService())
+            {
+                foreach (County c in Values)
+                {
+                    context.Add(c);
+                }
+            }
+        }
     }
 
-    public class County : BindableBase
+    public class County
     {
+        public int Id { get; private set; }
         public string Name { get; private set; }
         public string Abbreviation { get; private set; }
         public string ReportAbbr { get; private set; }
-        public int Number { get; private set; }
         public string ICCurator { get; private set; }
         public bool IsChecked { get; set; }
 
         public County(string name, string abbreviation, string reportAbbr, int number, string icCurator)
         {
+            Id = number;
             Name = name;
             Abbreviation = abbreviation;
             ReportAbbr = reportAbbr;
-            Number = number;
             ICCurator = icCurator;
             IsChecked = false;
         }

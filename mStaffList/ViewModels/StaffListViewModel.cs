@@ -124,16 +124,6 @@ namespace mStaffList.ViewModels
             }
         }
 
-        [Obsolete]
-        private void UpdatePersonO()
-        {
-            if (SelectedStaff.IsChanged)
-            {
-                _ss.UpdateStaffMember(SelectedStaff);
-                _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Updated.", Palette.AlertGreen));
-                SelectedStaff.IsChanged = false;
-            }
-        }
 
         private void DeletePerson()
         {

@@ -158,8 +158,8 @@ namespace mRecordSearchList.ViewModels
                         _deleting = true;
                         _ea.GetEvent<RSListModifiedEvent>().Publish(new ListModificationPayload("delete", RecordSearch.ID));
                         _rss.RemoveRecordSearch(RecordSearch.ID,
-                            RecordSearch.MailingAddress.Id,
-                            RecordSearch.BillingAddress.Id,
+                            0,
+                            0,
                             RecordSearch.Fee.ID);
                         _rm.RequestNavigate("ContentRegion", "RSList");
                     }
@@ -226,7 +226,6 @@ namespace mRecordSearchList.ViewModels
             {
                 return new Address()
                 {
-                    Id = toReplace.Id,
                     AddressName = toReplace.AddressName,
                     AttentionTo = toReplace.AttentionTo,
                     AddressLine1 = toReplace.AddressLine1,
@@ -249,7 +248,7 @@ namespace mRecordSearchList.ViewModels
             {
                 RecordSearch.Requestor = _ps.GetPersonByID(value);
                 RecordSearch.RequestorID = RecordSearch.Requestor.ID;
-                SelectedClient = RecordSearch.Requestor.CurrentAssociationID;
+                SelectedClient = 0;
             }
         }
 

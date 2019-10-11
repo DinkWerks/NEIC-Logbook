@@ -92,6 +92,7 @@ namespace mPersonList.ViewModels
         {
             int addressID = _as.UpdateAddress(PersonModel.Address);
             PersonModel.AddressID = addressID;
+            /*
             PersonModel.Address.Id = addressID;
 
             //Add in Person's Affiliation
@@ -99,7 +100,7 @@ namespace mPersonList.ViewModels
             {
                 PersonModel.CurrentAssociationID = SelectedClient.ID;
                 PersonModel.CurrentAssociation = SelectedClient.ToString();
-            }
+            }*/
 
             _ps.UpdatePersonInformation(PersonModel);
             _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Person entry successfully saved.", Palette.AlertGreen));
@@ -117,7 +118,7 @@ namespace mPersonList.ViewModels
                    if (r.Confirmed)
                    {
                        _deleting = true;
-                       _ps.RemovePerson(PersonModel.ID, PersonModel.Address.Id);
+                       _ps.RemovePerson(PersonModel.ID, 0);
                        _rm.RequestNavigate("ContentRegion", "PersonList");
                    }
                }
@@ -152,9 +153,9 @@ namespace mPersonList.ViewModels
             if (personID > 0)
             {
                 PersonModel = _ps.GetPersonByID(personID);
-                SelectedClient = _cs.GetClientByID(PersonModel.CurrentAssociationID);
+                //SelectedClient = _cs.GetClientByID(PersonModel.CurrentAssociationID);
                 InitialClient = ClientList.FindIndex(c => c.ToString() == SelectedClient.ToString());
-                PersonModel.Address = (PersonAddress)_as.GetAddressByID(PersonModel.AddressID);
+                //PersonModel.Address = (PersonAddress)_as.GetAddressByID(PersonModel.AddressID);
                 RecordSearches = new ObservableCollection<RecordSearch>(
                     _rss.GetPartialRecordSearchesByCriteria("WHERE RequestorID = " + personID)
                     );

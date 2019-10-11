@@ -60,7 +60,6 @@ namespace mClientList.ViewModels
         {
             int addressID = _as.UpdateAddress(ClientModel.AddressModel);
             ClientModel.AddressID = addressID;
-            ClientModel.AddressModel.Id = addressID;
             _cs.UpdateClientInformation(ClientModel);
             _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Client entry successfully saved.", Palette.AlertGreen));
         }
@@ -76,7 +75,7 @@ namespace mClientList.ViewModels
                     if (r.Confirmed)
                     {
                         _deleting = true;
-                        _cs.RemoveClient(ClientModel.ID, ClientModel.AddressModel.Id);
+                        _cs.RemoveClient(ClientModel.ID, 0);
                         _rm.RequestNavigate("ContentRegion", "ClientList");
                     }
                 }

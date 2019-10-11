@@ -8,8 +8,7 @@ namespace Tracker.Core.Models
         private int _id;
         private string _firstName;
         private string _lastName;
-        private int _currentAssociationID = 0;
-        private string _currentAssociation;
+        private Organization _currentAssociation;
         private string _phone1;
         private string _phone2;
         private string _email;
@@ -36,13 +35,7 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _lastName, value); }
         }
 
-        public int CurrentAssociationID
-        {
-            get { return _currentAssociationID; }
-            set { SetProperty(ref _currentAssociationID, value); }
-        }
-
-        public string CurrentAssociation
+        public Organization Affiliation
         {
             get { return _currentAssociation; }
             set { SetProperty(ref _currentAssociation, value); }
@@ -93,13 +86,6 @@ namespace Tracker.Core.Models
         public Person()
         {
 
-        }
-
-        public Person(string firstName, string lastName, int currentAssociation)
-        {
-            FirstName = firstName;
-            LastName = lastName;
-            CurrentAssociationID = currentAssociation;
         }
 
         public override string ToString()

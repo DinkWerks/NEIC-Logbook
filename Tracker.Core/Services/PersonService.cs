@@ -52,10 +52,7 @@ namespace Tracker.Core.Services
                         ID = reader.GetInt32Safe(index++),
                         FirstName = reader.GetStringSafe(index++),
                         LastName = reader.GetStringSafe(index++),
-                        CurrentAssociationID = reader.GetInt32Safe(index++),
-                        CurrentAssociation = reader.GetStringSafe(index++),
                         AddressID = reader.GetInt32Safe(index),
-                        Address = (PersonAddress)_as.GetAddressByID(reader.GetInt32(index++)),
                         Phone1 = reader.GetStringSafe(index++),
                         Phone2 = reader.GetStringSafe(index++),
                         Email = reader.GetStringSafe(index++),
@@ -91,8 +88,7 @@ namespace Tracker.Core.Services
                         {
                             ID = reader.GetInt32Safe(index++),
                             FirstName = reader.GetStringSafe(index++),
-                            LastName = reader.GetStringSafe(index++),
-                            CurrentAssociation = reader.GetStringSafe(index++)
+                            LastName = reader.GetStringSafe(index++)
                         };
                         returnCollection.Add(returnValue);
                     }
@@ -121,8 +117,7 @@ namespace Tracker.Core.Services
                         {
                             ID = reader.GetInt32Safe(index++),
                             FirstName = reader.GetStringSafe(index++),
-                            LastName = reader.GetStringSafe(index++),
-                            CurrentAssociation = reader.GetStringSafe(index++)
+                            LastName = reader.GetStringSafe(index++)
                         };
                         returnCollection.Add(returnValue);
                     }
@@ -176,8 +171,6 @@ namespace Tracker.Core.Services
                                     "WHERE ID = @id";
                                 updateCommand.Parameters.AddWithValue("@fname", p.FirstName ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@lname", p.LastName ?? Convert.DBNull);
-                                updateCommand.Parameters.AddWithValue("@assoc", p.CurrentAssociationID);
-                                updateCommand.Parameters.AddWithValue("@assocname", p.CurrentAssociation ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@addr", p.AddressID);
                                 updateCommand.Parameters.AddWithValue("@phone1", p.Phone1 ?? Convert.DBNull);
                                 updateCommand.Parameters.AddWithValue("@phone2", p.Phone2 ?? Convert.DBNull);
