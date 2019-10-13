@@ -207,14 +207,14 @@ namespace Tracker.Core.Services
             }
         }
 
-        private ClientStanding ParseStanding(string standingName)
+        private OrganizationStanding ParseStanding(string standingName)
         {
             if (!string.IsNullOrWhiteSpace(standingName))
             {
-                return ClientStandings.Values.First(s => s.Name == standingName);
+                return OrganizationStandings.Values.First(s => s.Name == standingName);
             }
             else
-                return ClientStandings.GoodStanding;
+                return OrganizationStandings.GoodStanding;
         }
     }
 }

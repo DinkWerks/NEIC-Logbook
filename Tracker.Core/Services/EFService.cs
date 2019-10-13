@@ -19,8 +19,7 @@ namespace Tracker.Core.Services
         public DbSet<Staff> Staffs { get; set; }
 
         //Secondary Models
-        //public DbSet<County> Counties { get; set; }
-        public DbSet<ProjectNumber> ProjectNumbers { get; set; }
+        public DbSet<OrganizationStanding> OrganizationStandings { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -33,22 +32,28 @@ namespace Tracker.Core.Services
             var StringToCounty = new ValueConverter<County, string>(
                 v => v.ToString(),
                 v => ParseCounty(v)
-            );
+                );
             var StringToAddCounties = new ValueConverter<ObservableCollection<County>, string>(
                 v => WriteAdditionalCounties(v),
                 v => ParseAdditionalCounties(v)
-            );
+                );
+            var StringToProjectNumber = new ValueConverter<ProjectNumber, string>(
+                v => v.ToString(),
+                v => ParseProjectNumber(v)
+                );
 
             //Model Builder
             modelBuilder.Entity<Project>().OwnsOne(p => p.MailingAddress);
             modelBuilder.Entity<Project>().OwnsOne(p => p.BillingAddress);
             modelBuilder.Entity<Project>().Property(p => p.MainCounty).HasConversion(StringToCounty);
             modelBuilder.Entity<Project>().Property(p => p.AdditionalCounties).HasConversion(StringToAddCounties);
+            modelBuilder.Entity<Project>().Property(p => p.ProjectNumber).HasConversion(StringToProjectNumber);
 
             modelBuilder.Entity<Organization>().OwnsOne(o => o.Address);
             modelBuilder.Entity<Person>().OwnsOne(p => p.Address);
         }
 
+        #region ConversionFunctions
         private ObservableCollection<County> ParseAdditionalCounties(string additionalCounties)
         {
             ObservableCollection<County> returnCollection = new ObservableCollection<County>();
@@ -76,5 +81,11 @@ namespace Tracker.Core.Services
             }
             return returnValue.TrimEnd(',');
         }
+
+        private ProjectNumber ParseProjectNumber(string projectNumber)
+        {
+            return ProjectNumbers.AllProjectNumbers.First(p => p.ProjectID == projectNumber);
+        }
+        #endregion
     }
 }

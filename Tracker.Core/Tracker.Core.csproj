@@ -170,6 +170,11 @@
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\OleDbDataReaderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Migrations\20191013000449_Test1.cs" />
+    <Compile Include="Migrations\20191013000449_Test1.designer.cs">
+      <DependentUpon>20191013000449_Test1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\EFServiceModelSnapshot.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\County.cs" />
@@ -217,7 +222,7 @@
     <Compile Include="Services\StaffService.cs" />
     <Compile Include="Settings\Palette.cs" />
     <Compile Include="Settings\Settings.cs" />
-    <Compile Include="StaticTypes\ClientStandings.cs" />
+    <Compile Include="StaticTypes\OrganizationStandings.cs" />
     <Compile Include="StaticTypes\Counties.cs" />
     <Compile Include="StaticTypes\DisclosureLevels.cs" />
     <Compile Include="StaticTypes\ProjectNumbers.cs" />

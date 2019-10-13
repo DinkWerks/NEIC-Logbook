@@ -75,7 +75,7 @@
                     <TextBox Grid.Column="3" Grid.Row="1" Text="{Binding ClientModel.OldPEID, StringFormat={}{0:D6}}" Width="100" HorizontalAlignment="Right"/>
 
                     <TextBlock Grid.Row="3" Text="Standing:" Style="{StaticResource Line Header}" Margin="0"/>
-                    <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Source={x:Static static:ClientStandings.Values}}" SelectedItem="{Binding ClientModel.Standing}" SelectedValuePath="Name"/>
+                    <ComboBox Grid.Row="3" Grid.Column="1" ItemsSource="{Binding Source={x:Static static:OrganizationStandings.Values}}" SelectedItem="{Binding ClientModel.Standing}" SelectedValuePath="Name"/>
                 </Grid>
             </GroupBox>
 

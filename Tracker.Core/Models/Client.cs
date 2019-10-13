@@ -13,7 +13,7 @@ namespace Tracker.Core.Models
         private string _phone;
         private string _email;
         private string _website;
-        private ClientStanding _standing;
+        private OrganizationStanding _standing;
         private int _addressID;
         private Address _addressModel;
         private string _notes;
@@ -66,7 +66,7 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _website, value); }
         }
 
-        public ClientStanding Standing
+        public OrganizationStanding Standing
         {
             get { return _standing; }
             set { SetProperty(ref _standing, value); }

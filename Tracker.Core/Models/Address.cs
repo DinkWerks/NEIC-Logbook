@@ -15,6 +15,7 @@ namespace Tracker.Core.Models
         private string _zip;
         private string _notes;
 
+
         public string AddressName
         {
             get { return _addressName; }
