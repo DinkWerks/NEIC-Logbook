@@ -3,27 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:prism="http://prismlibrary.com/"             
              prism:ViewModelLocator.AutoWireViewModel="True"
-			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
-			 xmlns:views="clr-namespace:mOrganizationList.Views"
 			 xmlns:converters="clr-namespace:Tracker.Core.Converters;assembly=Tracker.Core">
-<UserControl.Resources>
-		<Style TargetType="TextBlock" x:Key="ColumnTitle">
-			<Setter Property="FontWeight" Value="Bold"/>
-		</Style>
-		<converters:StringToIcon x:Key="StringToIcon"/>
-	</UserControl.Resources>
-
-	<i:Interaction.Triggers>
-		<prism:InteractionRequestTrigger SourceObject="{Binding NewOrganizationRequest}">
-			<prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
-				<prism:PopupWindowAction.WindowContent>
-					<views:NewOrganizationDialog/>
-				</prism:PopupWindowAction.WindowContent>
-			</prism:PopupWindowAction>
-		</prism:InteractionRequestTrigger>
-	</i:Interaction.Triggers>
-
-	<Grid Margin="10">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="ColumnTitle">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+        <converters:StringToIcon x:Key="StringToIcon"/>
+    </UserControl.Resources>
+    
+    <Grid Margin="10">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>

@@ -164,6 +164,7 @@
     <Compile Include="Events\AdditionalCountySelectionEvent.cs" />
     <Compile Include="Events\AdditionalCountySelectionOpenedEvent.cs" />
     <Compile Include="Events\CalculatorCostChangedEvent.cs" />
+    <Compile Include="Events\OrgListSelectEvent.cs" />
     <Compile Include="Events\ClientListSelectEvent.cs" />
     <Compile Include="Events\Payloads\AdditionalCountySelectionPayload.cs" />
     <Compile Include="Events\Payloads\RSListModificationPayload.cs" />

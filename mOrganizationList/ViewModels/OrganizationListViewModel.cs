@@ -75,7 +75,7 @@ namespace mOrganizationList.ViewModels
             _ds = dialogService;
 
             Organizations = efService.Organizations.ToList();
-            OrgView.Filter = ClientNameSearchFilter;
+            OrgView.Filter = OrgNameSearchFilter;
 
             NewOrganizationCommand = new DelegateCommand(CreateNewOrganization);
             eventAggregator.GetEvent<ClientListSelectEvent>().Subscribe(NavigateToClientEntry);
@@ -94,7 +94,8 @@ namespace mOrganizationList.ViewModels
                         context.Add(new Organization
                         {
                             OrganizationName = newName,
-                            OrganizationStanding = OrganizationStandings.GoodStanding
+                            OrganizationStanding = OrganizationStandings.GoodStanding,
+                            Address = new Address()
                         });
                         context.SaveChanges();
 
@@ -116,10 +117,10 @@ namespace mOrganizationList.ViewModels
                 _rm.RequestNavigate("ContentRegion", "OrganizationEntry", parameters);
         }
 
-        public bool ClientNameSearchFilter(object item)
+        public bool OrgNameSearchFilter(object item)
         {
-            Client client = item as Client;
-            if (client == null)
+            Organization org = item as Organization;
+            if (org == null)
             {
                 return false;
             }
@@ -128,7 +129,7 @@ namespace mOrganizationList.ViewModels
 
             if (!string.IsNullOrWhiteSpace(OrgNameSearchText))
             {
-                if (client.ClientName.ToLower().Contains(OrgNameSearchText.ToLower()))
+                if (org.OrganizationName.ToLower().Contains(OrgNameSearchText.ToLower()))
                     passedTests++;
                 else
                     return false;
@@ -137,7 +138,7 @@ namespace mOrganizationList.ViewModels
 
             if (!string.IsNullOrWhiteSpace(PEIDSearchText))
             {
-                if (!string.IsNullOrWhiteSpace(client.NewPEID) && client.NewPEID.ToLower().Contains(PEIDSearchText.ToLower()))
+                if (!string.IsNullOrWhiteSpace(org.NewPEID) && org.NewPEID.ToLower().Contains(PEIDSearchText.ToLower()))
                 {
                     passedTests++;
                 }
@@ -147,7 +148,7 @@ namespace mOrganizationList.ViewModels
 
             if (!string.IsNullOrWhiteSpace(OldPEIDSearchText))
             {
-                if (!string.IsNullOrWhiteSpace(client.OldPEID) && client.OldPEID.ToLower().Contains(OldPEIDSearchText.ToLower()))
+                if (!string.IsNullOrWhiteSpace(org.OldPEID) && org.OldPEID.ToLower().Contains(OldPEIDSearchText.ToLower()))
                 {
                     passedTests++;
                 }

@@ -64,9 +64,13 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\NewOrganizationDialogViewModel.cs" />
+    <Compile Include="ViewModels\OrganizationEntryViewModel.cs" />
     <Compile Include="ViewModels\OrganizationListViewModel.cs" />
     <Compile Include="Views\NewOrganizationDialog.xaml.cs">
       <DependentUpon>NewOrganizationDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OrganizationEntry.xaml.cs">
+      <DependentUpon>OrganizationEntry.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\OrganizationList.xaml.cs">
       <DependentUpon>OrganizationList.xaml</DependentUpon>
@@ -101,6 +105,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\NewOrganizationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrganizationEntry.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

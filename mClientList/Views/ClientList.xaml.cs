@@ -19,8 +19,8 @@ namespace mClientList.Views
 
         private void ListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            Client selectedClient = (Client)ClientListBox.SelectedItem;
-            _ea.GetEvent<ClientListSelectEvent>().Publish(selectedClient.ID);
+            Organization selectedClient = (Organization)ClientListBox.SelectedItem;
+            _ea.GetEvent<OrgListSelectEvent>().Publish(selectedClient.ID);
         }
     }
 }
