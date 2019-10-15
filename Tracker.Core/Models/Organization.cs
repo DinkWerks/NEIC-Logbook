@@ -1,6 +1,7 @@
 ﻿using Prism.Mvvm;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using Tracker.Core.StaticTypes;
 
@@ -11,8 +12,7 @@ namespace Tracker.Core.Models
         private int _id;
         private string _oldPEID;
         private string _newPEID;
-        private string _clientName;
-        private string _officeName;
+        private string _organizationName;
         private string _phone;
         private string _email;
         private string _website;
@@ -27,42 +27,42 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _id, value); }
         }
 
+        [MaxLength(10)]
         public string OldPEID
         {
             get { return _oldPEID; }
             set { SetProperty(ref _oldPEID, value); }
         }
 
+        [MaxLength(10)]
         public string NewPEID
         {
             get { return _newPEID; }
             set { SetProperty(ref _newPEID, value); }
         }
 
-        public string ClientName
+        [MaxLength(200)]
+        public string OrganizationName
         {
-            get { return _clientName; }
-            set { SetProperty(ref _clientName, value); }
+            get { return _organizationName; }
+            set { SetProperty(ref _organizationName, value); }
         }
 
-        public string OfficeName
-        {
-            get { return _officeName; }
-            set { SetProperty(ref _officeName, value); }
-        }
-
+        [MaxLength(15)]
         public string Phone
         {
             get { return _phone; }
             set { SetProperty(ref _phone, value); }
         }
 
+        [MaxLength(200)]
         public string Email
         {
             get { return _email; }
             set { SetProperty(ref _email, value); }
         }
 
+        [MaxLength(200)]
         public string Website
         {
             get { return _website; }
@@ -102,10 +102,7 @@ namespace Tracker.Core.Models
 
         public override string ToString()
         {
-            if (string.IsNullOrWhiteSpace(OfficeName))
-                return ClientName;
-            else
-                return ClientName + " - " + OfficeName;
+            return OrganizationName;
         }
     }
 }

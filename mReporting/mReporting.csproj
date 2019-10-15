@@ -97,7 +97,10 @@
     <PackageReference Include="Microsoft.Office.Interop.Word">
       <Version>15.0.4797.1003</Version>
     </PackageReference>
-    <PackageReference Include="Prism.Wpf" Version="7.1.0.431&#xD;" />
+    <PackageReference Include="Prism.Core">
+      <Version>7.2.0.1367</Version>
+    </PackageReference>
+    <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\DateParameters.xaml">

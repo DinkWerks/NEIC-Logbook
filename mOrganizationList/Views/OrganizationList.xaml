@@ -1,0 +1,87 @@
+﻿<UserControl x:Class="mOrganizationList.Views.OrganizationList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+			 xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+			 xmlns:views="clr-namespace:mOrganizationList.Views"
+			 xmlns:converters="clr-namespace:Tracker.Core.Converters;assembly=Tracker.Core">
+<UserControl.Resources>
+		<Style TargetType="TextBlock" x:Key="ColumnTitle">
+			<Setter Property="FontWeight" Value="Bold"/>
+		</Style>
+		<converters:StringToIcon x:Key="StringToIcon"/>
+	</UserControl.Resources>
+
+	<i:Interaction.Triggers>
+		<prism:InteractionRequestTrigger SourceObject="{Binding NewOrganizationRequest}">
+			<prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True">
+				<prism:PopupWindowAction.WindowContent>
+					<views:NewOrganizationDialog/>
+				</prism:PopupWindowAction.WindowContent>
+			</prism:PopupWindowAction>
+		</prism:InteractionRequestTrigger>
+	</i:Interaction.Triggers>
+
+	<Grid Margin="10">
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+
+		<ToolBar Margin="0,0,0,10" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
+			<Button Content="Add New" Command="{Binding NewOrganizationCommand}"/>
+		</ToolBar>
+
+		<Grid Grid.Row="1" HorizontalAlignment="Stretch">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="100"/>
+				<ColumnDefinition Width="100"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<TextBox Text="{Binding PEIDSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,2,0"/>
+			<TextBox Grid.Column="1" Text="{Binding OldPEIDSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,2,0"/>
+			<TextBox Grid.Column="2" Text="{Binding OrgNameSearchText, UpdateSourceTrigger=PropertyChanged}"/>
+		</Grid>
+
+		<Grid Grid.Row="2" HorizontalAlignment="Stretch">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="100"/>
+				<ColumnDefinition Width="100"/>
+				<ColumnDefinition Width="1*"/>
+				<ColumnDefinition Width="Auto"/>
+			</Grid.ColumnDefinitions>
+			<TextBlock Text="PEID" Style="{StaticResource ColumnTitle}"/>
+			<TextBlock Grid.Column="1" Text="OldPEID" Style="{StaticResource ColumnTitle}"/>
+			<TextBlock Grid.Column="2" Text="Organization" Style="{StaticResource ColumnTitle}"/>
+			<TextBlock Grid.Column="3" Text="Status" Style="{StaticResource ColumnTitle}"/>
+		</Grid>
+
+		<ListBox Grid.Row="3" x:Name="ClientListBox" ItemsSource="{Binding OrgView}" HorizontalContentAlignment="Stretch">
+			<ListBox.ItemContainerStyle>
+				<Style TargetType="ListBoxItem">
+					<EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+				</Style>
+			</ListBox.ItemContainerStyle>
+			<ListBox.ItemTemplate>
+				<DataTemplate>
+					<Grid>
+						<Grid.ColumnDefinitions>
+							<ColumnDefinition Width="100"/>
+							<ColumnDefinition Width="100"/>
+							<ColumnDefinition Width="1*"/>
+							<ColumnDefinition Width="Auto"/>
+						</Grid.ColumnDefinitions>
+						<TextBlock Text="{Binding NewPEID}"/>
+						<TextBlock Grid.Column="1" Text="{Binding OldPEID}"/>
+						<TextBlock Grid.Column="2" Text="{Binding OrganizationName}"/>
+						<Image Grid.Column="3" Width="16" Source="{Binding OrganizationStanding.Icon, Converter={StaticResource StringToIcon}}"/>
+					</Grid>
+				</DataTemplate>
+			</ListBox.ItemTemplate>
+		</ListBox>
+	</Grid>
+</UserControl>

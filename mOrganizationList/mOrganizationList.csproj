@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B528106F-DB13-418A-BE1C-B1836CC2E0BC}</ProjectGuid>
+    <ProjectGuid>{B02BD5D8-8BC8-4FA3-8640-B796582C27E2}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>mPersonList</RootNamespace>
-    <AssemblyName>mPersonList</AssemblyName>
+    <RootNamespace>mOrganizationList</RootNamespace>
+    <AssemblyName>mOrganizationList</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -49,10 +49,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\ICFileNumberConverter.cs" />
-    <Compile Include="mPersonListModule.cs" />
-    <Compile Include="Notifications\INewPersonNotification.cs" />
-    <Compile Include="Notifications\NewPersonNotification.cs" />
+    <Compile Include="mOrganizationListModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -66,17 +63,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ViewModels\NewPersonDialogViewModel.cs" />
-    <Compile Include="ViewModels\PersonEntryViewModel.cs" />
-    <Compile Include="ViewModels\PersonListViewModel.cs" />
-    <Compile Include="Views\NewPersonDialog.xaml.cs">
-      <DependentUpon>NewPersonDialog.xaml</DependentUpon>
+    <Compile Include="ViewModels\NewOrganizationDialogViewModel.cs" />
+    <Compile Include="ViewModels\OrganizationListViewModel.cs" />
+    <Compile Include="Views\NewOrganizationDialog.xaml.cs">
+      <DependentUpon>NewOrganizationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\PersonEntry.xaml.cs">
-      <DependentUpon>PersonEntry.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\PersonList.xaml.cs">
-      <DependentUpon>PersonList.xaml</DependentUpon>
+    <Compile Include="Views\OrganizationList.xaml.cs">
+      <DependentUpon>OrganizationList.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -89,18 +82,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Views\NewPersonDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PersonEntry.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\PersonList.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <ProjectReference Include="..\Tracker.Core\Tracker.Core.csproj">
+      <Project>{91072ca4-6b1a-4a0d-bf41-1123e13c3ebc}</Project>
+      <Name>Tracker.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore">
@@ -109,17 +94,20 @@
     <PackageReference Include="Prism.Core">
       <Version>7.2.0.1367</Version>
     </PackageReference>
-    <PackageReference Include="Prism.Unity">
-      <Version>7.2.0.1367</Version>
-    </PackageReference>
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Tracker.Core\Tracker.Core.csproj">
-      <Project>{91072ca4-6b1a-4a0d-bf41-1123e13c3ebc}</Project>
-      <Name>Tracker.Core</Name>
-    </ProjectReference>
+    <Folder Include="Notifications\" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Page Include="Views\NewOrganizationDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OrganizationList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
