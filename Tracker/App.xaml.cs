@@ -45,8 +45,10 @@ namespace Tracker
         {
             base.ConfigureModuleCatalog(moduleCatalog);
             //moduleCatalog.AddModule<mClientList.mClientListModule>();
+            moduleCatalog.AddModule<mDialogs.mDialogsModule>();
             moduleCatalog.AddModule<mOrganizationList.mOrganizationListModule>();
             moduleCatalog.AddModule<mPersonList.mPersonListModule>();
+            moduleCatalog.AddModule<mPeopleList.mPeopleListModule>();
             moduleCatalog.AddModule<mRecordSearchList.mRecordSearchListModule>();
             moduleCatalog.AddModule<mFeeCalculator.mFeeCalculatorModule>();
             moduleCatalog.AddModule<mReporting.mReportingModule>();

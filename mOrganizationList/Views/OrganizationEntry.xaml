@@ -59,7 +59,9 @@
                     <TextBox Grid.Column="3" Grid.Row="1" Text="{Binding Organization.OldPEID, StringFormat={}{0:D6}}" Width="100" HorizontalAlignment="Right"/>
 
                     <TextBlock Grid.Row="2" Text="Standing:" Style="{StaticResource Line Header}" Margin="0"/>
-                    <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Source={x:Static static:OrganizationStandings.Values}}" SelectedItem="{Binding Organization.OrganizationStanding}" SelectedValuePath="Name"/>
+                    <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Source={x:Static static:OrganizationStandings.Values}}" 
+                              SelectedItem="{Binding Organization.OrganizationStanding}" SelectedValue="{Binding Organization.OrganizationStanding}" SelectedValuePath="Name"
+                              Validation.ErrorTemplate="{x:Null}"/>
                 </Grid>
             </GroupBox>
 
@@ -130,7 +132,7 @@
 
             <!-- Affiliated People -->
             <GroupBox Grid.Row="1" Grid.Column="2" Header="Associated People" Margin="0,5">
-                <ListBox x:Name="PersonListBox" ItemsSource="{Binding Associates}" HorizontalContentAlignment="Stretch">
+                <ListBox x:Name="PersonListBox" ItemsSource="{Binding Organization.Employees}" HorizontalContentAlignment="Stretch">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
@@ -153,9 +155,6 @@
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
-
-                                <TextBlock Grid.Column="1" Text="{Binding CurrentAssociation}"/>
-                                <TextBlock Grid.Column="2" Text="{Binding LastContactedDate, StringFormat=d}"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

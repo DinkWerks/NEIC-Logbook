@@ -1,0 +1,72 @@
+﻿<UserControl x:Class="mPeopleList.Views.PeopleList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True">
+    <UserControl.Resources>
+        <Style TargetType="TextBlock" x:Key="ColumnTitle">
+            <Setter Property="FontWeight" Value="Bold"/>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <ToolBar Margin="0,0,0,10">
+            <Button Content="Add New" Command="{Binding NewPersonCommand}"/>
+        </ToolBar>
+
+        <!--Column Headers and Search Bars-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="100"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <TextBox Text="{Binding PersonNameSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,2,0"/>
+            <TextBox Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding AffiliationSearchText, UpdateSourceTrigger=PropertyChanged}"/>
+
+            <TextBlock Grid.Row="1" Text="Name" Style="{StaticResource ColumnTitle}"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Affiliation" Style="{StaticResource ColumnTitle}"/>
+        </Grid>
+
+        <!--List Box-->
+        <ListBox x:Name="PersonListBox" Grid.Row="2" ItemsSource="{Binding PeopleView}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemContainerStyle>
+                <Style TargetType="ListBoxItem">
+                    <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                </Style>
+            </ListBox.ItemContainerStyle>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="3*"/>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat=" {0} {1}">
+                                    <Binding Path="FirstName"/>
+                                    <Binding Path="LastName"/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <TextBlock Grid.Column="1" Text="{Binding CurrentAssociation}"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+    </Grid>
+</UserControl>

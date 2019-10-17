@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B02BD5D8-8BC8-4FA3-8640-B796582C27E2}</ProjectGuid>
+    <ProjectGuid>{45687570-2241-4DD5-9B1E-848E85003D9E}</ProjectGuid>
     <OutputType>library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>mOrganizationList</RootNamespace>
-    <AssemblyName>mOrganizationList</AssemblyName>
+    <RootNamespace>mDialogs</RootNamespace>
+    <AssemblyName>mDialogs</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -49,7 +49,12 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="mOrganizationListModule.cs" />
+    <Compile Include="mDialogsModule.cs" />
+    <Compile Include="ViewModels\NewOrganizationDialogViewModel.cs" />
+    <Compile Include="ViewModels\NewPersonDialogViewModel.cs" />
+    <Compile Include="Views\NewOrganizationDialog.xaml.cs">
+      <DependentUpon>NewOrganizationDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -63,13 +68,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="ViewModels\OrganizationEntryViewModel.cs" />
-    <Compile Include="ViewModels\OrganizationListViewModel.cs" />
-    <Compile Include="Views\OrganizationEntry.xaml.cs">
-      <DependentUpon>OrganizationEntry.xaml</DependentUpon>
+    <Compile Include="ViewModels\ConfirmationDialogViewModel.cs" />
+    <Compile Include="Views\ConfirmationDialog.xaml.cs">
+      <DependentUpon>ConfirmationDialog.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\OrganizationList.xaml.cs">
-      <DependentUpon>OrganizationList.xaml</DependentUpon>
+    <Compile Include="Views\NewPersonDialog.xaml.cs">
+      <DependentUpon>NewPersonDialog.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -82,10 +86,6 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\mDialogs\mDialogs.csproj">
-      <Project>{45687570-2241-4dd5-9b1e-848e85003d9e}</Project>
-      <Name>mDialogs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Tracker.Core\Tracker.Core.csproj">
       <Project>{91072ca4-6b1a-4a0d-bf41-1123e13c3ebc}</Project>
       <Name>Tracker.Core</Name>
@@ -95,18 +95,18 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore">
       <Version>2.2.6</Version>
     </PackageReference>
-    <PackageReference Include="Prism.Core">
-      <Version>7.2.0.1367</Version>
-    </PackageReference>
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Page Include="Views\OrganizationEntry.xaml">
+    <Page Include="Views\NewOrganizationDialog.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ConfirmationDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\OrganizationList.xaml">
+    <Page Include="Views\NewPersonDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

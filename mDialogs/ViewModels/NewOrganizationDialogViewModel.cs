@@ -6,16 +6,15 @@ using System.Linq;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
 
-namespace mOrganizationList.ViewModels
+namespace mDialogs.ViewModels
 {
     public class NewOrganizationDialogViewModel : BindableBase, IDialogAware
     {
         private string _organizationName;
         private string _isDistinctWarningVisible = "Hidden";
         private bool _canExit;
-        private IEFService _ef;
 
-        public string Title => "New Entry";
+        public string Title => "New Organization";
 
         public string OrganizationName
         {
@@ -33,10 +32,8 @@ namespace mOrganizationList.ViewModels
         public event Action<IDialogResult> RequestClose;
 
         //Constructor
-        public NewOrganizationDialogViewModel(IEFService efService)
+        public NewOrganizationDialogViewModel()
         {
-            _ef = efService;
-
             CloseCommand = new DelegateCommand<string>(CloseDialog);
         }
 

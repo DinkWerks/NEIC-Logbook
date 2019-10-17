@@ -1,31 +1,30 @@
-﻿using Prism.Commands;
+﻿using Microsoft.EntityFrameworkCore;
+using Prism.Commands;
 using Prism.Events;
-using Prism.Interactivity.InteractionRequest;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
-using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
-using Tracker.Core.StaticTypes;
 
 namespace mOrganizationList.ViewModels
 {
-    public class OrganizationListViewModel : BindableBase
+    public class OrganizationListViewModel : BindableBase, IRegionMemberLifetime
     {
         private IRegionManager _rm;
         private IDialogService _ds;
-        private List<Organization> _organizations = new List<Organization>();
+        private ObservableCollection<Organization> _organizations = new ObservableCollection<Organization>();
         private string _orgNameSearchText;
         private string _peidSearchText;
         private string _oldPEIDSearchText;
 
-        public List<Organization> Organizations
+        public ObservableCollection<Organization> Organizations
         {
             get { return _organizations; }
             set { SetProperty(ref _organizations, value); }
@@ -69,16 +68,22 @@ namespace mOrganizationList.ViewModels
         public bool KeepAlive => false;
 
         //Constructor
-        public OrganizationListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IEFService efService, IDialogService dialogService)
+        public OrganizationListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IDialogService dialogService)
         {
             _rm = regionManager;
             _ds = dialogService;
 
-            Organizations = efService.Organizations.ToList();
+            using (var context = new EFService())
+            {
+                Organizations = new ObservableCollection<Organization>(context.Organizations
+                    .Include(s => s.OrganizationStanding)
+                    .ToList());
+            }
+            
             OrgView.Filter = OrgNameSearchFilter;
 
             NewOrganizationCommand = new DelegateCommand(CreateNewOrganization);
-            eventAggregator.GetEvent<ClientListSelectEvent>().Subscribe(NavigateToClientEntry);
+            eventAggregator.GetEvent<OrgListSelectEvent>().Subscribe(NavigateToOrgEntry);
         }
 
         //Methods
@@ -89,24 +94,23 @@ namespace mOrganizationList.ViewModels
                 if (r.Result == ButtonResult.OK)
                 {
                     string newName = r.Parameters.GetValue<string>("OrgName");
+                    Organization newOrg = new Organization
+                    {
+                        OrganizationName = newName,
+                        Address = new Address()
+                    };
+
                     using (var context = new EFService())
                     {
-                        context.Add(new Organization
-                        {
-                            OrganizationName = newName,
-                            OrganizationStanding = OrganizationStandings.GoodStanding,
-                            Address = new Address()
-                        });
+                        context.Add(newOrg);
                         context.SaveChanges();
-
-                        //And Navigate Here
                     }
+                    NavigateToOrgEntry(newOrg.ID);
                 }
-            }
-            );
+            });
         }
 
-        public void NavigateToClientEntry(int navTargetID)
+        public void NavigateToOrgEntry(int navTargetID)
         {
             var parameters = new NavigationParameters
             {

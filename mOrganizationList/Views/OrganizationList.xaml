@@ -48,7 +48,7 @@
 			<TextBlock Grid.Column="3" Text="Status" Style="{StaticResource ColumnTitle}"/>
 		</Grid>
 
-		<ListBox Grid.Row="3" x:Name="ClientListBox" ItemsSource="{Binding OrgView}" HorizontalContentAlignment="Stretch">
+		<ListBox Grid.Row="3" x:Name="OrgListBox" ItemsSource="{Binding OrgView}" HorizontalContentAlignment="Stretch">
 			<ListBox.ItemContainerStyle>
 				<Style TargetType="ListBoxItem">
 					<EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>

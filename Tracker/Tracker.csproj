@@ -157,6 +157,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\mDialogs\mDialogs.csproj">
+      <Project>{45687570-2241-4dd5-9b1e-848e85003d9e}</Project>
+      <Name>mDialogs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\mFeeCalculator\mFeeCalculator.csproj">
       <Project>{d3320477-199c-4427-a5a7-99a640544193}</Project>
       <Name>mFeeCalculator</Name>
@@ -164,6 +168,10 @@
     <ProjectReference Include="..\mOrganizationList\mOrganizationList.csproj">
       <Project>{b02bd5d8-8bc8-4fa3-8640-b796582c27e2}</Project>
       <Name>mOrganizationList</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\mPeopleList\mPeopleList.csproj">
+      <Project>{bcc81e6d-c059-4138-b3e4-092620287c43}</Project>
+      <Name>mPeopleList</Name>
     </ProjectReference>
     <ProjectReference Include="..\mPersonList\mPersonList.csproj">
       <Project>{b528106f-db13-418a-be1c-b1836cc2e0bc}</Project>

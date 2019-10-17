@@ -15,7 +15,7 @@ namespace mOrganizationList
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
             containerRegistry.RegisterForNavigation<OrganizationList>();
-            containerRegistry.RegisterDialog<NewOrganizationDialog, NewOrganizationDialogViewModel>();
+            containerRegistry.RegisterForNavigation<OrganizationEntry>();
         }
     }
 }

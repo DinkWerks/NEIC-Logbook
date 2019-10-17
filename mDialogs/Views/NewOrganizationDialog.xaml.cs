@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace mOrganizationList.Views
+namespace mDialogs.Views
 {
     /// <summary>
     /// Interaction logic for NewOrganizationDialog
