@@ -4,7 +4,7 @@ using System.Windows.Input;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
 
-namespace mPersonList.Views
+namespace mPeopleList.Views
 {
     /// <summary>
     /// Interaction logic for PersonEntry
@@ -15,14 +15,14 @@ namespace mPersonList.Views
 
         public PersonEntry(IEventAggregator eventAggregator)
         {
-            InitializeComponent();
             _ea = eventAggregator;
+            InitializeComponent();
         }
 
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            RecordSearch selectedRS = (RecordSearch)RSListBox.SelectedItem;
-            _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.ID);
+            Project selectedRS = (Project)RSListBox.SelectedItem;
+            _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.Id);
         }
     }
 }

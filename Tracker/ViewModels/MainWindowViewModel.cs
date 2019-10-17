@@ -7,6 +7,7 @@ using Tracker.Core.CompositeCommands;
 using Prism.Events;
 using Tracker.Core.Events;
 using Tracker.Core.Events.Payloads;
+using Prism.Services.Dialogs;
 
 namespace Tracker.ViewModels
 {
@@ -15,6 +16,7 @@ namespace Tracker.ViewModels
         private string _title = "NEIC Logbook";
         private string _version = "Version 0.5.5.3";
         private IRegionManager _rm;
+        private IDialogService _ds;
         private IApplicationCommands applicationCommands;
         private StatusPayload _status;
         private double _windowHeight;
@@ -61,14 +63,14 @@ namespace Tracker.ViewModels
         public DelegateCommand GoToGithubCommand { get; private set; }
         public DelegateCommand ExitCommand { get; private set; }
 
-        public InteractionRequest<IConfirmation> ConfirmationRequest { get; set; }
-
         //Constructor
-        public MainWindowViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IRegionNavigationJournal journal, IApplicationCommands applicationCommands)
+        public MainWindowViewModel(IEventAggregator eventAggregator, IRegionManager regionManager,
+            IApplicationCommands applicationCommands, IDialogService dialogService)
         {
             WindowWidth = SystemParameters.PrimaryScreenHeight;
 
             _rm = regionManager;
+            _ds = dialogService;
             
             ApplicationCommands = applicationCommands;
 
@@ -76,7 +78,6 @@ namespace Tracker.ViewModels
             GoToGithubCommand = new DelegateCommand(GoToGithub);
             ExitCommand = new DelegateCommand(Exit);
 
-            ConfirmationRequest = new InteractionRequest<IConfirmation>();
             eventAggregator.GetEvent<StatusEvent>().Subscribe(ChangeStatusText);
         }
 
@@ -99,17 +100,12 @@ namespace Tracker.ViewModels
 
         private void Exit()
         {
-            ConfirmationRequest.Raise(new Confirmation
-            {
-                Title = "Exit",
-                Content = "Are you sure you would like to exit? Unsaved work will be lost."
-            },
-                r =>
-                {
-                    if (r.Confirmed)
+            _ds.Show("ConfirmationDialog",
+                new DialogParameters("message=Are you sure you would like to exit? Unsaved work will be lost."),
+                r => {
+                    if (r.Result == ButtonResult.OK)
                         Application.Current.Shutdown();
-                }
-            );
+                });
         }
     }
 }

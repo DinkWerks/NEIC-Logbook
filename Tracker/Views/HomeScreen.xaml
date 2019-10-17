@@ -23,7 +23,7 @@
         <StackPanel  Grid.Row="2"  Width="300"  HorizontalAlignment="Center">
             <Button Content="Projects" Command="{Binding NavigateCommand}" CommandParameter="RSList"/>
             <Button Content="Organizations" Command="{Binding NavigateCommand}" CommandParameter="OrganizationList"/>
-            <Button Content="People" Command="{Binding NavigateCommand}" CommandParameter="PersonList"/>
+            <Button Content="People" Command="{Binding NavigateCommand}" CommandParameter="PeopleList"/>
             <Button Content="Staff" Command="{Binding NavigateCommand}" CommandParameter="StaffList"/>
             <Button Content="Reporting" Command="{Binding NavigateCommand}" CommandParameter="ReportingHomeScreen"/>
         </StackPanel>

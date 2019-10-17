@@ -63,7 +63,7 @@
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
-                        <TextBlock Grid.Column="1" Text="{Binding CurrentAssociation}"/>
+                        <TextBlock Grid.Column="1" Text="{Binding Affiliation}"/>
                     </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>

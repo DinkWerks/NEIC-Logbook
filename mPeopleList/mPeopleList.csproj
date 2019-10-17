@@ -64,8 +64,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\PeopleListViewModel.cs" />
+    <Compile Include="ViewModels\PersonEntryViewModel.cs" />
     <Compile Include="Views\PeopleList.xaml.cs">
       <DependentUpon>PeopleList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PersonEntry.xaml.cs">
+      <DependentUpon>PersonEntry.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -95,6 +99,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Views\PeopleList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PersonEntry.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

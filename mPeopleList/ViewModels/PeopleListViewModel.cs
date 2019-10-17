@@ -1,13 +1,14 @@
-﻿using Prism.Commands;
+﻿using Microsoft.EntityFrameworkCore;
+using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
-using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using Tracker.Core.Events;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
 
@@ -63,10 +64,26 @@ namespace mPeopleList.ViewModels
 
             using (var context = new EFService())
             {
-                People = context.People.ToList();
+                People = context.People
+                    .Include(o => o.Affiliation)
+                    .ToList();
             }
+
             PeopleView.Filter = PersonNameSearchFilter;
             NewPersonCommand = new DelegateCommand(CreateNewPerson);
+            eventAggregator.GetEvent<PersonListSelectEvent>().Subscribe(NavigateToPeopleEntry);
+        }
+
+        //Methods
+        private void NavigateToPeopleEntry(int navTargetID)
+        {
+            var parameters = new NavigationParameters
+            {
+                { "id", navTargetID }
+            };
+
+            if (navTargetID > 0)
+                _rm.RequestNavigate("ContentRegion", "PersonEntry", parameters);
         }
 
         private void CreateNewPerson()
@@ -75,7 +92,20 @@ namespace mPeopleList.ViewModels
             {
                 if (r.Result == ButtonResult.OK)
                 {
-                    //Do things
+                    Person newPerson = new Person()
+                    {
+                        FirstName = r.Parameters.GetValue<string>("fname"),
+                        LastName = r.Parameters.GetValue<string>("lname"),
+                        Address = new Address()
+                    };
+
+                    using (var context = new EFService())
+                    {
+                        context.Add(newPerson);
+                        context.SaveChanges();
+                    }
+
+                    NavigateToPeopleEntry(newPerson.ID);
                 }
             });
         }

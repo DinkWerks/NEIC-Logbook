@@ -75,7 +75,7 @@ namespace mStaffList.ViewModels
             AddPersonCommand = new DelegateCommand<string>(AddPerson);
             DeletePersonCommand = new DelegateCommand(DeletePerson);
 
-            _ea.GetEvent<RecordSearchListSelectEvent>().Subscribe(NavigateToRSEntry);
+            _ea.GetEvent<ProjectListSelectEvent>().Subscribe(NavigateToRSEntry);
         }
 
         //Methods

@@ -46,7 +46,7 @@ namespace mOrganizationList.ViewModels
             {
                 context.Update(Organization);
                 context.SaveChanges();
-                _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Client entry successfully saved.", Palette.AlertGreen));
+                _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Organization entry successfully saved.", Palette.AlertGreen));
             }
         }
 

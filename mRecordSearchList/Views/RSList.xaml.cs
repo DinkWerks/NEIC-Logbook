@@ -21,7 +21,7 @@ namespace mRecordSearchList.Views
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             RecordSearch selectedRS = (RecordSearch)RSListBox.SelectedItem;
-            _ea.GetEvent<RecordSearchListSelectEvent>().Publish(selectedRS.ID);
+            _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.ID);
         }
 
         private void RSIDPrefix_PreviewKeyDown(object sender, KeyEventArgs e)

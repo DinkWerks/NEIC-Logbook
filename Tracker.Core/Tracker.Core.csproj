@@ -160,6 +160,7 @@
     <Compile Include="BaseClasses\RecordEntryBindableBase.cs" />
     <Compile Include="CompositeCommands\ApplicationCommands.cs" />
     <Compile Include="CompositeCommands\IApplicationCommands.cs" />
+    <Compile Include="Converters\ICFileNumberConverter.cs" />
     <Compile Include="Converters\StringToIcon.cs" />
     <Compile Include="Events\AdditionalCountySelectionEvent.cs" />
     <Compile Include="Events\AdditionalCountySelectionOpenedEvent.cs" />
@@ -170,7 +171,7 @@
     <Compile Include="Events\Payloads\RSListModificationPayload.cs" />
     <Compile Include="Events\Payloads\StatusPayload.cs" />
     <Compile Include="Events\PersonListSelectEvent.cs" />
-    <Compile Include="Events\RecordSearchListSelectEvent.cs" />
+    <Compile Include="Events\ProjectListSelectEvent.cs" />
     <Compile Include="Events\RSEntryChangedEvent.cs" />
     <Compile Include="Events\RSListModifiedEvent.cs" />
     <Compile Include="Events\SaveCompleteEvent.cs" />

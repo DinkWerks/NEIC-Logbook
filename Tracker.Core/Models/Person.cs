@@ -1,5 +1,7 @@
 ﻿using Prism.Mvvm;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Tracker.Core.Models
 {
@@ -82,6 +84,8 @@ namespace Tracker.Core.Models
             get { return _address; }
             set { SetProperty(ref _address, value); }
         }
+
+        public ICollection<Project> RecentProjects { get; set; }
 
         public Person()
         {

@@ -84,7 +84,7 @@ namespace mPersonList.ViewModels
 
             NavigateToClientCommand = new DelegateCommand(NavigateToClient);
             DeleteConfirmationRequest = new InteractionRequest<IConfirmation>();
-            eventAggregator.GetEvent<RecordSearchListSelectEvent>().Subscribe(NavigateToRecordSearch);
+            eventAggregator.GetEvent<ProjectListSelectEvent>().Subscribe(NavigateToRecordSearch);
         }
 
         //Methods

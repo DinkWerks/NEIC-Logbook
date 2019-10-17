@@ -14,7 +14,8 @@ namespace mPeopleList
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterForNavigation<PeopleList>();   
+            containerRegistry.RegisterForNavigation<PeopleList>();
+            containerRegistry.RegisterForNavigation<PersonEntry>();
         }
     }
 }

@@ -111,7 +111,7 @@ namespace mRecordSearchList.ViewModels
             NewRSRequest = new InteractionRequest<ICreateNewRSNotification>();
             CreateNewRSCommand = new DelegateCommand(CreateNewRecordSearch);
 
-            eventAggregator.GetEvent<RecordSearchListSelectEvent>().Subscribe(NavigateToRecordSearchEntry);
+            eventAggregator.GetEvent<ProjectListSelectEvent>().Subscribe(NavigateToRecordSearchEntry);
             eventAggregator.GetEvent<RSListModifiedEvent>().Subscribe(ModifyRSList);
         }
 

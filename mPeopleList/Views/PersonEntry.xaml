@@ -1,0 +1,158 @@
+﻿<UserControl x:Class="mPeopleList.Views.PersonEntry"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:converter="clr-namespace:Tracker.Core.Converters;assembly=Tracker.Core"
+             xmlns:static="clr-namespace:Tracker.Core.StaticTypes;assembly=Tracker.Core">
+    <UserControl.Resources>
+        <converter:ICFileNumberConverter x:Key="ICFileNumberConverter"/>
+        <Style TargetType="TextBlock" x:Key="Line Header">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Margin" Value="0,10,10,0"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Bottom"/>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel Margin="10">
+        <TextBlock Text="Person Entry Form" HorizontalAlignment="Center" FontSize="36" FontWeight="SemiBold" Margin="0,0,0,25"/>
+
+        <!--Person Name Grid-->
+        <Grid MaxWidth="500">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <TextBox Text="{Binding Person.FirstName}" Margin="0,0,5,0"/>
+            <TextBox Grid.Column="1" Text="{Binding Person.LastName}" Margin="0,0,5,0"/>
+
+            <TextBlock Grid.Row="1" Text="First Name" VerticalAlignment="Top"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" Text="Last Name" VerticalAlignment="Top"/>
+        </Grid>
+
+        <!--Information Grid-->
+        <Grid Margin="0,30,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="10"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Affiliation:" Margin="0,0,10,0" Style="{StaticResource Line Header}"/>
+            <DockPanel Grid.Column="1" Grid.ColumnSpan="3">
+                <Button Command="{Binding NavigateToOrganizationCommand}" Width="22" Height="22"
+						VerticalAlignment="Center" DockPanel.Dock="Right">
+                    <Image Source="/Tracker.Core;component/Resources/Icons/link_go.png"/>
+                </Button>
+                <ComboBox ItemsSource="{Binding OrgList, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding Person.Affiliation}"
+                          Margin="0,0,5,0"/>
+            </DockPanel>
+
+            <TextBlock Grid.Row="2" Text="Primary Phone:" Style="{StaticResource Line Header}"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Person.Phone1}"/>
+
+            <TextBlock Grid.Row="3" Text="Secondary Phone:" Style="{StaticResource Line Header}"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Person.Phone2}"/>
+
+            <TextBlock Grid.Row="4" Text="Email:" Style="{StaticResource Line Header}"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Person.Email}"/>
+
+            <TextBlock Grid.Row="5" Text="Disclosure Level:" Style="{StaticResource Line Header}"/>
+            <ComboBox Grid.Row="5" Grid.Column="1" SelectedValue="{Binding Person.DisclosureLevel}" ItemsSource="{Binding Source={x:Static static:StaticData.DisclosureLevels}}" Margin="0,10,0,0" />
+
+            <!--Address-->
+            <GroupBox Grid.Row="6" Grid.ColumnSpan="2" Header="Address" Margin="0,5">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="50"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Text="Name of Address:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Person.Address.AddressName}"/>
+
+                    <TextBlock Grid.Row="1" Text="Address Line 1:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Person.Address.AddressLine1}"/>
+
+                    <TextBlock Grid.Row="2" Text="Address Line 2:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Person.Address.AddressLine2}"/>
+
+                    <TextBlock Grid.Row="3" Text="City:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Margin="0,0,10,0" Text="{Binding Person.Address.City}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="2" Text="State:" Style="{StaticResource Line Header}"/>
+                    <TextBox  Grid.Row="3" Grid.Column="3" Margin="0,0,10,0" Text="{Binding Person.Address.State}"/>
+                    <TextBlock Grid.Row="3" Grid.Column="4" Text="Zip:" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="3" Grid.Column="5" Text="{Binding Person.Address.ZIP}"/>
+
+                    <TextBlock Grid.Row="4" Text="Special Billing Procedure:" TextWrapping="Wrap" Style="{StaticResource Line Header}"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="5" Margin="0,10,0,0" MinLines="5" Text="{Binding Person.Address.Notes}"/>
+                </Grid>
+            </GroupBox>
+
+            <!--Projects-->
+            <GroupBox Grid.Row="2" Grid.Column="3" Grid.RowSpan="5" Header="Previous Record Searches" Height="200" VerticalAlignment="Top">
+                <ListBox x:Name="RSListBox" ItemsSource="{Binding Person.RecentProjects}" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource ICFileNumberConverter}">
+                                            <Binding Path="ICTypePrefix"/>
+                                            <Binding Path="ICYear"/>
+                                            <Binding Path="ICEnumeration"/>
+                                            <Binding Path="ICSuffix"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <TextBlock Grid.Column="1" Text="{Binding ProjectName}"/>
+                                <TextBlock Grid.Column="2" Text="{Binding LastUpdated, StringFormat=d}"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </GroupBox>
+        </Grid>
+    </StackPanel>
+</UserControl>

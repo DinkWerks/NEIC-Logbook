@@ -173,10 +173,6 @@
       <Project>{bcc81e6d-c059-4138-b3e4-092620287c43}</Project>
       <Name>mPeopleList</Name>
     </ProjectReference>
-    <ProjectReference Include="..\mPersonList\mPersonList.csproj">
-      <Project>{b528106f-db13-418a-be1c-b1836cc2e0bc}</Project>
-      <Name>mPersonList</Name>
-    </ProjectReference>
     <ProjectReference Include="..\mRecordSearchList\mRecordSearchList.csproj">
       <Project>{485680d9-6a72-4817-8a49-3850e23aad15}</Project>
       <Name>mRecordSearchList</Name>

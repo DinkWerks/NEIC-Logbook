@@ -1,4 +1,5 @@
-﻿using Prism.Mvvm;
+﻿using Prism.Commands;
+using Prism.Mvvm;
 using Prism.Services.Dialogs;
 using System;
 using System.Linq;
@@ -26,13 +27,14 @@ namespace mDialogs.ViewModels
         }
 
         public string Title => "New Person";
-
+        public DelegateCommand<string> CloseCommand { get; set; }
         public event Action<IDialogResult> RequestClose;
 
         //Constructor
         public NewPersonDialogViewModel(IDialogService dialogService)
         {
             _ds = dialogService;
+            CloseCommand = new DelegateCommand<string>(CloseDialog);
         }
 
         //Methods
@@ -69,9 +71,13 @@ namespace mDialogs.ViewModels
             }
 
             if (exit)
-                RaiseRequestClose(new DialogResult(result,
-                    new DialogParameters($"fname={FirstName},lname={LastName}"))
-                    );
+            {
+                var returnValue = new DialogParameters();
+                returnValue.Add("fname", FirstName);
+                returnValue.Add("lname", LastName);
+                RaiseRequestClose(new DialogResult(result, returnValue));
+            }
+                
         }
 
         public virtual void RaiseRequestClose(IDialogResult dialogResult)

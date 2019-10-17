@@ -35,7 +35,7 @@
             <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged}" Margin="5,0,0,0"/>
         </Grid>
 
-        <Button Grid.Row="2" Grid.Column="1" Content="Cancel" Command="{Binding CancelCommand}" Width="75" Margin="0,0,10,0"/>
-        <Button Grid.Row="2" Grid.Column="2" Content="Accept" Command="{Binding AcceptCommand}" Width="75"/>
+        <Button Grid.Row="2" Grid.Column="1" Content="Cancel" Command="{Binding CloseCommand}" CommandParameter="Cancel" Width="75" Margin="0,0,10,0"/>
+        <Button Grid.Row="2" Grid.Column="2" Content="Accept" Command="{Binding CloseCommand}" CommandParameter="OK" Width="75"/>
     </Grid>
 </UserControl>
