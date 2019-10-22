@@ -50,6 +50,7 @@ namespace Tracker
             //moduleCatalog.AddModule<mPersonList.mPersonListModule>();
             moduleCatalog.AddModule<mPeopleList.mPeopleListModule>();
             moduleCatalog.AddModule<mRecordSearchList.mRecordSearchListModule>();
+            moduleCatalog.AddModule<mProjectList.mProjectListModule>();
             moduleCatalog.AddModule<mFeeCalculator.mFeeCalculatorModule>();
             moduleCatalog.AddModule<mReporting.mReportingModule>();
             moduleCatalog.AddModule<mStaffList.mStaffListModule>();
