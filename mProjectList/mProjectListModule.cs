@@ -14,7 +14,8 @@ namespace mProjectList
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            
+            containerRegistry.RegisterForNavigation<ProjectList>();
+            containerRegistry.RegisterForNavigation<ProjectEntry>();
         }
     }
 }

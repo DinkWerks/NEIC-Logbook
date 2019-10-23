@@ -21,7 +21,7 @@
 		<Image Source="/Tracker.Core;component/Resources/Images/SmallTransparent.png" Stretch="None" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
 		<TextBlock Grid.Row="1" Text="NEIC Logbook" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,25" FontSize="36" FontWeight="SemiBold" Foreground="#8C2332"/>
         <StackPanel  Grid.Row="2"  Width="300"  HorizontalAlignment="Center">
-            <Button Content="Projects" Command="{Binding NavigateCommand}" CommandParameter="RSList"/>
+            <Button Content="Projects" Command="{Binding NavigateCommand}" CommandParameter="ProjectList"/>
             <Button Content="Organizations" Command="{Binding NavigateCommand}" CommandParameter="OrganizationList"/>
             <Button Content="People" Command="{Binding NavigateCommand}" CommandParameter="PeopleList"/>
             <Button Content="Staff" Command="{Binding NavigateCommand}" CommandParameter="StaffList"/>

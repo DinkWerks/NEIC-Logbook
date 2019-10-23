@@ -17,6 +17,7 @@ namespace mDialogs
             containerRegistry.RegisterDialog<ConfirmationDialog, ConfirmationDialogViewModel>();
             containerRegistry.RegisterDialog<NewOrganizationDialog, NewOrganizationDialogViewModel>();
             containerRegistry.RegisterDialog<NewPersonDialog, NewPersonDialogViewModel>();
+            containerRegistry.RegisterDialog<NewProjectDialog, NewProjectDialogViewModel>();
         }
     }
 }

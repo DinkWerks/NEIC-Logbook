@@ -1,0 +1,471 @@
+﻿<UserControl x:Class="mProjectList.Views.ProjectEntry"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:prism="http://prismlibrary.com/"             
+             prism:ViewModelLocator.AutoWireViewModel="True"
+             xmlns:converters="clr-namespace:Tracker.Core.Converters;assembly=Tracker.Core"
+             xmlns:static="clr-namespace:Tracker.Core.StaticTypes;assembly=Tracker.Core"
+             xmlns:tc="clr-namespace:Tracker.Controls;assembly=Tracker.Controls"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d"
+             d:DesignHeight="720" d:DesignWidth="1280">
+    
+    <UserControl.Resources>
+        <Style x:Key="Line Header" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Margin" Value="0,0,5,10"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Margin" Value="0,0,0,4"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Setter Property="VerticalAlignment" Value="Top"/>
+        </Style>
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="0,0,2,8"/>
+        </Style>
+        <converters:StringToIcon x:Key="StringToIcon"/>
+        <converters:BoolToActiveConverter x:Key="BoolToActiveConverter"/>
+        <CollectionViewSource x:Key="StaffGrouped" Source="{Binding StaffList}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="IsActive"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!--Project Title-->
+            <Border RenderOptions.EdgeMode="Aliased" BorderThickness="10" BorderBrush="SandyBrown" Background="SandyBrown" Panel.ZIndex="1">
+                <Border.Effect>
+                    <DropShadowEffect Direction="277" Color="#FF5A5A5A" Opacity="0.66" BlurRadius="10" ShadowDepth="3"/>
+                </Border.Effect>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+
+                    <DockPanel>
+                        <TextBlock FontSize="36" FontWeight="Bold" >
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}{1}-{2}{3}">
+                                    <Binding Path="RecordSearch.ICTypePrefix"/>
+                                    <Binding Path="RecordSearch.ICYear"/>
+                                    <Binding Path="RecordSearch.ICEnumeration"/>
+                                    <Binding Path="RecordSearch.ICSuffix" FallbackValue=""/>
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <Button Command="{Binding ChangeFileNumCommand}" VerticalAlignment="Top" HorizontalAlignment="Left" Width="16" Height="16">
+                            <Image Source="/Tracker.Core;component/Resources/Icons/pencil.png" Width="16"/>
+                        </Button>
+                    </DockPanel>
+
+                    <StackPanel Grid.Row="1" Margin="0,0,10,10">
+                        <TextBlock Text="Project Title:" Style="{StaticResource Line Header}"/>
+                        <TextBox Text="{Binding Project.ProjectName}" MinLines="2" MaxLines="2" TextWrapping="Wrap" Margin="30,0" VerticalAlignment="Bottom"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1" HorizontalAlignment="Right">
+                        <DockPanel LastChildFill="True">
+                            <TextBlock Text="Status: " Style="{StaticResource Line Header}"/>
+                            <TextBlock Text="{Binding Project.Status}"  HorizontalAlignment="Right"/>
+                        </DockPanel>
+
+                        <DockPanel LastChildFill="False">
+                            <TextBlock Text="Project #: " Style="{StaticResource Line Header}"/>
+                            <ComboBox SelectedItem="{Binding Project.ProjectNumber}"
+                                      ItemsSource="{Binding ActiveProjectNumbers}" Width="200">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="75"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding ProjectID}"/>
+                                            <TextBlock Grid.Column="1" Text="{Binding Description}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ComboBox>
+                        </DockPanel>
+
+                        <DockPanel LastChildFill="False" Margin="0,2,0,0">
+                            <TextBlock Text="Invoice #: " Style="{StaticResource Line Header}"/>
+                            <TextBox Text="{Binding RecordSearch.InvoiceNumber}"  Width="200"/>
+                        </DockPanel>
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">
+                        <DockPanel LastChildFill="False">
+                            <TextBlock Text="Record Search Type: " Style="{StaticResource Line Header}"/>
+                            <ComboBox ItemsSource="{Binding Source={x:Static static:StaticData.RecordSearchTypes}}" 
+                                      SelectedItem="{Binding Project.RSType}" Width="200"/>
+                        </DockPanel>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+
+            <!--Content Area-->
+            <Border Grid.Row="1" BorderThickness="0,20,0,0" BorderBrush="Snow" Background="Snow">
+                <ScrollViewer Padding="10,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <!--Requestor Information-->
+                        <Grid Margin="0,0,5,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Requestor:" Style="{StaticResource Line Header}"/>
+
+                            <DockPanel Grid.Column="1">
+                                <Button Command="{Binding NavigateCommand}" CommandParameter="Requestor" Width="22" Height="22"
+						                VerticalAlignment="Top"  DockPanel.Dock="Right">
+                                    <Image Source="/Tracker.Core;component/Resources/Icons/link_go.png"/>
+                                </Button>
+                                <ComboBox Grid.Column="1" ItemsSource="{Binding PeopleList}" 
+									  SelectedValue="{Binding SelectedRequestor}"  SelectedValuePath="ID" IsTextSearchEnabled="True"
+									  IsTextSearchCaseSensitive="False" IsEditable="True"/>
+                            </DockPanel>
+
+                            <TextBlock Grid.Row="1" Text="Additional Requestors:" Style="{StaticResource Line Header}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordSearch.AdditionalRequestors}"/>
+
+                            <TextBlock Grid.Row="2" Text="Current Affiliation:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.Requestor.CurrentAssociation}"/>
+
+                            <TextBlock Grid.Row="3" Text="Primary Phone:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Phone1}"/>
+
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Secondary Phone:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Phone2}"/>
+
+                            <TextBlock Grid.Row="5" Text="Email:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Email}"/>
+                        </Grid>
+
+                        <!--Client Information-->
+                        <Grid Grid.Column="1" Margin="5,0,0,10">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="Client:" Style="{StaticResource Line Header}"/>
+                            <DockPanel Grid.Column="1" Grid.ColumnSpan="3">
+                                <Button Command="{Binding NavigateCommand}" CommandParameter="Client" Width="22" Height="22"
+						                VerticalAlignment="Top"  DockPanel.Dock="Right">
+                                    <Image Source="/Tracker.Core;component/Resources/Icons/link_go.png"/>
+                                </Button>
+                                <ComboBox ItemsSource="{Binding ClientList}" SelectedValue="{Binding SelectedClient}"  SelectedValuePath="ID" 
+                                          IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" IsEditable="True">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding Standing.Icon, Converter={StaticResource StringToIcon}}"/>
+                                                <TextBlock Text="{Binding OrganizationName}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </DockPanel>
+
+                            <TextBlock Grid.Row="1" Text="Status:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Standing}">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RecordSearch.ClientModel.Standing.Severity}" Value="2">
+                                                <Setter Property="Foreground" Value="Red"/>
+                                                <Setter Property="FontWeight" Value="Bold"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding RecordSearch.ClientModel.Standing.Severity}" Value="1">
+                                                <Setter Property="Foreground" Value="Orange"/>
+                                                <Setter Property="FontWeight" Value="SemiBold"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
+
+                            <TextBlock Grid.Row="2" Text="New PEID:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.NewPEID}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="2" Text="Old PEID:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.OldPEID}"/>
+
+                            <TextBlock Grid.Row="3" Text="Phone:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Phone}"/>
+
+                            <TextBlock Grid.Row="4" Text="Email:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Email}"/>
+
+                            <TextBlock Grid.Row="5" Text="Website:" Style="{StaticResource Line Header}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Website}"/>
+                        </Grid>
+
+                        <!--Address Information-->
+                        <TabControl Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,10">
+                            <TabItem Header="Mailing Address">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="Address Source: " Style="{StaticResource Line Header}" Margin="0,12"/>
+                                    <DockPanel Grid.Column="1" Margin="0,10">
+                                        <Button Content="Copy Requestor" Command="{Binding CopyRequestorCommand}" 
+												CommandParameter="Mailing" Width="100" Margin="0,0,10,0"/>
+                                        <Button Content="Copy Client" Command="{Binding CopyClientCommand}" 
+												CommandParameter="Mailing" Width="100" Margin="0,0,10,0"/>
+                                        <CheckBox Grid.Column="2" Content="Billing Same as Mailing" IsChecked="{Binding RecordSearch.IsMailingSameAsBilling}" HorizontalAlignment="Right"/>
+                                    </DockPanel>
+
+                                    <ContentControl Grid.Row="1" Grid.ColumnSpan="2" prism:RegionManager.RegionName="RequestorAddress"
+                                                prism:RegionManager.RegionContext="{Binding RecordSearch.MailingAddress}"/>
+                                </Grid>
+                            </TabItem>
+
+                            <TabItem Header="Billing Address">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock Text="Address Source: " Style="{StaticResource Line Header}" Margin="0,12"/>
+                                    <DockPanel Grid.Column="1" Margin="0,10" LastChildFill="False">
+                                        <Button Content="Copy Requestor" Command="{Binding CopyRequestorCommand}" 
+												CommandParameter="Billing" Width="100" Margin="0,0,10,0"/>
+                                        <Button Content="Copy Client" Command="{Binding CopyClientCommand}" 
+												CommandParameter="Billing" Width="100" Margin="0,0,10,0"/>
+                                    </DockPanel>
+
+                                    <ContentControl Grid.Row="1" Grid.ColumnSpan="2" prism:RegionManager.RegionName="BillingAddress"
+                                                prism:RegionManager.RegionContext="{Binding RecordSearch.BillingAddress}"/>
+                                </Grid>
+                            </TabItem>
+                        </TabControl>
+
+                        <!--Location Information-->
+                        <GroupBox  Header="Location" Grid.Row="2" Margin="0,0,5,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Text="Main County:" Style="{StaticResource Line Header}"/>
+                                <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.MainCounty}"
+								IsEditable="True" ItemsSource="{Binding Source={x:Static static:Counties.regionCounties}}"/>
+
+                                <!--Additional Counties-->
+                                <StackPanel Grid.Row="1" Grid.ColumnSpan="4" Margin="0,10">
+                                    <TextBlock Text="Additional Counties" FontSize="10"/>
+                                    <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                                        <ListBox ItemsSource="{Binding RecordSearch.AdditionalCounties}" Height="75">
+                                            <ListBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}"/>
+                                                </DataTemplate>
+                                            </ListBox.ItemTemplate>
+                                        </ListBox>
+                                    </ScrollViewer>
+                                    <Button Command="{Binding CountySelectPopupCommand}" HorizontalAlignment="Right" Width="22" BorderBrush="Beige">
+                                        <Image Source="/Tracker.Core;component/Resources/Icons/application_edit.png"/>
+                                    </Button>
+                                </StackPanel>
+
+                                <TextBlock Grid.Row="2" Text="PLSS:" Style="{StaticResource Line Header}"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding RecordSearch.PLSS}" Grid.ColumnSpan="3"/>
+
+                                <TextBlock Grid.Row="3" Text="Acres:" Style="{StaticResource Line Header}"/>
+                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding RecordSearch.Acres, StringFormat={}{0:0.###}}" Margin="0,0,4,0"/>
+                                <TextBlock Grid.Row="3" Grid.Column="2" Text="Linear Miles:" Style="{StaticResource Line Header}"/>
+                                <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding RecordSearch.LinearMiles, StringFormat={}{0:0.###}}"/>
+                            </Grid>
+                        </GroupBox>
+
+                        <!--Results Information-->
+                        <GroupBox Header="Results" Grid.Row="2" Grid.Column="1" Margin="5,0,0,0">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <!--Processor Information-->
+                                <TextBlock Text="Processor:" Style="{StaticResource Line Header}"/>
+                                <ComboBox Grid.Column="1" ItemsSource="{Binding Source={StaticResource StaffGrouped}}" 
+                                          SelectedItem="{Binding RecordSearch.Processor}">
+                                    <ComboBox.GroupStyle>
+                                        <GroupStyle>
+                                            <GroupStyle.HeaderTemplate>
+                                                <DataTemplate>
+                                                    <Border Background="DarkGray">
+                                                        <TextBlock Text="{Binding Name, Converter={StaticResource BoolToActiveConverter}}"
+                                                               FontWeight="Bold"/>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </GroupStyle.HeaderTemplate>
+                                        </GroupStyle>
+                                    </ComboBox.GroupStyle>
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Name}"/>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+
+                                <TextBlock Grid.Row="1" Text="Recommendation:" Style="{StaticResource Line Header}"/>
+                                <ComboBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordSearch.Recommendation}" IsEditable="True"
+                                          ItemsSource="{Binding Source={x:Static static:StaticData.Recommendations}}"/>
+
+                                <CheckBox Grid.Row="2" Grid.Column="1" Content="Resources Present in Project Area" IsChecked="{Binding RecordSearch.AreResourcesInProject}" Margin="0,0,0,5"/>
+
+                                <CheckBox Grid.Row="3" Grid.Column="1" Content="Report Recieved" IsChecked="{Binding RecordSearch.IsReportReceived}" Margin="0,0,0,5"/>
+
+                                <TextBlock Grid.Row="4" Text="Encryption Password:" Style="{StaticResource Line Header}"/>
+                                <tc:LockableTextBox Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.EncryptionPassword}"/>
+
+                                <Separator Grid.ColumnSpan="2" Grid.Row="5" Margin="0,0,0,10"/>
+
+                                <TextBlock Grid.Row="6" Text="Check Name:" Style="{StaticResource Line Header}"/>
+                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding RecordSearch.CheckName}"/>
+
+                                <TextBlock Grid.Row="7" Text="Check Number:" Style="{StaticResource Line Header}"/>
+                                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding RecordSearch.CheckNumber}"/>
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!--Dates and Billing-->
+        <Grid Grid.Column="1" Margin="10,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <!--Date Information-->
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="Date Received:" Style="{StaticResource Line Header}"/>
+                <DatePicker SelectedDate="{Binding RecordSearch.DateReceived}" Grid.Column="1"/>
+
+                <TextBlock Grid.Row="1" Text="Date Entered:" Style="{StaticResource Line Header}"/>
+                <DatePicker SelectedDate="{Binding RecordSearch.DateEntered}" Grid.Row="1" Grid.Column="1"/>
+
+                <TextBlock Grid.Row="2" Text="Date of Response:" Style="{StaticResource Line Header}"/>
+                <DatePicker SelectedDate="{Binding RecordSearch.DateOfResponse}" Grid.Row="2" Grid.Column="1"/>
+
+                <TextBlock Grid.Row="3" Text="Date Billed:" Style="{StaticResource Line Header}"/>
+                <DatePicker SelectedDate="{Binding RecordSearch.DateBilled}" Grid.Row="3" Grid.Column="1"/>
+
+                <TextBlock Grid.Row="4" Text="Date Paid:" Style="{StaticResource Line Header}"/>
+                <DatePicker SelectedDate="{Binding RecordSearch.DatePaid}" Grid.Row="4" Grid.Column="1"/>
+            </Grid>
+
+            <!--Fee/Billing-->
+            <Border Margin="0,20,0,0" Grid.Row="1" Background="Snow">
+                <ScrollViewer>
+                    <ContentControl prism:RegionManager.RegionName="CalculatorRegion"/>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+    </Grid>
+</UserControl>

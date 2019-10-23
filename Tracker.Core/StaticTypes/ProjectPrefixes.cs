@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Tracker.Core.StaticTypes
 {
-    public class RecordSearchPrefixes
+    public class ProjectPrefixes
     {
         public static readonly Prefix A = new Prefix("A", "Shasta County", "808008900");
         public static readonly Prefix B = new Prefix("B", "Plumas County", "808008900");
@@ -67,7 +67,7 @@ namespace Tracker.Core.StaticTypes
 
         public static Prefix GetPrefix(string prefix)
         {
-            Type type = typeof(RecordSearchPrefixes);
+            Type type = typeof(ProjectPrefixes);
             FieldInfo field = type.GetField(prefix.ToUpper());
             return (Prefix)field.GetValue(null);
         }

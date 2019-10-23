@@ -10,13 +10,12 @@ using Tracker.Core.StaticTypes;
 
 namespace mDialogs.ViewModels
 {
-    public class NewProjectDialogViewModel : BindableBase, IDialogAware
+    public class ChangeICFileDialogViewModel : BindableBase, IDialogAware
     {
         private Prefix _prefix;
         private string _year;
         private int _enumeration;
         private string _suffix;
-        private string _projectName;
         private string _isDistinctWarningVisible = "Hidden";
         private bool _canExit;
 
@@ -53,14 +52,6 @@ namespace mDialogs.ViewModels
             get { return _suffix; }
             set { SetProperty(ref _suffix, value); }
         }
-        public string ProjectName
-        {
-            get { return _projectName; }
-            set
-            {
-                SetProperty(ref _projectName, value);
-            }
-        }
 
         public string IsDistinctWarningVisible
         {
@@ -71,14 +62,14 @@ namespace mDialogs.ViewModels
             }
         }
 
-        public string Title => "New Project";
+        public string Title => "Change the IC File Number";
         public DelegateCommand<string> CloseCommand { get; set; }
         public event Action<IDialogResult> RequestClose;
 
         //Constructor
-        public NewProjectDialogViewModel()
+        public ChangeICFileDialogViewModel()
         {
-            PrefixChoices = ProjectPrefixes.Values.ToList(); 
+            PrefixChoices = ProjectPrefixes.Values.ToList();
 
             CloseCommand = new DelegateCommand<string>(CloseDialog);
         }
@@ -115,7 +106,6 @@ namespace mDialogs.ViewModels
                 returnValue.Add("year", Year);
                 returnValue.Add("enumeration", Enumeration);
                 returnValue.Add("suffix", Suffix);
-                returnValue.Add("pname", ProjectName);
                 RaiseRequestClose(new DialogResult(result, returnValue));
             }
         }
@@ -129,7 +119,7 @@ namespace mDialogs.ViewModels
         {
             if (!string.IsNullOrEmpty(Year) && Prefix != null)
             {
-                using(var context = new EFService())
+                using (var context = new EFService())
                 {
                     Enumeration = context.Projects
                         .Where(p => p.ICTypePrefix == Prefix.ToString() && p.ICYear == Year)
@@ -161,9 +151,9 @@ namespace mDialogs.ViewModels
             using (var context = new EFService())
             {
                 Project match = context.Projects
-                    .Where(p => p.ICTypePrefix == Prefix.ToString() 
-                             && p.ICYear == Year 
-                             && p.ICEnumeration == Enumeration 
+                    .Where(p => p.ICTypePrefix == Prefix.ToString()
+                             && p.ICYear == Year
+                             && p.ICEnumeration == Enumeration
                              && p.ICSuffix == Suffix)
                     .FirstOrDefault();
                 if (match == null)
@@ -183,7 +173,6 @@ namespace mDialogs.ViewModels
             Year = "";
             Enumeration = 0;
             Suffix = "";
-            ProjectName = "";
             IsDistinctWarningVisible = "Hidden";
         }
 

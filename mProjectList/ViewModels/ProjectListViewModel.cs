@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Windows.Data;
+using Tracker.Core.Events;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
 using Tracker.Core.StaticTypes;
@@ -34,7 +36,7 @@ namespace mProjectList.ViewModels
 
         public ICollectionView ProjectView
         {
-            get { return _projectView; }
+            get { return CollectionViewSource.GetDefaultView(Projects); }
         }
 
         public string ICFilePrefixSearch
@@ -87,7 +89,7 @@ namespace mProjectList.ViewModels
             _ea = eventAggregator;
             _rm = regionManager;
             _ds = dialogService;
-            PrefixChoices = new List<Prefix>(RecordSearchPrefixes.Values);
+            PrefixChoices = new List<Prefix>(ProjectPrefixes.Values);
 
             using (var context = new EFService())
             {
@@ -96,11 +98,14 @@ namespace mProjectList.ViewModels
                     .Include(o => o.Client)
                     .ToList();
             }
+            ProjectView.Filter = ProjectViewFilter;
 
+            CreateNewProjectCommand = new DelegateCommand(CreateNewProject);
+            eventAggregator.GetEvent<ProjectListSelectEvent>().Subscribe(NavigateToProjectEntry);
         }
 
         //Methods
-        public void NavigateToRecordSearchEntry(int navTargetID)
+        public void NavigateToProjectEntry(int navTargetID)
         {
             var parameters = new NavigationParameters
             {
@@ -108,18 +113,40 @@ namespace mProjectList.ViewModels
             };
 
             if (navTargetID >= 0)
-                _rm.RequestNavigate("ContentRegion", "RSEntry", parameters);
+                _rm.RequestNavigate("ContentRegion", "ProjectEntry", parameters);
         }
 
-        public void CreateNewRecordSearch()
+        public void CreateNewProject()
         {
-            
+            _ds.Show("NewProjectDialog", null, r =>
+            {
+                if(r.Result == ButtonResult.OK)
+                {
+                    using(var context = new EFService())
+                    {
+                        Project newProject = new Project()
+                        {
+                            ICTypePrefix = r.Parameters.GetValue<Prefix>("prefix").ToString(),
+                            ICYear = r.Parameters.GetValue<string>("year"),
+                            ICEnumeration = r.Parameters.GetValue<int>("enumeration"),
+                            ICSuffix = r.Parameters.GetValue<string>("suffix"),
+                            ProjectName = r.Parameters.GetValue<string>("pname"),
+                            MailingAddress = new Address(),
+                            BillingAddress = new Address(),
+                        };
+                        context.Add(newProject);
+                        context.SaveChanges();
+
+                        NavigateToProjectEntry(newProject.Id);
+                    }
+                }
+            });
         }
 
-        public bool RecordSearchViewFilter(object filterable)
+        public bool ProjectViewFilter(object filterable)
         {
-            Project recordSearch = filterable as Project;
-            if (recordSearch == null)
+            Project project = filterable as Project;
+            if (project == null)
             {
                 return false;
             }
@@ -128,7 +155,7 @@ namespace mProjectList.ViewModels
 
             if (ProjectNameSearchText != null)
             {
-                if (recordSearch.ProjectName.ToLower().Contains(ProjectNameSearchText.ToLower()))
+                if (project.ProjectName.ToLower().Contains(ProjectNameSearchText.ToLower()))
                 {
                     passedTests++;
                 }
@@ -138,7 +165,7 @@ namespace mProjectList.ViewModels
 
             if (ICFilePrefixSearch != null)
             {
-                if (recordSearch.ICTypePrefix.ToUpper() == ICFilePrefixSearch)
+                if (project.ICTypePrefix.ToUpper() == ICFilePrefixSearch)
                 {
                     passedTests++;
                 }
@@ -148,7 +175,7 @@ namespace mProjectList.ViewModels
 
             if (ICFileYearSearch != null)
             {
-                if (recordSearch.ICYear.ToLower().Contains(ICFileYearSearch))
+                if (project.ICYear.ToLower().Contains(ICFileYearSearch))
                 {
                     passedTests++;
                 }
@@ -158,7 +185,7 @@ namespace mProjectList.ViewModels
 
             if (ICFileEnumerationSearch != null)
             {
-                if (recordSearch.ICEnumeration.ToString().Contains(ICFileEnumerationSearch))
+                if (project.ICEnumeration.ToString().Contains(ICFileEnumerationSearch))
                 {
                     passedTests++;
                 }

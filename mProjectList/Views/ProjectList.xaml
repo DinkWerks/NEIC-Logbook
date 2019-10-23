@@ -47,7 +47,7 @@
 			<TextBlock Grid.Row="1" Grid.Column="3" Text="Last Updated" HorizontalAlignment="Right" Style="{StaticResource ColumnTitle}"/>
 		</Grid>
 
-		<ListBox x:Name="ProjectListBox" Grid.Row="2" ItemsSource="{Binding RecordSearchesView}" HorizontalContentAlignment="Stretch">
+		<ListBox x:Name="ProjectListBox" Grid.Row="2" ItemsSource="{Binding ProjectView}" HorizontalContentAlignment="Stretch">
 			<ListBox.ItemContainerStyle>
 				<Style TargetType="ListBoxItem">
 					<EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>

@@ -160,6 +160,7 @@
     <Compile Include="BaseClasses\RecordEntryBindableBase.cs" />
     <Compile Include="CompositeCommands\ApplicationCommands.cs" />
     <Compile Include="CompositeCommands\IApplicationCommands.cs" />
+    <Compile Include="Converters\BoolToActiveConverter.cs" />
     <Compile Include="Converters\ICFileNumberConverter.cs" />
     <Compile Include="Converters\StringToIcon.cs" />
     <Compile Include="Events\AdditionalCountySelectionEvent.cs" />
@@ -240,7 +241,7 @@
     <Compile Include="StaticTypes\DisclosureLevels.cs" />
     <Compile Include="StaticTypes\ProjectNumbers.cs" />
     <Compile Include="StaticTypes\StaticData.cs" />
-    <Compile Include="StaticTypes\RecordSearchPrefixes.cs" />
+    <Compile Include="StaticTypes\ProjectPrefixes.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

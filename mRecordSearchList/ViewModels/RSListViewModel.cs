@@ -102,7 +102,7 @@ namespace mRecordSearchList.ViewModels
         {
             _rm = regionManager;
             _rss = recordSearchService;
-            PrefixChoices = new List<Prefix>(RecordSearchPrefixes.Values);
+            PrefixChoices = new List<Prefix>(ProjectPrefixes.Values);
 
             RecordSearches = _rss.GetAllPartialRecordSearches();
             _recordSearchesView = CollectionViewSource.GetDefaultView(RecordSearches);

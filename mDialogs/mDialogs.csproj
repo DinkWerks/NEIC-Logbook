@@ -50,9 +50,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="mDialogsModule.cs" />
+    <Compile Include="ViewModels\ChangeAdditionalCountiesDialogViewModel.cs" />
+    <Compile Include="ViewModels\ChangeICFileDialogViewModel.cs" />
     <Compile Include="ViewModels\NewOrganizationDialogViewModel.cs" />
     <Compile Include="ViewModels\NewPersonDialogViewModel.cs" />
     <Compile Include="ViewModels\NewProjectDialogViewModel.cs" />
+    <Compile Include="Views\ChangeAdditionalCountiesDialog.xaml.cs">
+      <DependentUpon>ChangeAdditionalCountiesDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChangeICFileDialog.xaml.cs">
+      <DependentUpon>ChangeICFileDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NewOrganizationDialog.xaml.cs">
       <DependentUpon>NewOrganizationDialog.xaml</DependentUpon>
     </Compile>
@@ -102,6 +110,14 @@
     <PackageReference Include="Prism.Wpf" Version="7.2.0.1367" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Views\ChangeAdditionalCountiesDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChangeICFileDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\NewOrganizationDialog.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

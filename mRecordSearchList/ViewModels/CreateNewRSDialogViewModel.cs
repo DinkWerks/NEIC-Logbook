@@ -101,7 +101,7 @@ namespace mRecordSearchList.ViewModels
         public CreateNewRSDialogViewModel(IRecordSearchService recordSearchService)
         {
             _rss = recordSearchService;
-            PrefixChoices = new List<Prefix>(RecordSearchPrefixes.Values);
+            PrefixChoices = new List<Prefix>(ProjectPrefixes.Values);
 
             CancelCommand = new DelegateCommand(Cancel);
             AcceptCommand = new DelegateCommand(Accept, CanAccept);
