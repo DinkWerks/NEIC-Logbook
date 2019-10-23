@@ -27,6 +27,9 @@ namespace mProjectList.ViewModels
         private IRegionManager _rm;
         private IDialogService _ds;
         private Project _project;
+        private List<Person> _requestorList;
+        private List<Organization> _clientList;
+        private List<Staff> _staffList;
         private int _selectedRequestor;
         private int _selectedClient;
 
@@ -34,6 +37,24 @@ namespace mProjectList.ViewModels
         {
             get { return _project; }
             set { SetProperty(ref _project, value); }
+        }
+
+        public List<Person> RequestorList
+        {
+            get { return _requestorList; }
+            set { SetProperty(ref _requestorList, value); }
+        }
+
+        public List<Organization> ClientList
+        {
+            get { return _clientList; }
+            set { SetProperty(ref _clientList, value); }
+        }
+
+        public List<Staff> StaffList
+        {
+            get { return _staffList; }
+            set { SetProperty(ref _staffList, value); }
         }
 
         public int SelectedRequestor
@@ -194,14 +215,19 @@ namespace mProjectList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            using(var context = new EFService())
+            using (var context = new EFService())
             {
                 Project = context.Projects
                     .Where(p => p.Id == (int)navigationContext.Parameters["id"])
                     .Include(p => p.Requestor)
                         .ThenInclude(r => r.Affiliation)
                     .Include(p => p.Client)
+                    .Include(p => p.Processor)
                     .FirstOrDefault();
+
+                RequestorList = context.People.OrderBy(s => s.LastName).ToList();
+                ClientList = context.Organizations.OrderBy(s => s.OrganizationName).ToList();
+                StaffList = context.Staff.OrderBy(s => s.Name).ToList();
             }
         }
     }

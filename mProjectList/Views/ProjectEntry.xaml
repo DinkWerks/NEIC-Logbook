@@ -168,7 +168,7 @@
 						                VerticalAlignment="Top"  DockPanel.Dock="Right">
                                     <Image Source="/Tracker.Core;component/Resources/Icons/link_go.png"/>
                                 </Button>
-                                <ComboBox Grid.Column="1" ItemsSource="{Binding PeopleList}" 
+                                <ComboBox Grid.Column="1" ItemsSource="{Binding RequestorList}" 
 									  SelectedValue="{Binding SelectedRequestor}"  SelectedValuePath="ID" IsTextSearchEnabled="True"
 									  IsTextSearchCaseSensitive="False" IsEditable="True"/>
                             </DockPanel>
