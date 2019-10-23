@@ -15,14 +15,11 @@ namespace mStaffList.ViewModels
 {
     public class StaffListViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
     {
-        private readonly IStaffService _ss;
-        private readonly IRecordSearchService _rss;
         private readonly IEventAggregator _ea;
         private readonly IRegionManager _rm;
-        private readonly IEFService _ef;
         private ObservableCollection<Staff> _staffMembers;
         private Staff _selectedStaff;
-        private ObservableCollection<RecordSearch> _staffRecordSearches;
+        private ObservableCollection<Project> _staffProjects;
         private string _newPersonName;
 
         public ObservableCollection<Staff> StaffMembers
@@ -39,15 +36,23 @@ namespace mStaffList.ViewModels
                 if (_selectedStaff != null)
                     UpdatePerson();
                 if (value != null && value.Name != string.Empty)
-                    StaffRecordSearches = new ObservableCollection<RecordSearch>(_rss.GetPartialRecordSearchesByCriteria("WHERE Processor = \"" + value.Name + "\""));
+                    using(var context = new EFService())
+                    {
+                        StaffProjects = new ObservableCollection<Project>(
+                            context.Projects
+                                .Where(p => p.Processor == value)
+                                .OrderBy(p => p.DateReceived)
+                                .Take(10)
+                            );
+                    }
                 SetProperty(ref _selectedStaff, value);
             }
         }
 
-        public ObservableCollection<RecordSearch> StaffRecordSearches
+        public ObservableCollection<Project> StaffProjects
         {
-            get { return _staffRecordSearches; }
-            set { SetProperty(ref _staffRecordSearches, value); }
+            get { return _staffProjects; }
+            set { SetProperty(ref _staffProjects, value); }
         }
 
         public string NewPersonName
@@ -61,17 +66,16 @@ namespace mStaffList.ViewModels
         public bool KeepAlive => false;
 
         //Constructor
-        public StaffListViewModel(IStaffService staffService, IEFService efService, IRecordSearchService recordSearchService, IEventAggregator eventAggregator, IRegionManager regionManager)
+        public StaffListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager)
         {
-            _ss = staffService;
-            _rss = recordSearchService;
             _ea = eventAggregator;
             _rm = regionManager;
-            _ef = efService;
 
-            StaffMembers = new ObservableCollection<Staff>(_ef.Staffs.ToList());
-            //StaffMembers = new ObservableCollection<Staff>(staffService.CompleteStaffList);
-
+            using (var context = new EFService())
+            {
+                StaffMembers = new ObservableCollection<Staff>(context.Staff.ToList());
+            }
+            
             AddPersonCommand = new DelegateCommand<string>(AddPerson);
             DeletePersonCommand = new DelegateCommand(DeletePerson);
 
@@ -89,28 +93,12 @@ namespace mStaffList.ViewModels
                     IsActive = true
                 };
 
-                context.Staffs.Add(newMember);
+                context.Staff.Add(newMember);
                 context.SaveChanges();
-                StaffMembers = new ObservableCollection<Staff>(_ef.Staffs.ToList());
+                StaffMembers = new ObservableCollection<Staff>(context.Staff.ToList());
             }
 
             NewPersonName = "";
-            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Added.", Palette.AlertGreen));
-        }
-
-        [Obsolete]
-        private void AddPersonO(string name)
-        {
-            Staff newMember = new Staff()
-            {
-                Name = name,
-                IsActive = true
-            };
-
-            newMember.ID = _ss.AddStaffMember(newMember);
-            StaffMembers.Add(newMember);
-            NewPersonName = "";
-
             _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Added.", Palette.AlertGreen));
         }
 
@@ -118,12 +106,11 @@ namespace mStaffList.ViewModels
         {
             using (var context = new EFService())
             {
-                context.Update<Staff>(SelectedStaff);
+                context.Update(SelectedStaff);
                 context.SaveChanges();
                 _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Updated.", Palette.AlertGreen));
             }
         }
-
 
         private void DeletePerson()
         {
@@ -132,17 +119,9 @@ namespace mStaffList.ViewModels
                 context.Remove(SelectedStaff);
                 _selectedStaff = null;
                 context.SaveChanges();
-                StaffMembers = new ObservableCollection<Staff>(_ef.Staffs.ToList());
+                StaffMembers = new ObservableCollection<Staff>(context.Staff.ToList());
                 _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Deleted.", Palette.AlertGreen));
             }
-        }
-
-        [Obsolete]
-        private void DeletePersonO()
-        {
-            _ss.DeleteStaffMember(SelectedStaff.ID);
-            StaffMembers = new ObservableCollection<Staff>(_ss.CompleteStaffList);
-            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Staff Member Deleted.", Palette.AlertGreen));
         }
 
         private void NavigateToRSEntry(int navTargetID)
@@ -153,7 +132,7 @@ namespace mStaffList.ViewModels
             };
 
             if (navTargetID >= 0)
-                _rm.RequestNavigate("ContentRegion", "RSEntry", parameters);
+                _rm.RequestNavigate("ContentRegion", "ProjectEntry", parameters);
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)

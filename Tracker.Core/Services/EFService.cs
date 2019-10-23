@@ -16,7 +16,7 @@ namespace Tracker.Core.Services
         public DbSet<Organization> Organizations { get; set; }
         public DbSet<Person> People { get; set; }
         public DbSet<Address> Addresses { get; set; }
-        public DbSet<Staff> Staffs { get; set; }
+        public DbSet<Staff> Staff { get; set; }
 
         //Secondary Models
         public DbSet<OrganizationStanding> OrganizationStandings { get; set; }

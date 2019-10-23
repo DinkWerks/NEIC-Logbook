@@ -20,8 +20,8 @@ namespace mStaffList.Views
 
         private void ListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            RecordSearch selectedRS = (RecordSearch)RSListBox.SelectedItem;
-            _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.ID);
+            Project selectedProject = (Project)RSListBox.SelectedItem;
+            _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedProject.Id);
         }
     }
 }

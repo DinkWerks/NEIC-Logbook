@@ -1,4 +1,5 @@
 ﻿using Prism.Mvvm;
+using System.Collections.Generic;
 
 namespace Tracker.Core.Models
 {
@@ -31,6 +32,8 @@ namespace Tracker.Core.Models
                 SetProperty(ref _isActive, value);
             }
         }
+
+        public ICollection<Project> StaffProjects { get; set; }
 
         public override string ToString()
         {

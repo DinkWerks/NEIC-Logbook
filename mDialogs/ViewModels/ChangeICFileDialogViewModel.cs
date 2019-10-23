@@ -102,7 +102,7 @@ namespace mDialogs.ViewModels
             var returnValue = new DialogParameters();
             if (_canExit)
             {
-                returnValue.Add("prefix", Prefix);
+                returnValue.Add("prefix", Prefix.ToString());
                 returnValue.Add("year", Year);
                 returnValue.Add("enumeration", Enumeration);
                 returnValue.Add("suffix", Suffix);

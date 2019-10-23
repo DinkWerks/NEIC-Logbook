@@ -44,7 +44,8 @@ namespace Tracker.Core.Models
         private bool _areResourcesInProject;
         private string _recommendation;
         private bool _isReportReceived;
-        private string _processor;
+        private int _processorID;
+        private Staff _processor;
         private string _encryptionPassword;
         // Fees
         private string _feeVersion;
@@ -295,12 +296,20 @@ namespace Tracker.Core.Models
             get { return _isReportReceived; }
             set { SetProperty(ref _isReportReceived, value); }
         }
+        
         public string EncryptionPassword
         {
             get { return _encryptionPassword; }
             set { SetProperty(ref _encryptionPassword, value); }
         }
-        public string Processor
+
+        public int ProcessorID
+        {
+            get { return _processorID; }
+            set { SetProperty(ref _processorID, value); }
+        }
+
+        public Staff Processor
         {
             get { return _processor; }
             set { SetProperty(ref _processor, value); }

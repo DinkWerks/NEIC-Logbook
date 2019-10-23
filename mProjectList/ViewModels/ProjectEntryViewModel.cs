@@ -8,6 +8,7 @@ using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Tracker.Core;
 using Tracker.Core.BaseClasses;
@@ -16,6 +17,7 @@ using Tracker.Core.Events;
 using Tracker.Core.Events.Payloads;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
+using Tracker.Core.StaticTypes;
 
 namespace mProjectList.ViewModels
 {
@@ -138,21 +140,24 @@ namespace mProjectList.ViewModels
             {
                 if (r.Result == ButtonResult.OK)
                 {
-                    Project.ICTypePrefix = r.Parameters.GetValue<string>("");
-                    Project.ICYear = r.Parameters.GetValue<string>("");
-                    Project.ICEnumeration = r.Parameters.GetValue<int>("");
-                    Project.ICSuffix = r.Parameters.GetValue<string>("");
+                    Project.ICTypePrefix = r.Parameters.GetValue<string>("prefix");
+                    Project.ICYear = r.Parameters.GetValue<string>("year");
+                    Project.ICEnumeration = r.Parameters.GetValue<int>("enumeration");
+                    Project.ICSuffix = r.Parameters.GetValue<string>("suffix");
                 }
             });
         }
 
         private void ChangeAdditionalCounties()
         {
-            _ds.Show("ChangeAdditionalCountiesDialog", null, r =>
+            DialogParameters currentCounties = new DialogParameters();
+            currentCounties.Add("selected", Project.AdditionalCounties);
+
+            _ds.Show("ChangeAdditionalCountiesDialog", currentCounties, r =>
             {
                 if (r.Result == ButtonResult.OK)
                 {
-
+                    Project.AdditionalCounties = r.Parameters.GetValue<ObservableCollection<County>>("counties");
                 }
             });
         }

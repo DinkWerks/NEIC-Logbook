@@ -188,6 +188,14 @@
     <Compile Include="Migrations\20191014051003_B1.designer.cs">
       <DependentUpon>20191014051003_B1.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20191023205517_StaffTableCorrection.cs" />
+    <Compile Include="Migrations\20191023205517_StaffTableCorrection.designer.cs">
+      <DependentUpon>20191023205517_StaffTableCorrection.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20191023214227_SPRelate.cs" />
+    <Compile Include="Migrations\20191023214227_SPRelate.designer.cs">
+      <DependentUpon>20191023214227_SPRelate.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\EFServiceModelSnapshot.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Client.cs" />

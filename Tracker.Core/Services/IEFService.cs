@@ -9,6 +9,6 @@ namespace Tracker.Core.Services
         DbSet<Organization> Organizations { get; set; }
         DbSet<Person> People { get; set; }
         DbSet<Address> Addresses { get; set; }
-        DbSet<Staff> Staffs { get; set; }
+        DbSet<Staff> Staff { get; set; }
     }
 }

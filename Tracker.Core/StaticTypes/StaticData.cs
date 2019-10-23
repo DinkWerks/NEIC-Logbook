@@ -27,6 +27,20 @@ namespace Tracker.Core.StaticTypes
             "Subscription"
         };
 
+        public static List<string> ProjectTypes = new List<string>()
+        {
+            "Standard",
+            "Inhouse",
+            "Copies/Information",
+            "Project Review",
+            "Record Search - Confidential",
+            "Record Search - Non-Confidential",
+            "Priority/Rapid Response",
+            "Emergency",
+            "Ownership Wide/5 Year Update",
+            "Subscription"
+        };
+
         public static List<string> DisclosureLevels = new List<string>()
         {
             string.Empty,

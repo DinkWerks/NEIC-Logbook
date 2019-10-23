@@ -92,8 +92,8 @@ namespace Tracker.Core.Services
                         AreResourcesInProject = reader.GetBooleanSafe(index++),
                         Recommendation = reader.GetStringSafe(index++),
                         IsReportReceived = reader.GetBooleanSafe(index++), //30
-                        Processor = reader.GetStringSafe(index++),
-                        EncryptionPassword = reader.GetStringSafe(index++),
+                        //Processor = reader.GetStringSafe(index++),
+                        //EncryptionPassword = reader.GetStringSafe(index++),
                         FeeVersion = reader.GetStringSafe(index++),
                         FeeID = reader.GetInt32Safe(index++),
                         TotalFee = reader.GetDecimalSafe(index++),
@@ -175,7 +175,7 @@ namespace Tracker.Core.Services
                             AreResourcesInProject = reader.GetBooleanSafe(index++),
                             Recommendation = reader.GetStringSafe(index++),
                             IsReportReceived = reader.GetBooleanSafe(index++), //30
-                            Processor = reader.GetStringSafe(index++),
+                            //Processor = reader.GetStringSafe(index++),
                             EncryptionPassword = reader.GetStringSafe(index++),
                             FeeVersion = reader.GetStringSafe(index++),
                             FeeID = reader.GetInt32Safe(index++),

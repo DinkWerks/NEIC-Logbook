@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tracker.Core.Services;
 
 namespace Tracker.Core.Migrations
 {
     [DbContext(typeof(EFService))]
-    partial class EFServiceModelSnapshot : ModelSnapshot
+    [Migration("20191023205517_StaffTableCorrection")]
+    partial class StaffTableCorrection
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +156,7 @@ namespace Tracker.Core.Migrations
 
                     b.Property<string>("PLSS");
 
-                    b.Property<int?>("ProcessorID");
+                    b.Property<string>("Processor");
 
                     b.Property<string>("ProjectName");
 
@@ -178,8 +180,6 @@ namespace Tracker.Core.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ClientID");
-
-                    b.HasIndex("ProcessorID");
 
                     b.HasIndex("RequestorID");
 
@@ -298,10 +298,6 @@ namespace Tracker.Core.Migrations
                     b.HasOne("Tracker.Core.Models.Organization", "Client")
                         .WithMany()
                         .HasForeignKey("ClientID");
-
-                    b.HasOne("Tracker.Core.Models.Staff", "Processor")
-                        .WithMany("StaffProjects")
-                        .HasForeignKey("ProcessorID");
 
                     b.HasOne("Tracker.Core.Models.Person", "Requestor")
                         .WithMany("RecentProjects")

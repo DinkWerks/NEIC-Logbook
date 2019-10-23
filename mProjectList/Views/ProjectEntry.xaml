@@ -70,10 +70,10 @@
                         <TextBlock FontSize="36" FontWeight="Bold" >
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0}{1}-{2}{3}">
-                                    <Binding Path="RecordSearch.ICTypePrefix"/>
-                                    <Binding Path="RecordSearch.ICYear"/>
-                                    <Binding Path="RecordSearch.ICEnumeration"/>
-                                    <Binding Path="RecordSearch.ICSuffix" FallbackValue=""/>
+                                    <Binding Path="Project.ICTypePrefix"/>
+                                    <Binding Path="Project.ICYear"/>
+                                    <Binding Path="Project.ICEnumeration"/>
+                                    <Binding Path="Project.ICSuffix" FallbackValue=""/>
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
@@ -114,15 +114,15 @@
 
                         <DockPanel LastChildFill="False" Margin="0,2,0,0">
                             <TextBlock Text="Invoice #: " Style="{StaticResource Line Header}"/>
-                            <TextBox Text="{Binding RecordSearch.InvoiceNumber}"  Width="200"/>
+                            <TextBox Text="{Binding Project.InvoiceNumber}"  Width="200"/>
                         </DockPanel>
                     </StackPanel>
 
                     <StackPanel Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom" HorizontalAlignment="Right">
                         <DockPanel LastChildFill="False">
                             <TextBlock Text="Record Search Type: " Style="{StaticResource Line Header}"/>
-                            <ComboBox ItemsSource="{Binding Source={x:Static static:StaticData.RecordSearchTypes}}" 
-                                      SelectedItem="{Binding Project.RSType}" Width="200"/>
+                            <ComboBox ItemsSource="{Binding Source={x:Static static:StaticData.ProjectTypes}}" 
+                                      SelectedItem="{Binding Project.ProjectType}" Width="200"/>
                         </DockPanel>
                     </StackPanel>
                 </Grid>
@@ -174,19 +174,19 @@
                             </DockPanel>
 
                             <TextBlock Grid.Row="1" Text="Additional Requestors:" Style="{StaticResource Line Header}"/>
-                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordSearch.AdditionalRequestors}"/>
+                            <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Project.AdditionalRequestors}"/>
 
                             <TextBlock Grid.Row="2" Text="Current Affiliation:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.Requestor.CurrentAssociation}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Project.Requestor.CurrentAssociation}"/>
 
                             <TextBlock Grid.Row="3" Text="Primary Phone:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Phone1}"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Project.Requestor.Phone1}"/>
 
                             <TextBlock Grid.Row="4" Grid.Column="0" Text="Secondary Phone:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Phone2}"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding Project.Requestor.Phone2}"/>
 
                             <TextBlock Grid.Row="5" Text="Email:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding RecordSearch.Requestor.Email}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Project.Requestor.Email}"/>
                         </Grid>
 
                         <!--Client Information-->
@@ -230,11 +230,11 @@
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding RecordSearch.ClientModel.Standing.Severity}" Value="2">
+                                            <DataTrigger Binding="{Binding Project.ClientModel.Standing.Severity}" Value="2">
                                                 <Setter Property="Foreground" Value="Red"/>
                                                 <Setter Property="FontWeight" Value="Bold"/>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding RecordSearch.ClientModel.Standing.Severity}" Value="1">
+                                            <DataTrigger Binding="{Binding Project.ClientModel.Standing.Severity}" Value="1">
                                                 <Setter Property="Foreground" Value="Orange"/>
                                                 <Setter Property="FontWeight" Value="SemiBold"/>
                                             </DataTrigger>
@@ -244,18 +244,18 @@
                             </TextBlock>
 
                             <TextBlock Grid.Row="2" Text="New PEID:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.NewPEID}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Project.Client.NewPEID}"/>
                             <TextBlock Grid.Row="2" Grid.Column="2" Text="Old PEID:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.OldPEID}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="3" Grid.ColumnSpan="3" Text="{Binding Project.Client.OldPEID}"/>
 
                             <TextBlock Grid.Row="3" Text="Phone:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Phone}"/>
+                            <TextBlock Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Project.Client.Phone}"/>
 
                             <TextBlock Grid.Row="4" Text="Email:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Email}"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Project.Client.Email}"/>
 
                             <TextBlock Grid.Row="5" Text="Website:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Website}"/>
+                            <TextBlock Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Project.Client.Website}"/>
                         </Grid>
 
                         <!--Address Information-->
@@ -278,11 +278,11 @@
 												CommandParameter="Mailing" Width="100" Margin="0,0,10,0"/>
                                         <Button Content="Copy Client" Command="{Binding CopyClientCommand}" 
 												CommandParameter="Mailing" Width="100" Margin="0,0,10,0"/>
-                                        <CheckBox Grid.Column="2" Content="Billing Same as Mailing" IsChecked="{Binding RecordSearch.IsMailingSameAsBilling}" HorizontalAlignment="Right"/>
+                                        <CheckBox Grid.Column="2" Content="Billing Same as Mailing" IsChecked="{Binding Project.IsMailingSameAsBilling}" HorizontalAlignment="Right"/>
                                     </DockPanel>
 
                                     <ContentControl Grid.Row="1" Grid.ColumnSpan="2" prism:RegionManager.RegionName="RequestorAddress"
-                                                prism:RegionManager.RegionContext="{Binding RecordSearch.MailingAddress}"/>
+                                                prism:RegionManager.RegionContext="{Binding Project.MailingAddress}"/>
                                 </Grid>
                             </TabItem>
 
@@ -306,7 +306,7 @@
                                     </DockPanel>
 
                                     <ContentControl Grid.Row="1" Grid.ColumnSpan="2" prism:RegionManager.RegionName="BillingAddress"
-                                                prism:RegionManager.RegionContext="{Binding RecordSearch.BillingAddress}"/>
+                                                prism:RegionManager.RegionContext="{Binding Project.BillingAddress}"/>
                                 </Grid>
                             </TabItem>
                         </TabControl>
@@ -328,14 +328,14 @@
                                 </Grid.ColumnDefinitions>
 
                                 <TextBlock Text="Main County:" Style="{StaticResource Line Header}"/>
-                                <ComboBox Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.MainCounty}"
+                                <ComboBox Grid.Column="1" Grid.ColumnSpan="3" SelectedItem="{Binding Project.MainCounty}"
 								IsEditable="True" ItemsSource="{Binding Source={x:Static static:Counties.regionCounties}}"/>
 
                                 <!--Additional Counties-->
                                 <StackPanel Grid.Row="1" Grid.ColumnSpan="4" Margin="0,10">
                                     <TextBlock Text="Additional Counties" FontSize="10"/>
                                     <ScrollViewer VerticalScrollBarVisibility="Hidden">
-                                        <ListBox ItemsSource="{Binding RecordSearch.AdditionalCounties}" Height="75">
+                                        <ListBox ItemsSource="{Binding Project.AdditionalCounties}" Height="75">
                                             <ListBox.ItemTemplate>
                                                 <DataTemplate>
                                                     <TextBlock Text="{Binding Name}"/>
@@ -343,18 +343,18 @@
                                             </ListBox.ItemTemplate>
                                         </ListBox>
                                     </ScrollViewer>
-                                    <Button Command="{Binding CountySelectPopupCommand}" HorizontalAlignment="Right" Width="22" BorderBrush="Beige">
+                                    <Button Command="{Binding ChangeAdditionalCountiesCommand}" HorizontalAlignment="Right" Width="22" BorderBrush="Beige">
                                         <Image Source="/Tracker.Core;component/Resources/Icons/application_edit.png"/>
                                     </Button>
                                 </StackPanel>
 
                                 <TextBlock Grid.Row="2" Text="PLSS:" Style="{StaticResource Line Header}"/>
-                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding RecordSearch.PLSS}" Grid.ColumnSpan="3"/>
+                                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Project.PLSS}" Grid.ColumnSpan="3"/>
 
                                 <TextBlock Grid.Row="3" Text="Acres:" Style="{StaticResource Line Header}"/>
-                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding RecordSearch.Acres, StringFormat={}{0:0.###}}" Margin="0,0,4,0"/>
+                                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Project.Acres, StringFormat={}{0:0.###}}" Margin="0,0,4,0"/>
                                 <TextBlock Grid.Row="3" Grid.Column="2" Text="Linear Miles:" Style="{StaticResource Line Header}"/>
-                                <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding RecordSearch.LinearMiles, StringFormat={}{0:0.###}}"/>
+                                <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding Project.LinearMiles, StringFormat={}{0:0.###}}"/>
                             </Grid>
                         </GroupBox>
 
@@ -379,7 +379,7 @@
                                 <!--Processor Information-->
                                 <TextBlock Text="Processor:" Style="{StaticResource Line Header}"/>
                                 <ComboBox Grid.Column="1" ItemsSource="{Binding Source={StaticResource StaffGrouped}}" 
-                                          SelectedItem="{Binding RecordSearch.Processor}">
+                                          SelectedItem="{Binding Project.Processor}">
                                     <ComboBox.GroupStyle>
                                         <GroupStyle>
                                             <GroupStyle.HeaderTemplate>
@@ -400,23 +400,23 @@
                                 </ComboBox>
 
                                 <TextBlock Grid.Row="1" Text="Recommendation:" Style="{StaticResource Line Header}"/>
-                                <ComboBox Grid.Row="1" Grid.Column="1" Text="{Binding RecordSearch.Recommendation}" IsEditable="True"
+                                <ComboBox Grid.Row="1" Grid.Column="1" Text="{Binding Project.Recommendation}" IsEditable="True"
                                           ItemsSource="{Binding Source={x:Static static:StaticData.Recommendations}}"/>
 
-                                <CheckBox Grid.Row="2" Grid.Column="1" Content="Resources Present in Project Area" IsChecked="{Binding RecordSearch.AreResourcesInProject}" Margin="0,0,0,5"/>
+                                <CheckBox Grid.Row="2" Grid.Column="1" Content="Resources Present in Project Area" IsChecked="{Binding Project.AreResourcesInProject}" Margin="0,0,0,5"/>
 
-                                <CheckBox Grid.Row="3" Grid.Column="1" Content="Report Recieved" IsChecked="{Binding RecordSearch.IsReportReceived}" Margin="0,0,0,5"/>
+                                <CheckBox Grid.Row="3" Grid.Column="1" Content="Report Recieved" IsChecked="{Binding Project.IsReportReceived}" Margin="0,0,0,5"/>
 
                                 <TextBlock Grid.Row="4" Text="Encryption Password:" Style="{StaticResource Line Header}"/>
-                                <tc:LockableTextBox Grid.Row="4" Grid.Column="1" Text="{Binding RecordSearch.EncryptionPassword}"/>
+                                <tc:LockableTextBox Grid.Row="4" Grid.Column="1" Text="{Binding Project.EncryptionPassword}"/>
 
                                 <Separator Grid.ColumnSpan="2" Grid.Row="5" Margin="0,0,0,10"/>
 
                                 <TextBlock Grid.Row="6" Text="Check Name:" Style="{StaticResource Line Header}"/>
-                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding RecordSearch.CheckName}"/>
+                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Project.CheckName}"/>
 
                                 <TextBlock Grid.Row="7" Text="Check Number:" Style="{StaticResource Line Header}"/>
-                                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding RecordSearch.CheckNumber}"/>
+                                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Project.CheckNumber}"/>
                             </Grid>
                         </GroupBox>
                     </Grid>
@@ -445,19 +445,19 @@
                 </Grid.ColumnDefinitions>
 
                 <TextBlock Text="Date Received:" Style="{StaticResource Line Header}"/>
-                <DatePicker SelectedDate="{Binding RecordSearch.DateReceived}" Grid.Column="1"/>
+                <DatePicker SelectedDate="{Binding Project.DateReceived}" Grid.Column="1"/>
 
                 <TextBlock Grid.Row="1" Text="Date Entered:" Style="{StaticResource Line Header}"/>
-                <DatePicker SelectedDate="{Binding RecordSearch.DateEntered}" Grid.Row="1" Grid.Column="1"/>
+                <DatePicker SelectedDate="{Binding Project.DateEntered}" Grid.Row="1" Grid.Column="1"/>
 
                 <TextBlock Grid.Row="2" Text="Date of Response:" Style="{StaticResource Line Header}"/>
-                <DatePicker SelectedDate="{Binding RecordSearch.DateOfResponse}" Grid.Row="2" Grid.Column="1"/>
+                <DatePicker SelectedDate="{Binding Project.DateOfResponse}" Grid.Row="2" Grid.Column="1"/>
 
                 <TextBlock Grid.Row="3" Text="Date Billed:" Style="{StaticResource Line Header}"/>
-                <DatePicker SelectedDate="{Binding RecordSearch.DateBilled}" Grid.Row="3" Grid.Column="1"/>
+                <DatePicker SelectedDate="{Binding Project.DateBilled}" Grid.Row="3" Grid.Column="1"/>
 
                 <TextBlock Grid.Row="4" Text="Date Paid:" Style="{StaticResource Line Header}"/>
-                <DatePicker SelectedDate="{Binding RecordSearch.DatePaid}" Grid.Row="4" Grid.Column="1"/>
+                <DatePicker SelectedDate="{Binding Project.DatePaid}" Grid.Row="4" Grid.Column="1"/>
             </Grid>
 
             <!--Fee/Billing-->

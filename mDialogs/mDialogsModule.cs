@@ -18,6 +18,8 @@ namespace mDialogs
             containerRegistry.RegisterDialog<NewOrganizationDialog, NewOrganizationDialogViewModel>();
             containerRegistry.RegisterDialog<NewPersonDialog, NewPersonDialogViewModel>();
             containerRegistry.RegisterDialog<NewProjectDialog, NewProjectDialogViewModel>();
+            containerRegistry.RegisterDialog<ChangeICFileDialog, ChangeICFileDialogViewModel>();
+            containerRegistry.RegisterDialog<ChangeAdditionalCountiesDialog, ChangeAdditionalCountiesDialogViewModel>();
         }
     }
 }
