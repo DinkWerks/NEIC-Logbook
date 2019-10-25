@@ -1,12 +1,9 @@
-﻿using mFeeCalculator.Views;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using mProjectList.Views;
 using Prism.Commands;
 using Prism.Events;
-using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -64,6 +61,7 @@ namespace mProjectList.ViewModels
             {
                 //LoadNewRequestor(value);
                 SetProperty(ref _selectedRequestor, value);
+
             }
         }
 
@@ -80,6 +78,7 @@ namespace mProjectList.ViewModels
         //Commands
         public DelegateCommand ChangeFileNumCommand { get; private set; }
         public DelegateCommand ChangeAdditionalCountiesCommand { get; private set; }
+        public DelegateCommand RequestorChangedCommand { get; private set; }
         public DelegateCommand<string> NavigateCommand { get; private set; }
         public DelegateCommand<string> CopyRequestorCommand { get; private set; }
         public DelegateCommand<string> CopyClientCommand { get; private set; }
@@ -94,10 +93,11 @@ namespace mProjectList.ViewModels
 
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
-            //regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
+            regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
 
             ChangeFileNumCommand = new DelegateCommand(ChangeFileNum);
             ChangeAdditionalCountiesCommand = new DelegateCommand(ChangeAdditionalCounties);
+            RequestorChangedCommand = new DelegateCommand(RequestorChanged);
             NavigateCommand = new DelegateCommand<string>(Navigate);
             CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
             CopyClientCommand = new DelegateCommand<string>(CopyAffiliation);
@@ -110,48 +110,48 @@ namespace mProjectList.ViewModels
             {
                 NavigationParameters parameters = new NavigationParameters
                 {
-                    { "id", SelectedRequestor }
+                    { "id", Project.Requestor.ID }
                 };
-                if (SelectedClient > 0)
+                if (Project.Requestor.ID > 0)
                     _rm.RequestNavigate("ContentRegion", "PersonEntry", parameters);
             }
             else if (destination == "Client")
             {
                 NavigationParameters parameters = new NavigationParameters
                 {
-                    { "id", SelectedClient }
+                    { "id", Project.Client.ID }
                 };
-                if (SelectedClient > 0)
-                    _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
+                if (Project.Client.ID > 0)
+                    _rm.RequestNavigate("ContentRegion", "OrganizationEntry", parameters);
             }
         }
 
         private void CopyRequestor(string destination)
         {
-            if (destination == "Mailing")
-                CopyAddress(Project.MailingAddress, Project.Requestor.Address);
-            else if (destination == "Billing")
-                CopyAddress(Project.BillingAddress, Project.Requestor.Address);
+            if (Project.Requestor != null)
+            {
+                if (destination == "Mailing")
+                    Project.MailingAddress = Project.Requestor.Address;
+                else if (destination == "Billing")
+                    Project.BillingAddress = Project.Requestor.Address;
+            }
         }
 
         private void CopyAffiliation(string destination)
         {
-            if (destination == "Mailing")
-                CopyAddress(Project.MailingAddress, Project.Client.Address);
-            else if (destination == "Billing")
-                CopyAddress(Project.BillingAddress, Project.Client.Address);
+            if (Project.Client != null)
+            {
+                if (destination == "Mailing")
+                    Project.MailingAddress = Project.Client.Address;
+                else if (destination == "Billing")
+                    Project.BillingAddress = Project.Client.Address;
+            }
         }
 
-        private void CopyAddress(Address toReplace, Address toCopy)
+        private void RequestorChanged()
         {
-            toReplace.AddressName = toCopy.AddressName;
-            toReplace.AttentionTo = toCopy.AttentionTo;
-            toReplace.AddressLine1 = toCopy.AddressLine1;
-            toReplace.AddressLine2 = toCopy.AddressLine2;
-            toReplace.City = toCopy.City;
-            toReplace.State = toCopy.State;
-            toReplace.ZIP = toCopy.ZIP;
-            toReplace.Notes = toCopy.Notes;
+            if (Project.Requestor != null && Project.Client == null)
+                Project.Client = Project.Requestor.Affiliation;
         }
 
         //Popups

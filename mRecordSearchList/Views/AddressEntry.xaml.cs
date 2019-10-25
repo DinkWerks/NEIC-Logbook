@@ -1,7 +1,6 @@
 ﻿using mRecordSearchList.ViewModels;
 using Prism.Common;
 using Prism.Regions;
-using System;
 using System.ComponentModel;
 using System.Windows.Controls;
 using Tracker.Core.Models;

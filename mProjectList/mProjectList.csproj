@@ -64,10 +64,14 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <Compile Include="ViewModels\AddressEntryViewModel.cs" />
+    <Compile Include="ViewModels\CalculatorViewModel.cs" />
     <Compile Include="ViewModels\ProjectEntryViewModel.cs" />
     <Compile Include="ViewModels\ProjectListViewModel.cs" />
     <Compile Include="Views\AddressEntry.xaml.cs">
       <DependentUpon>AddressEntry.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Calculator.xaml.cs">
+      <DependentUpon>Calculator.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\ProjectEntry.xaml.cs">
       <DependentUpon>ProjectEntry.xaml</DependentUpon>
@@ -90,10 +94,6 @@
       <Project>{45687570-2241-4dd5-9b1e-848e85003d9e}</Project>
       <Name>mDialogs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\mFeeCalculator\mFeeCalculator.csproj">
-      <Project>{D3320477-199C-4427-A5A7-99A640544193}</Project>
-      <Name>mFeeCalculator</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Tracker.Controls\Tracker.Controls.csproj">
       <Project>{88d9ab74-f571-4338-946d-0f57de4b3a4e}</Project>
       <Name>Tracker.Controls</Name>
@@ -109,6 +109,10 @@
   <ItemGroup />
   <ItemGroup>
     <Page Include="Views\AddressEntry.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\Calculator.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

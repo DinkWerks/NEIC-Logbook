@@ -75,7 +75,7 @@ namespace mPeopleList.ViewModels
                             context.SaveChanges();
                             _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Person entry successfully deleted.", Palette.AlertGreen));
                             _deleting = true;
-                            _rm.RequestNavigate("ContentRegion", "OrganizationList");
+                            _rm.RequestNavigate("ContentRegion", "PeopleList");
                         }
                     }
                 });
@@ -89,7 +89,7 @@ namespace mPeopleList.ViewModels
             };
 
             if (Person.Affiliation.ID > 0)
-                _rm.RequestNavigate("ContentRegion", "ClientEntry", parameters);
+                _rm.RequestNavigate("ContentRegion", "OrganizationEntry", parameters);
         }
 
         private void NavigateToProject(int navTarget)
@@ -100,7 +100,7 @@ namespace mPeopleList.ViewModels
             };
 
             if (navTarget > 0)
-                _rm.RequestNavigate("ContentRegion", "RSEntry", parameters);
+                _rm.RequestNavigate("ContentRegion", "ProjectEntry", parameters);
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)

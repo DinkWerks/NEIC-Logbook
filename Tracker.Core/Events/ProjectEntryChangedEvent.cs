@@ -2,7 +2,7 @@
 
 namespace Tracker.Core.Events
 {
-    public class RSEntryChangedEvent : PubSubEvent
+    public class ProjectEntryChangedEvent : PubSubEvent
     {
     }
 }

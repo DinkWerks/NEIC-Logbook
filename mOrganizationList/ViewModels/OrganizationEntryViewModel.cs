@@ -15,7 +15,6 @@ namespace mOrganizationList.ViewModels
 {
     public class OrganizationEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
-        private readonly IEFService _ef;
         private readonly IEventAggregator _ea;
         private readonly IDialogService _ds;
         private readonly IRegionManager _rm;
@@ -28,10 +27,9 @@ namespace mOrganizationList.ViewModels
         }
 
         //Constructor
-        public OrganizationEntryViewModel(IEFService efService, IEventAggregator eventAggregator, IDialogService dialogService,
+        public OrganizationEntryViewModel(IEventAggregator eventAggregator, IDialogService dialogService,
             IRegionManager regionManager, IApplicationCommands applicationCommands) : base(applicationCommands)
         {
-            _ef = efService;
             _ea = eventAggregator;
             _ds = dialogService;
             _rm = regionManager;
@@ -83,11 +81,14 @@ namespace mOrganizationList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            Organization = _ef.Organizations
-                .Where(o => o.ID == (int)navigationContext.Parameters["id"])
-                .Include(s => s.OrganizationStanding)
-                .Include(e => e.Employees)
-                .FirstOrDefault();
+            using (var context = new EFService())
+            {
+                Organization = context.Organizations
+                    .Where(o => o.ID == (int)navigationContext.Parameters["id"])
+                    .Include(s => s.OrganizationStanding)
+                    .Include(e => e.Employees)
+                    .FirstOrDefault();
+            }
         }
     }
 }

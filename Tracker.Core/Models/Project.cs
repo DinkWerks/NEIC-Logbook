@@ -48,7 +48,7 @@ namespace Tracker.Core.Models
         // Fees
         private string _feeVersion;
         private int _feeID;
-        private Fees.Fee _fee;
+        private FeeData _feeData;
         private bool _isPrePaid;
         private decimal _totalFee;
         // Billing Information
@@ -315,13 +315,11 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _feeID, value); }
         }
 
-        /*
-        public Fees.Fee Fee
+        public FeeData FeeData
         {
-            get { return _fee; }
-            set { SetProperty(ref _fee, value); }
+            get { return _feeData; }
+            set { SetProperty(ref _feeData, value); }
         }
-        */
 
         public bool IsPrePaid
         {
@@ -413,7 +411,5 @@ namespace Tracker.Core.Models
             else
                 return ICTypePrefix + ICYear + "-" + ICEnumeration + ICSuffix;
         }
-
-
     }
 }

@@ -1,4 +1,9 @@
-﻿using System.Windows.Controls;
+﻿using mProjectList.ViewModels;
+using Prism.Common;
+using Prism.Regions;
+using System.ComponentModel;
+using System.Windows.Controls;
+using Tracker.Core.Models;
 
 namespace mProjectList.Views
 {
@@ -10,6 +15,14 @@ namespace mProjectList.Views
         public AddressEntry()
         {
             InitializeComponent();
+            RegionContext.GetObservableContext(this).PropertyChanged += AddressPropertyChanged;
+        }
+
+        private void AddressPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            var context = (ObservableObject<object>)sender;
+            var address = (Address)context.Value;
+            (DataContext as AddressEntryViewModel).Address = address;
         }
     }
 }

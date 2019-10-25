@@ -162,6 +162,7 @@
     <Compile Include="CompositeCommands\IApplicationCommands.cs" />
     <Compile Include="Converters\BoolToActiveConverter.cs" />
     <Compile Include="Converters\ICFileNumberConverter.cs" />
+    <Compile Include="Converters\PresentToBoolConverter.cs" />
     <Compile Include="Converters\StringToIcon.cs" />
     <Compile Include="Events\AdditionalCountySelectionEvent.cs" />
     <Compile Include="Events\AdditionalCountySelectionOpenedEvent.cs" />
@@ -173,7 +174,7 @@
     <Compile Include="Events\Payloads\StatusPayload.cs" />
     <Compile Include="Events\PersonListSelectEvent.cs" />
     <Compile Include="Events\ProjectListSelectEvent.cs" />
-    <Compile Include="Events\RSEntryChangedEvent.cs" />
+    <Compile Include="Events\ProjectEntryChangedEvent.cs" />
     <Compile Include="Events\RSListModifiedEvent.cs" />
     <Compile Include="Events\SaveCompleteEvent.cs" />
     <Compile Include="Extensions\BindableSelectedItemBehavior.cs" />
@@ -200,6 +201,8 @@
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\County.cs" />
+    <Compile Include="Models\FeeX.cs" />
+    <Compile Include="Models\FeeData.cs" />
     <Compile Include="Models\FeeSchedule.cs" />
     <Compile Include="Models\Fees\BooleanCharge.cs" />
     <Compile Include="Models\Fees\CategoricalCharge.cs" />

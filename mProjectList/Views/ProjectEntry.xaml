@@ -8,6 +8,7 @@
              xmlns:tc="clr-namespace:Tracker.Controls;assembly=Tracker.Controls"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="1280">
     
@@ -36,6 +37,8 @@
         </CollectionViewSource>
     </UserControl.Resources>
 
+    
+    
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -169,8 +172,14 @@
                                     <Image Source="/Tracker.Core;component/Resources/Icons/link_go.png"/>
                                 </Button>
                                 <ComboBox Grid.Column="1" ItemsSource="{Binding RequestorList}" 
-									  SelectedValue="{Binding SelectedRequestor}"  SelectedValuePath="ID" IsTextSearchEnabled="True"
-									  IsTextSearchCaseSensitive="False" IsEditable="True"/>
+									  SelectedItem="{Binding Project.Requestor}" IsTextSearchEnabled="True"
+									  IsTextSearchCaseSensitive="False" IsEditable="True">
+                                    <i:Interaction.Triggers>
+                                        <i:EventTrigger EventName="SelectionChanged">
+                                            <i:InvokeCommandAction Command="{Binding RequestorChangedCommand}"/>
+                                        </i:EventTrigger>
+                                    </i:Interaction.Triggers>
+                                </ComboBox>
                             </DockPanel>
 
                             <TextBlock Grid.Row="1" Text="Additional Requestors:" Style="{StaticResource Line Header}"/>
@@ -212,7 +221,7 @@
 						                VerticalAlignment="Top"  DockPanel.Dock="Right">
                                     <Image Source="/Tracker.Core;component/Resources/Icons/link_go.png"/>
                                 </Button>
-                                <ComboBox ItemsSource="{Binding ClientList}" SelectedValue="{Binding SelectedClient}"  SelectedValuePath="ID" 
+                                <ComboBox ItemsSource="{Binding ClientList}" SelectedItem="{Binding Project.Client}"
                                           IsTextSearchEnabled="True" IsTextSearchCaseSensitive="False" IsEditable="True">
                                     <ComboBox.ItemTemplate>
                                         <DataTemplate>

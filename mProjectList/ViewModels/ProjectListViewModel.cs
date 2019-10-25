@@ -6,6 +6,7 @@ using Prism.Regions;
 using Prism.Services.Dialogs;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -16,10 +17,9 @@ using Tracker.Core.StaticTypes;
 
 namespace mProjectList.ViewModels
 {
-    public class ProjectListViewModel : BindableBase
+    public class ProjectListViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
     {
         private List<Project> _projects = new List<Project>();
-        private ICollectionView _projectView;
         private string _icFilePrefix;
         private string _icFileYear;
         private string _icFileEnumeration;
@@ -31,7 +31,11 @@ namespace mProjectList.ViewModels
         public List<Project> Projects
         {
             get { return _projects; }
-            set { SetProperty(ref _projects, value); }
+            set
+            {
+                SetProperty(ref _projects, value);
+                ProjectView.Refresh();
+            }
         }
 
         public ICollectionView ProjectView
@@ -83,6 +87,8 @@ namespace mProjectList.ViewModels
 
         public DelegateCommand CreateNewProjectCommand { get; set; }
 
+        public bool KeepAlive => false;
+
         //Constructor
         public ProjectListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IDialogService dialogService)
         {
@@ -120,9 +126,9 @@ namespace mProjectList.ViewModels
         {
             _ds.Show("NewProjectDialog", null, r =>
             {
-                if(r.Result == ButtonResult.OK)
+                if (r.Result == ButtonResult.OK)
                 {
-                    using(var context = new EFService())
+                    using (var context = new EFService())
                     {
                         Project newProject = new Project()
                         {
@@ -194,6 +200,28 @@ namespace mProjectList.ViewModels
             else passedTests++;
 
             return passedTests >= 4;
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            using (var context = new EFService())
+            {
+                Projects = context.Projects
+                    .Include(p => p.Requestor)
+                    .Include(o => o.Client)
+                    .ToList();
+            }
+            ProjectView.Refresh();
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            
         }
     }
 }

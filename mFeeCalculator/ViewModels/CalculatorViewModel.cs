@@ -17,21 +17,20 @@ namespace mFeeCalculator.ViewModels
 {
     public class CalculatorViewModel : BindableBase
     {
-        private ObservableCollection<FeeSchedule> _versions = new ObservableCollection<FeeSchedule>();
+        private ObservableCollection<FeeStructure> _versions = new ObservableCollection<FeeStructure>();
         private ObservableCollection<ICharge> _charges = new ObservableCollection<ICharge>();
-        private string _icFileNum;
         private Fee _fee;
-        private FeeSchedule _selectedVersion;
+        private FeeStructure _selectedVersion;
         private IRecordSearchService _rs;
         private bool _isLoaded = false;
 
-        public ObservableCollection<FeeSchedule> Versions
+        public ObservableCollection<FeeStructure> Versions
         {
             get { return _versions; }
             set { SetProperty(ref _versions, value); }
         }
 
-        public FeeSchedule SelectedVersion
+        public FeeStructure SelectedVersion
         {
             get { return _selectedVersion; }
             set
@@ -56,26 +55,27 @@ namespace mFeeCalculator.ViewModels
         public Fee FeeModel
         {
             get { return _fee; }
-            set {
+            set
+            {
                 SetProperty(ref _fee, value);
                 Charges = FeeModel.Charges;
             }
         }
 
-
         public DelegateCommand ExportCommand { get; set; }
+
         //Constructor
         public CalculatorViewModel(IEventAggregator eventAggregator, IRecordSearchService recordSearchService)
         {
             _rs = recordSearchService;
 
-            LoadFeeStructures();
-            LoadFeeData();
+            LoadFeeStructures(); //Loads from XML
+            LoadFeeData(); //Loads from DB
 
             _isLoaded = true;
 
             ExportCommand = new DelegateCommand(ExportFee);
-            eventAggregator.GetEvent<RSEntryChangedEvent>().Subscribe(LoadFeeData);
+            eventAggregator.GetEvent<ProjectEntryChangedEvent>().Subscribe(LoadFeeData);
             eventAggregator.GetEvent<CalculatorCostChangedEvent>().Subscribe(UpdateTotalCost);
         }
 
@@ -100,8 +100,8 @@ namespace mFeeCalculator.ViewModels
             foreach (string path in feeStructures)
             {
                 XElement xmlFile = XElement.Load(path);
-                FeeSchedule newItem = (from fs in xmlFile.Descendants("Meta")
-                                       select new FeeSchedule(
+                FeeStructure newItem = (from fs in xmlFile.Descendants("Meta")
+                                       select new FeeStructure(
                                            path,
                                            (string)fs.Element("Version"),
                                            (string)fs.Element("Name"),
@@ -118,7 +118,7 @@ namespace mFeeCalculator.ViewModels
         private void LoadFeeData()
         {
             _isLoaded = false;
-            FeeSchedule fs = Versions.Where(v => v.Version == _rs.CurrentRecordSearch.Fee.FeeVersion).First();
+            FeeStructure fs = Versions.Where(v => v.Version == _rs.CurrentRecordSearch.Fee.FeeVersion).First();
 
             if (fs != null)
             {
