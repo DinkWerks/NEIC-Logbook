@@ -197,13 +197,17 @@
     <Compile Include="Migrations\20191023214227_SPRelate.designer.cs">
       <DependentUpon>20191023214227_SPRelate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20191029060120_FeeDataTable.cs" />
+    <Compile Include="Migrations\20191029060120_FeeDataTable.designer.cs">
+      <DependentUpon>20191029060120_FeeDataTable.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\EFServiceModelSnapshot.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Client.cs" />
     <Compile Include="Models\County.cs" />
     <Compile Include="Models\FeeX.cs" />
     <Compile Include="Models\FeeData.cs" />
-    <Compile Include="Models\FeeSchedule.cs" />
+    <Compile Include="Models\FeeStructure.cs" />
     <Compile Include="Models\Fees\BooleanCharge.cs" />
     <Compile Include="Models\Fees\CategoricalCharge.cs" />
     <Compile Include="Models\Fees\CategorySubcharge.cs" />

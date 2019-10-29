@@ -231,8 +231,8 @@
 
   <Fee type="variable">
     <Index>12</Index>
-    <Name>Black and White Pages</Name>
-    <DBField>BWPages</DBField>
+    <Name>Printed Pages</Name>
+    <DBField>PrintedPages</DBField>
     <UnitName>page</UnitName>
     <UnitNamePlural>pages</UnitNamePlural>
     <Description>Pages copied or printed for the product.</Description>

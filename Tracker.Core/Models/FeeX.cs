@@ -53,12 +53,14 @@ namespace Tracker.Core.Models
         }
 
         //Constructor
-        public FeeX(string version)
+        public FeeX(string version, FeeData feeData)
         {
             if (string.IsNullOrEmpty(version))
                 FeeStructure = FeeStructures.Structures[Settings.Settings.Instance.DefaultFeeStructure.Value];
             else
                 FeeStructure = FeeStructures.Structures[version];
+
+            FeeData = feeData;
 
             StructureCharges(FeeStructure.Version);
         }
@@ -68,6 +70,7 @@ namespace Tracker.Core.Models
         {
             //TODO make resistant to unlocated filenames, try and default
             XElement xmlFile = XElement.Load($"{@"Resources\FeeStructures\" + fileName + ".xml"}");
+            var t = (decimal)(int)FeeData.GetType().GetProperty("GISFeatures").GetValue(FeeData);
 
             //Gather list of charges for DB
             IEnumerable<FeeSeparator> separators = from item in xmlFile.Descendants("Fee")
@@ -83,7 +86,7 @@ namespace Tracker.Core.Models
                                                               Index = (int)item.Element("Index"),
                                                               Name = (string)item.Element("Name"),
                                                               DBField = (string)item.Element("DBField"),
-                                                              Count = (decimal)FeeData.GetType().GetProperty((string)item.Element("DBField")).GetValue(FeeData),
+                                                              Count = FeeData.GetAsDecimal((string)item.Element("DBField")),
                                                               Description = (string)item.Element("Description"),
                                                               UnitName = (string)item.Element("UnitName"),
                                                               UnitNamePlural = (string)item.Element("UnitNamePlural"),
@@ -107,7 +110,7 @@ namespace Tracker.Core.Models
                                                                     Index = (int)item.Element("Index"),
                                                                     Name = (string)item.Element("Name"),
                                                                     DBField = (string)item.Element("DBField"),
-                                                                    Count = (decimal)FeeData.GetType().GetProperty((string)item.Element("DBField")).GetValue(FeeData),
+                                                                    Count = FeeData.GetAsDecimal((string)item.Element("DBField")),
                                                                     Description = (string)item.Element("Description"),
                                                                     UnitName = (string)item.Element("UnitName"),
                                                                     UnitNamePlural = (string)item.Element("UnitNamePlural"),

@@ -309,7 +309,7 @@ namespace mRecordSearchList.ViewModels
                 ActiveProjectNumbers = new ObservableCollection<ProjectNumber>(ProjectNumbers.ActiveProjectNumbers);
 
                 _isLoaded = true;
-                _ea.GetEvent<ProjectEntryChangedEvent>().Publish();
+                //_ea.GetEvent<ProjectEntryChangedEvent>().Publish();
             }
         }
     }

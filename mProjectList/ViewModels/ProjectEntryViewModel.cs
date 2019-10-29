@@ -223,7 +223,11 @@ namespace mProjectList.ViewModels
                         .ThenInclude(r => r.Affiliation)
                     .Include(p => p.Client)
                     .Include(p => p.Processor)
+                    .Include(p => p.FeeData)
                     .FirstOrDefault();
+
+                FeeX projectFee = new FeeX(Project.FeeVersion, Project.FeeData ?? new FeeData());
+                _ea.GetEvent<ProjectEntryChangedEvent>().Publish(projectFee);
 
                 RequestorList = context.People.OrderBy(s => s.LastName).ToList();
                 ClientList = context.Organizations.OrderBy(s => s.OrganizationName).ToList();

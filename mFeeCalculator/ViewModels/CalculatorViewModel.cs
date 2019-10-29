@@ -75,7 +75,7 @@ namespace mFeeCalculator.ViewModels
             _isLoaded = true;
 
             ExportCommand = new DelegateCommand(ExportFee);
-            eventAggregator.GetEvent<ProjectEntryChangedEvent>().Subscribe(LoadFeeData);
+            //eventAggregator.GetEvent<ProjectEntryChangedEvent>().Subscribe(LoadFeeData);
             eventAggregator.GetEvent<CalculatorCostChangedEvent>().Subscribe(UpdateTotalCost);
         }
 
@@ -91,6 +91,8 @@ namespace mFeeCalculator.ViewModels
 
         /// <summary>
         /// Gathers the metadata for all fee structure documents in the FeeStructure directory.
+        /// 
+        /// Moved to FeeStructure.cs
         /// </summary>
         public void LoadFeeStructures()
         {
@@ -114,6 +116,8 @@ namespace mFeeCalculator.ViewModels
 
         /// <summary>
         /// Event driven loading for updating the FeeModel and SelectedVersion properties with the currently open record search.
+        /// 
+        /// Replaced by EF?
         /// </summary>
         private void LoadFeeData()
         {

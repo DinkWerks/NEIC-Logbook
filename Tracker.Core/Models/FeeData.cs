@@ -137,5 +137,16 @@ namespace Tracker.Core.Models
         {
 
         }
+
+        public decimal GetAsDecimal(string propname)
+        {
+            var t = GetType().GetProperty(propname).GetValue(this);
+            if (t.GetType() == typeof(decimal))
+                return (decimal)t;
+            else if (t.GetType() == typeof(int))
+                return (decimal)(int)t;
+            else
+                return 99m;
+        }
     }
 }
