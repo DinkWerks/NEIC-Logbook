@@ -50,6 +50,16 @@ namespace Tracker.Core.Models.Fees
             return "";
         }
 
+        public void Reset()
+        {
+            
+        }
+
+        public decimal GetAsDecimal()
+        {
+            return 0;
+        }
+
         public decimal RoundTotal(decimal value)
         {
             return decimal.Round(value, 2);

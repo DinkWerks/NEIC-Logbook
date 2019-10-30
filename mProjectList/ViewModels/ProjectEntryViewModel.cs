@@ -2,6 +2,7 @@
 using mProjectList.Views;
 using Prism.Commands;
 using Prism.Events;
+using Prism.Ioc;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using System.Collections.Generic;
@@ -20,15 +21,18 @@ namespace mProjectList.ViewModels
 {
     public class ProjectEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
-        private IEventAggregator _ea;
-        private IRegionManager _rm;
-        private IDialogService _ds;
+        private readonly IEventAggregator _ea;
+        private readonly IRegionManager _rm;
+        private readonly IDialogService _ds;
+        private readonly IContainerExtension _container;
         private Project _project;
         private List<Person> _requestorList;
         private List<Organization> _clientList;
         private List<Staff> _staffList;
         private int _selectedRequestor;
         private int _selectedClient;
+        private bool _firstRun = true;
+        private Calculator _calc;
 
         public Project Project
         {
@@ -85,16 +89,16 @@ namespace mProjectList.ViewModels
 
         //Constructor
         public ProjectEntryViewModel(IEventAggregator eventAggregator, IDialogService dialogService, IRegionManager regionManager,
-            IApplicationCommands applicationCommands) : base(applicationCommands)
+            IApplicationCommands applicationCommands, IContainerExtension container) : base(applicationCommands)
         {
             _ea = eventAggregator;
             _rm = regionManager;
             _ds = dialogService;
+            _container = container;
 
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
-            regionManager.RegisterViewWithRegion("CalculatorRegion", typeof(Calculator));
-
+            
             ChangeFileNumCommand = new DelegateCommand(ChangeFileNum);
             ChangeAdditionalCountiesCommand = new DelegateCommand(ChangeAdditionalCounties);
             RequestorChangedCommand = new DelegateCommand(RequestorChanged);
@@ -188,6 +192,7 @@ namespace mProjectList.ViewModels
         {
             using (var context = new EFService())
             {
+                Project.FeeData = ((CalculatorViewModel)_calc.DataContext).Fee.FeeData;
                 context.Update(Project);
                 context.SaveChanges();
                 _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));
@@ -215,6 +220,14 @@ namespace mProjectList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            if (_firstRun)
+            {
+                _calc = _container.Resolve<Calculator>();
+                IRegion region = _rm.Regions["CalculatorRegion"];
+                region.Add(_calc);
+                _firstRun = false;
+            }
+            
             using (var context = new EFService())
             {
                 Project = context.Projects

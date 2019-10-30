@@ -2,6 +2,8 @@
 using System.Windows;
 using System.Windows.Controls;
 using Tracker.Core.Events;
+using Tracker.Core.Events.Payloads;
+using Tracker.Core.Models.Fees;
 
 namespace mProjectList.Views
 {
@@ -20,7 +22,17 @@ namespace mProjectList.Views
 
         private void CostChangedEvent(object sender, RoutedEventArgs e)
         {
-            _ea.GetEvent<CalculatorCostChangedEvent>().Publish();
+            ICharge c = (ICharge)((FrameworkElement)sender).Tag;
+            if (c != null)
+            {
+                var payload = new ChargePayload(c.Type, c.DBField, c.GetAsDecimal());
+                _ea.GetEvent<CalculatorCostChangedEvent>().Publish(payload);
+            }
+        }
+
+        private void ModifierChangedEvent(object sender, RoutedEventArgs e)
+        {
+            _ea.GetEvent<CalculatorModifierChangedEvent>().Publish();
         }
     }
 }

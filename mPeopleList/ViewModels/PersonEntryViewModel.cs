@@ -3,7 +3,6 @@ using Prism.Commands;
 using Prism.Events;
 using Prism.Regions;
 using Prism.Services.Dialogs;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Tracker.Core;

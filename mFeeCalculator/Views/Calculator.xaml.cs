@@ -19,7 +19,7 @@ namespace mFeeCalculator.Views
 
         private void CostChangedEvent(object sender, RoutedEventArgs e)
         {
-            _ea.GetEvent<CalculatorCostChangedEvent>().Publish();
+            //_ea.GetEvent<CalculatorCostChangedEvent>().Publish();
         }
     }
 }

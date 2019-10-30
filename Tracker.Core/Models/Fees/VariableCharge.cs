@@ -55,7 +55,8 @@ namespace Tracker.Core.Models.Fees
         public decimal Count
         {
             get { return _count; }
-            set {
+            set
+            {
                 SetProperty(ref _count, value);
                 TotalCost = 0;
             }
@@ -69,13 +70,27 @@ namespace Tracker.Core.Models.Fees
 
         public decimal TotalCost
         {
-            get { return RoundTotal(_totalCost);  }
+            get { return RoundTotal(_totalCost); }
             private set { SetProperty(ref _totalCost, Count * Cost); }
+        }
+
+        public VariableCharge()
+        {
         }
 
         public string GetCostString()
         {
             return Cost.ToString("C") + "/" + UnitName;
+        }
+
+        public void Reset()
+        {
+            Count = 0;
+        }
+
+        public decimal GetAsDecimal()
+        {
+            return Count;
         }
 
         public decimal RoundTotal(decimal value)

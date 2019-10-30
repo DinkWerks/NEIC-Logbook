@@ -86,11 +86,11 @@ namespace Tracker.Core.Models
                                                               Index = (int)item.Element("Index"),
                                                               Name = (string)item.Element("Name"),
                                                               DBField = (string)item.Element("DBField"),
-                                                              Count = FeeData.GetAsDecimal((string)item.Element("DBField")),
                                                               Description = (string)item.Element("Description"),
                                                               UnitName = (string)item.Element("UnitName"),
                                                               UnitNamePlural = (string)item.Element("UnitNamePlural"),
-                                                              Cost = (decimal)item.Element("Cost")
+                                                              Cost = (decimal)item.Element("Cost"),
+                                                              Count = FeeData.GetAsDecimal((string)item.Element("DBField")),
                                                           };
             IEnumerable<BooleanCharge> booleanCharges = from item in xmlFile.Descendants("Fee")
                                                         where (string)item.Attribute("type") == "boolean"
@@ -99,9 +99,9 @@ namespace Tracker.Core.Models
                                                             Index = (int)item.Element("Index"),
                                                             Name = (string)item.Element("Name"),
                                                             DBField = (string)item.Element("DBField"),
-                                                            IsIncurred = (bool)FeeData.GetType().GetProperty((string)item.Element("DBField")).GetValue(FeeData),
                                                             Description = (string)item.Element("Description"),
-                                                            Cost = (decimal)item.Element("Cost")
+                                                            Cost = (decimal)item.Element("Cost"),
+                                                            IsIncurred = (bool)FeeData.GetType().GetProperty((string)item.Element("DBField")).GetValue(FeeData)
                                                         };
             IEnumerable<CategoricalCharge> categoricalCharges = from item in xmlFile.Descendants("Fee")
                                                                 where (string)item.Attribute("type") == "categorical"

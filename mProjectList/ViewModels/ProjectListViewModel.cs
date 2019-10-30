@@ -20,6 +20,7 @@ namespace mProjectList.ViewModels
     public class ProjectListViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
     {
         private List<Project> _projects = new List<Project>();
+        private ICollectionView _projectView;
         private string _icFilePrefix;
         private string _icFileYear;
         private string _icFileEnumeration;
@@ -27,20 +28,18 @@ namespace mProjectList.ViewModels
         private IEventAggregator _ea;
         private IRegionManager _rm;
         private IDialogService _ds;
+        private bool _firstRun = false;
 
         public List<Project> Projects
         {
             get { return _projects; }
-            set
-            {
-                SetProperty(ref _projects, value);
-                ProjectView.Refresh();
-            }
+            set { SetProperty(ref _projects, value); }
         }
 
         public ICollectionView ProjectView
         {
-            get { return CollectionViewSource.GetDefaultView(Projects); }
+            get { return _projectView; }
+            set { SetProperty(ref _projectView, value); }
         }
 
         public string ICFilePrefixSearch
@@ -104,6 +103,7 @@ namespace mProjectList.ViewModels
                     .Include(o => o.Client)
                     .ToList();
             }
+            ProjectView = CollectionViewSource.GetDefaultView(Projects);
             ProjectView.Filter = ProjectViewFilter;
 
             CreateNewProjectCommand = new DelegateCommand(CreateNewProject);
@@ -204,14 +204,21 @@ namespace mProjectList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            using (var context = new EFService())
+            if (_firstRun)
             {
-                Projects = context.Projects
-                    .Include(p => p.Requestor)
-                    .Include(o => o.Client)
-                    .ToList();
+                _firstRun = false;
             }
-            ProjectView.Refresh();
+            else
+            {
+                using (var context = new EFService())
+                {
+                    Projects = context.Projects
+                        .Include(p => p.Requestor)
+                        .Include(o => o.Client)
+                        .ToList();
+                }
+                ProjectView = CollectionViewSource.GetDefaultView(Projects);
+            }
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
@@ -221,7 +228,7 @@ namespace mProjectList.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            
+
         }
     }
 }

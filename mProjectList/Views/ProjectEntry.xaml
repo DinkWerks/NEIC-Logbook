@@ -99,7 +99,7 @@
                         <DockPanel LastChildFill="False">
                             <TextBlock Text="Project #: " Style="{StaticResource Line Header}"/>
                             <ComboBox SelectedItem="{Binding Project.ProjectNumber}"
-                                      ItemsSource="{Binding ActiveProjectNumbers}" Width="200">
+                                      ItemsSource="{Binding Source={x:Static static:ProjectNumbers.ActiveProjectNumbers}}" Width="200">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Grid>

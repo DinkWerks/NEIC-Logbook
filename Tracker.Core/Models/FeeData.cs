@@ -146,7 +146,16 @@ namespace Tracker.Core.Models
             else if (t.GetType() == typeof(int))
                 return (decimal)(int)t;
             else
-                return 99m;
+                return 0;
+        }
+
+        public void SetFromDecimal(string propname, decimal value)
+        {
+            var t = GetType().GetProperty(propname).PropertyType;
+            if (t == typeof(decimal))
+                GetType().GetProperty(propname).SetValue(this, value);
+            else if(t == typeof(int))
+                GetType().GetProperty(propname).SetValue(this, decimal.ToInt32(value));
         }
     }
 }

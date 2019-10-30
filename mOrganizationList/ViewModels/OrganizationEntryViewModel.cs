@@ -42,9 +42,10 @@ namespace mOrganizationList.ViewModels
         {
             using (var context = new EFService())
             {
-                context.Update(Organization);
+                var e = context.Update(Organization);
                 context.SaveChanges();
                 _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Organization entry successfully saved.", Palette.AlertGreen));
+                context.Entry(Organization).State = EntityState.Detached;
             }
         }
 
@@ -81,14 +82,25 @@ namespace mOrganizationList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            int id = (int)navigationContext.Parameters["id"];
             using (var context = new EFService())
             {
                 Organization = context.Organizations
-                    .Where(o => o.ID == (int)navigationContext.Parameters["id"])
-                    .Include(s => s.OrganizationStanding)
+                    //.Find(id);
+                    .Where(o => o.ID == id)
+                    //.Include(s => s.OrganizationStanding)
                     .Include(e => e.Employees)
                     .FirstOrDefault();
+
+                //context.Entry(Organization).State = EntityState.Detached;
             }
+        }
+
+        public new void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            if (!_deleting)
+                SaveCommand.Execute();
+            Organization = null;
         }
     }
 }

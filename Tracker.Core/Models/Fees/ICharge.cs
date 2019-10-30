@@ -11,5 +11,7 @@
         decimal TotalCost { get; }
         decimal RoundTotal(decimal value);
         string GetCostString();
+        void Reset();
+        decimal GetAsDecimal();
     }
 }

@@ -76,7 +76,7 @@ namespace mFeeCalculator.ViewModels
 
             ExportCommand = new DelegateCommand(ExportFee);
             //eventAggregator.GetEvent<ProjectEntryChangedEvent>().Subscribe(LoadFeeData);
-            eventAggregator.GetEvent<CalculatorCostChangedEvent>().Subscribe(UpdateTotalCost);
+            //eventAggregator.GetEvent<CalculatorCostChangedEvent>().Subscribe(UpdateTotalCost);
         }
 
         public void UpdateTotalCost()

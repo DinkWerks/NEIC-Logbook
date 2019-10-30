@@ -36,8 +36,6 @@ namespace Tracker.Core.StaticTypes
             AllProjectNumbers = output.ToList();
             ActiveProjectNumbers = AllProjectNumbers.Where(r => r.IsActive).ToList();
         }
-
-
     }
 
     public class ProjectNumber

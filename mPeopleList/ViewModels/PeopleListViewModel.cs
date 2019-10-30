@@ -14,11 +14,12 @@ using Tracker.Core.Services;
 
 namespace mPeopleList.ViewModels
 {
-    public class PeopleListViewModel : BindableBase, IRegionMemberLifetime
+    public class PeopleListViewModel : BindableBase, INavigationAware
     {
         private readonly IRegionManager _rm;
         private readonly IDialogService _ds;
         private List<Person> _people = new List<Person>();
+        private ICollectionView _peopleView;
         private string _personNameSearchText;
         private string _affilliationSearchText;
 
@@ -30,7 +31,8 @@ namespace mPeopleList.ViewModels
 
         public ICollectionView PeopleView
         {
-            get { return CollectionViewSource.GetDefaultView(People); }
+            get { return _peopleView; }
+            set { SetProperty(ref _peopleView, value); }
         }
 
         public string PersonNameSearchText
@@ -54,7 +56,6 @@ namespace mPeopleList.ViewModels
         }
 
         public DelegateCommand NewPersonCommand { get; private set; }
-        public bool KeepAlive => false;
 
         //Constructor
         public PeopleListViewModel(IRegionManager regionManager, IDialogService dialogService, IEventAggregator eventAggregator)
@@ -68,6 +69,8 @@ namespace mPeopleList.ViewModels
                     .Include(o => o.Affiliation)
                     .ToList();
             }
+
+            PeopleView = CollectionViewSource.GetDefaultView(People);
 
             PeopleView.Filter = PersonNameSearchFilter;
             NewPersonCommand = new DelegateCommand(CreateNewPerson);
@@ -148,6 +151,28 @@ namespace mPeopleList.ViewModels
                 return false;
             }
             return true;
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            using (var context = new EFService())
+            {
+                People = context.People
+                    .Include(o => o.Affiliation)
+                    .ToList();
+            }
+
+            PeopleView = CollectionViewSource.GetDefaultView(People);
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            
         }
     }
 }

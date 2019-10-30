@@ -59,7 +59,8 @@ namespace Tracker.Core.Models.Fees
         public decimal Count
         {
             get { return _count; }
-            set {
+            set
+            {
                 SetProperty(ref _count, value);
                 TotalCost = FindCost(value);
             }
@@ -82,6 +83,8 @@ namespace Tracker.Core.Models.Fees
             get { return _costCategories; }
             set { SetProperty(ref _costCategories, value); }
         }
+
+
 
         public CategoricalCharge(XElement rawCostCategories)
         {
@@ -152,6 +155,16 @@ namespace Tracker.Core.Models.Fees
             }
 
             return returnValue;
+        }
+
+        public void Reset()
+        {
+            Count = 0;
+        }
+
+        public decimal GetAsDecimal()
+        {
+            return Count;
         }
     }
 }

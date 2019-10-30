@@ -16,7 +16,7 @@ namespace mProjectList
         {
             containerRegistry.RegisterForNavigation<ProjectList>();
             containerRegistry.RegisterForNavigation<ProjectEntry>();
-            containerRegistry.RegisterForNavigation<Calculator>();
+            containerRegistry.Register<Calculator>();
         }
     }
 }

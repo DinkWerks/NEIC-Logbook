@@ -1,5 +1,4 @@
 ﻿using Prism.Mvvm;
-using Tracker.Core.Events;
 
 namespace Tracker.Core.Models.Fees
 {
@@ -64,9 +63,27 @@ namespace Tracker.Core.Models.Fees
             set { SetProperty(ref _totalCost, value); }
         }
 
+        public BooleanCharge()
+        {
+
+        }
+
         public string GetCostString()
         {
             return Cost.ToString("C");
+        }
+
+        public void Reset()
+        {
+            IsIncurred = false;
+        }
+
+        public decimal GetAsDecimal()
+        {
+            if (IsIncurred)
+                return 1;
+            else
+                return 0;
         }
 
         public decimal RoundTotal(decimal value)

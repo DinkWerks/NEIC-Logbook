@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using System.Windows.Data;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
@@ -15,14 +16,16 @@ using Tracker.Core.Services;
 
 namespace mOrganizationList.ViewModels
 {
-    public class OrganizationListViewModel : BindableBase, IRegionMemberLifetime
+    public class OrganizationListViewModel : BindableBase, INavigationAware
     {
         private IRegionManager _rm;
         private IDialogService _ds;
         private ObservableCollection<Organization> _organizations = new ObservableCollection<Organization>();
+        private ICollectionView _orgView;
         private string _orgNameSearchText;
         private string _peidSearchText;
         private string _oldPEIDSearchText;
+        private int counter;
 
         public ObservableCollection<Organization> Organizations
         {
@@ -33,6 +36,7 @@ namespace mOrganizationList.ViewModels
         public ICollectionView OrgView
         {
             get { return CollectionViewSource.GetDefaultView(Organizations); }
+            set { SetProperty(ref _orgView, value); }
         }
 
         public string PEIDSearchText
@@ -65,7 +69,6 @@ namespace mOrganizationList.ViewModels
             }
         }
         public DelegateCommand NewOrganizationCommand { get; private set; }
-        public bool KeepAlive => false;
 
         //Constructor
         public OrganizationListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IDialogService dialogService)
@@ -79,11 +82,17 @@ namespace mOrganizationList.ViewModels
                     .Include(s => s.OrganizationStanding)
                     .ToList());
             }
-            
+            OrgView = CollectionViewSource.GetDefaultView(Organizations);
             OrgView.Filter = OrgNameSearchFilter;
 
+            Interlocked.Increment(ref counter);
             NewOrganizationCommand = new DelegateCommand(CreateNewOrganization);
             eventAggregator.GetEvent<OrgListSelectEvent>().Subscribe(NavigateToOrgEntry);
+        }
+
+        ~OrganizationListViewModel()
+        {
+            Interlocked.Decrement(ref counter);
         }
 
         //Methods
@@ -161,6 +170,28 @@ namespace mOrganizationList.ViewModels
             else passedTests++;
 
             return passedTests >= 3;
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            int _c = counter;
+            using (var context = new EFService())
+            {
+                Organizations = new ObservableCollection<Organization>(context.Organizations
+                    .Include(s => s.OrganizationStanding)
+                    .ToList());
+            }
+            OrgView = CollectionViewSource.GetDefaultView(Organizations);
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            
         }
     }
 }
