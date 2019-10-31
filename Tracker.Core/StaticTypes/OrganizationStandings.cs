@@ -7,9 +7,9 @@ namespace Tracker.Core.StaticTypes
 {
     public class OrganizationStandings
     {
-        public static readonly OrganizationStanding GoodStanding = new OrganizationStanding("Good Standing", "bullet_green.png", 0);
-        public static readonly OrganizationStanding Warning = new OrganizationStanding("Warning", "bullet_orange.png", 1);
-        public static readonly OrganizationStanding Denial = new OrganizationStanding("Denied Service", "bullet_red.png", 2);
+        public static readonly OrganizationStanding GoodStanding = new OrganizationStanding(1, "Good Standing", "bullet_green.png", 0);
+        public static readonly OrganizationStanding Warning = new OrganizationStanding(2, "Warning", "bullet_orange.png", 1);
+        public static readonly OrganizationStanding Denial = new OrganizationStanding(3, "Denied Service", "bullet_red.png", 2);
 
         public static IEnumerable<OrganizationStanding> Values
         {
@@ -24,14 +24,15 @@ namespace Tracker.Core.StaticTypes
 
     public class OrganizationStanding : BindableBase
     {
-        [Key]
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Icon { get; set; }
         public int Severity { get; set; }
         public ICollection<Organization> Organizations { get; set; }
 
-        public OrganizationStanding(string name, string icon, int severity)
+        public OrganizationStanding(int id, string name, string icon, int severity)
         {
+            Id = id;
             Name = name;
             Icon = icon;
             Severity = severity;

@@ -203,6 +203,14 @@
     <Compile Include="Migrations\20191029060120_FeeDataTable.designer.cs">
       <DependentUpon>20191029060120_FeeDataTable.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20191030191507_OrgStanding.cs" />
+    <Compile Include="Migrations\20191030191507_OrgStanding.designer.cs">
+      <DependentUpon>20191030191507_OrgStanding.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\20191030201742_OrgStanding2.cs" />
+    <Compile Include="Migrations\20191030201742_OrgStanding2.designer.cs">
+      <DependentUpon>20191030201742_OrgStanding2.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\EFServiceModelSnapshot.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Client.cs" />

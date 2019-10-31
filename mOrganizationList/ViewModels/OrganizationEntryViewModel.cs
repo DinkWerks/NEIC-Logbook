@@ -42,10 +42,12 @@ namespace mOrganizationList.ViewModels
         {
             using (var context = new EFService())
             {
-                var e = context.Update(Organization);
+                //context.Entry(Organization).State = EntityState.Detached;
+                var x = context.ChangeTracker.Entries();
+                context.Update(Organization);
                 context.SaveChanges();
+
                 _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Organization entry successfully saved.", Palette.AlertGreen));
-                context.Entry(Organization).State = EntityState.Detached;
             }
         }
 
@@ -87,12 +89,14 @@ namespace mOrganizationList.ViewModels
             {
                 Organization = context.Organizations
                     //.Find(id);
-                    .Where(o => o.ID == id)
                     //.Include(s => s.OrganizationStanding)
                     .Include(e => e.Employees)
+                    .Where(o => o.ID == id)
+                    .AsNoTracking()
                     .FirstOrDefault();
-
-                //context.Entry(Organization).State = EntityState.Detached;
+                var x = context.ChangeTracker.Entries();
+                //context.Entry(Organization).Reference(s => s.OrganizationStanding).Load();
+                //context.Entry(Organization.OrganizationStanding).State = EntityState.Detached;
             }
         }
 

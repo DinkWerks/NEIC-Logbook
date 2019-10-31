@@ -186,7 +186,7 @@
                             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Project.AdditionalRequestors}"/>
 
                             <TextBlock Grid.Row="2" Text="Current Affiliation:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Project.Requestor.CurrentAssociation}"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Project.Requestor.Affiliation}"/>
 
                             <TextBlock Grid.Row="3" Text="Primary Phone:" Style="{StaticResource Line Header}"/>
                             <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Project.Requestor.Phone1}"/>
@@ -235,15 +235,15 @@
                             </DockPanel>
 
                             <TextBlock Grid.Row="1" Text="Status:" Style="{StaticResource Line Header}"/>
-                            <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding RecordSearch.ClientModel.Standing}">
+                            <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Project.Client.OrganizationStanding}">
                                 <TextBlock.Style>
                                     <Style TargetType="TextBlock">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Project.ClientModel.Standing.Severity}" Value="2">
+                                            <DataTrigger Binding="{Binding Project.Client.OrganizationStanding.Severity}" Value="2">
                                                 <Setter Property="Foreground" Value="Red"/>
                                                 <Setter Property="FontWeight" Value="Bold"/>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding Project.ClientModel.Standing.Severity}" Value="1">
+                                            <DataTrigger Binding="{Binding Project.Client.OrganizationStanding.Severity}" Value="1">
                                                 <Setter Property="Foreground" Value="Orange"/>
                                                 <Setter Property="FontWeight" Value="SemiBold"/>
                                             </DataTrigger>

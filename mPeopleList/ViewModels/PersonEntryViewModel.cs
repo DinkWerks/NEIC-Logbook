@@ -54,6 +54,7 @@ namespace mPeopleList.ViewModels
         {
             using (var context = new EFService())
             {
+                var x = context.ChangeTracker.Entries();
                 context.Update(Person);
                 context.SaveChanges();
                 _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Person entry successfully saved.", Palette.AlertGreen));
@@ -114,6 +115,7 @@ namespace mPeopleList.ViewModels
                                 .Include(p => p.RecentProjects)
                                     .Take(10)
                                 .FirstOrDefault();
+                var x = context.ChangeTracker.Entries();
                 OrgList = new ObservableCollection<Organization>(context.Organizations.ToList());
            }
         }

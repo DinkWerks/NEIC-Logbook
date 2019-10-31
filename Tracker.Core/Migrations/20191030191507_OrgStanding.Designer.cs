@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Tracker.Core.Services;
 
 namespace Tracker.Core.Migrations
 {
     [DbContext(typeof(EFService))]
-    partial class EFServiceModelSnapshot : ModelSnapshot
+    [Migration("20191030191507_OrgStanding")]
+    partial class OrgStanding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,7 +96,7 @@ namespace Tracker.Core.Migrations
                     b.Property<string>("OrganizationName")
                         .HasMaxLength(200);
 
-                    b.Property<int>("OrganizationStandingId");
+                    b.Property<int?>("OrganizationStandingId");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(15);
@@ -283,8 +285,7 @@ namespace Tracker.Core.Migrations
                 {
                     b.HasOne("Tracker.Core.StaticTypes.OrganizationStanding", "OrganizationStanding")
                         .WithMany("Organizations")
-                        .HasForeignKey("OrganizationStandingId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("OrganizationStandingId");
 
                     b.OwnsOne("Tracker.Core.Models.Address", "Address", b1 =>
                         {

@@ -80,6 +80,7 @@ namespace mOrganizationList.ViewModels
             {
                 Organizations = new ObservableCollection<Organization>(context.Organizations
                     .Include(s => s.OrganizationStanding)
+                    .AsNoTracking()
                     .ToList());
             }
             OrgView = CollectionViewSource.GetDefaultView(Organizations);
@@ -179,6 +180,7 @@ namespace mOrganizationList.ViewModels
             {
                 Organizations = new ObservableCollection<Organization>(context.Organizations
                     .Include(s => s.OrganizationStanding)
+                    .AsNoTracking()
                     .ToList());
             }
             OrgView = CollectionViewSource.GetDefaultView(Organizations);

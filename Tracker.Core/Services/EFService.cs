@@ -52,6 +52,11 @@ namespace Tracker.Core.Services
             modelBuilder.Entity<Project>().Property(p => p.ProjectNumber).HasConversion(StringToProjectNumber);
 
             modelBuilder.Entity<Organization>().OwnsOne(o => o.Address);
+            modelBuilder.Entity<Organization>()
+                .HasOne<OrganizationStanding>(o => o.OrganizationStanding)
+                .WithMany(os => os.Organizations)
+                .HasForeignKey(o => o.OrganizationStandingId);
+
             modelBuilder.Entity<Person>().OwnsOne(p => p.Address);
         }
 

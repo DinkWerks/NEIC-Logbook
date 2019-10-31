@@ -10,7 +10,7 @@ namespace Tracker.Core.Models
         private int _id;
         private string _firstName;
         private string _lastName;
-        private Organization _currentAssociation;
+        private Organization _affiliation;
         private string _phone1;
         private string _phone2;
         private string _email;
@@ -39,8 +39,8 @@ namespace Tracker.Core.Models
 
         public Organization Affiliation
         {
-            get { return _currentAssociation; }
-            set { SetProperty(ref _currentAssociation, value); }
+            get { return _affiliation; }
+            set { SetProperty(ref _affiliation, value); }
         }
 
         public string Phone1
