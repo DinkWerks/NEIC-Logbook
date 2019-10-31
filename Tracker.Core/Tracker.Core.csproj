@@ -255,6 +255,7 @@
     <Compile Include="Services\IFeeService.cs" />
     <Compile Include="Services\IPersonService.cs" />
     <Compile Include="Services\IStaffService.cs" />
+    <Compile Include="Services\OrganizationService.cs" />
     <Compile Include="Services\PersonService.cs" />
     <Compile Include="Services\RecordSearchService.cs" />
     <Compile Include="Services\IRecordSearchService.cs" />

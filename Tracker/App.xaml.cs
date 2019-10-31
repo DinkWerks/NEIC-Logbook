@@ -39,6 +39,7 @@ namespace Tracker
             containerRegistry.RegisterSingleton<IFeeService, FeeService>();
             containerRegistry.RegisterSingleton<IStaffService, StaffService>();
             containerRegistry.RegisterSingleton<IEFService, EFService>();
+            containerRegistry.RegisterSingleton<IOrganizationService, OrganizationService>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

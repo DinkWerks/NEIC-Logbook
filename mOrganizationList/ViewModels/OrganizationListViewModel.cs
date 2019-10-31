@@ -20,6 +20,7 @@ namespace mOrganizationList.ViewModels
     {
         private IRegionManager _rm;
         private IDialogService _ds;
+        private IOrganizationService _os;
         private ObservableCollection<Organization> _organizations = new ObservableCollection<Organization>();
         private ICollectionView _orgView;
         private string _orgNameSearchText;
@@ -71,18 +72,13 @@ namespace mOrganizationList.ViewModels
         public DelegateCommand NewOrganizationCommand { get; private set; }
 
         //Constructor
-        public OrganizationListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IDialogService dialogService)
+        public OrganizationListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IDialogService dialogService, IOrganizationService organizationService)
         {
             _rm = regionManager;
             _ds = dialogService;
+            _os = organizationService;
 
-            using (var context = new EFService())
-            {
-                Organizations = new ObservableCollection<Organization>(context.Organizations
-                    .Include(s => s.OrganizationStanding)
-                    .AsNoTracking()
-                    .ToList());
-            }
+            Organizations = _os.GetAllOrganizations();
             OrgView = CollectionViewSource.GetDefaultView(Organizations);
             OrgView.Filter = OrgNameSearchFilter;
 
@@ -175,14 +171,7 @@ namespace mOrganizationList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            int _c = counter;
-            using (var context = new EFService())
-            {
-                Organizations = new ObservableCollection<Organization>(context.Organizations
-                    .Include(s => s.OrganizationStanding)
-                    .AsNoTracking()
-                    .ToList());
-            }
+            Organizations = _os.GetAllOrganizations();
             OrgView = CollectionViewSource.GetDefaultView(Organizations);
         }
 

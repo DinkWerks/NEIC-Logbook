@@ -1,7 +1,9 @@
 ﻿using Prism.Mvvm;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using Tracker.Core.Models;
+using Tracker.Core.Services;
 
 namespace Tracker.Core.StaticTypes
 {
@@ -11,6 +13,13 @@ namespace Tracker.Core.StaticTypes
         public static readonly OrganizationStanding Warning = new OrganizationStanding(2, "Warning", "bullet_orange.png", 1);
         public static readonly OrganizationStanding Denial = new OrganizationStanding(3, "Denied Service", "bullet_red.png", 2);
 
+        public OrganizationStandings(IEFService eFService)
+        {
+            eFService.OrganizationStandings.ToList();
+        }
+
+        public static List<OrganizationStanding> Values { get; private set;}
+        /*
         public static IEnumerable<OrganizationStanding> Values
         {
             get
@@ -20,6 +29,7 @@ namespace Tracker.Core.StaticTypes
                 yield return Denial;
             }
         }
+        */
     }
 
     public class OrganizationStanding : BindableBase

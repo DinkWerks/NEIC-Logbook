@@ -18,6 +18,7 @@ namespace mOrganizationList.ViewModels
         private readonly IEventAggregator _ea;
         private readonly IDialogService _ds;
         private readonly IRegionManager _rm;
+        private readonly IOrganizationService _os;
         private Organization _organization;
 
         public Organization Organization
@@ -28,11 +29,12 @@ namespace mOrganizationList.ViewModels
 
         //Constructor
         public OrganizationEntryViewModel(IEventAggregator eventAggregator, IDialogService dialogService,
-            IRegionManager regionManager, IApplicationCommands applicationCommands) : base(applicationCommands)
+            IRegionManager regionManager, IApplicationCommands applicationCommands, IOrganizationService organizationService) : base(applicationCommands)
         {
             _ea = eventAggregator;
             _ds = dialogService;
             _rm = regionManager;
+            _os = organizationService;
 
             eventAggregator.GetEvent<PersonListSelectEvent>().Subscribe(NavigateToPersonEntry);
         }
@@ -40,6 +42,9 @@ namespace mOrganizationList.ViewModels
         //Methods
         public override void SaveEntry()
         {
+            _os.UpdateOrganization(Organization);
+            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Organization entry successfully saved.", Palette.AlertGreen));
+            /*
             using (var context = new EFService())
             {
                 //context.Entry(Organization).State = EntityState.Detached;
@@ -48,7 +53,7 @@ namespace mOrganizationList.ViewModels
                 context.SaveChanges();
 
                 _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Organization entry successfully saved.", Palette.AlertGreen));
-            }
+            }*/
         }
 
         public override void DeleteEntry()
@@ -85,6 +90,8 @@ namespace mOrganizationList.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             int id = (int)navigationContext.Parameters["id"];
+            Organization = _os.GetOrganization(id);
+            /*
             using (var context = new EFService())
             {
                 Organization = context.Organizations
@@ -97,7 +104,7 @@ namespace mOrganizationList.ViewModels
                 var x = context.ChangeTracker.Entries();
                 //context.Entry(Organization).Reference(s => s.OrganizationStanding).Load();
                 //context.Entry(Organization.OrganizationStanding).State = EntityState.Detached;
-            }
+            }*/
         }
 
         public new void OnNavigatedFrom(NavigationContext navigationContext)

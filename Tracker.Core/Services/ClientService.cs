@@ -57,7 +57,7 @@ namespace Tracker.Core.Services
                         Phone = reader.GetStringSafe(index++),
                         Email = reader.GetStringSafe(index++),
                         Website = reader.GetStringSafe(index++),
-                        Standing = ParseStanding(reader.GetStringSafe(index++)),
+                        //Standing = ParseStanding(reader.GetStringSafe(index++)),
                         AddressID = reader.GetInt32Safe(index),
                         AddressModel = _as.GetAddressByID(reader.GetInt32Safe(index++)),
                         Notes = reader.GetStringSafe(index++)
@@ -95,7 +95,7 @@ namespace Tracker.Core.Services
                             NewPEID = reader.GetStringSafe(index++),
                             ClientName = reader.GetStringSafe(index++),
                             OfficeName = reader.GetStringSafe(index++),
-                            Standing = ParseStanding(reader.GetStringSafe(index++)),
+                            //Standing = ParseStanding(reader.GetStringSafe(index++)),
                             AddressID = reader.GetInt32Safe(index++)
                         };
                         returnCollection.Add(returnValue);
@@ -206,7 +206,7 @@ namespace Tracker.Core.Services
                 }
             }
         }
-
+        /*
         private OrganizationStanding ParseStanding(string standingName)
         {
             if (!string.IsNullOrWhiteSpace(standingName))
@@ -215,6 +215,6 @@ namespace Tracker.Core.Services
             }
             else
                 return OrganizationStandings.GoodStanding;
-        }
+        }*/
     }
 }
