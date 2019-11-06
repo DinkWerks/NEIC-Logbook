@@ -85,15 +85,15 @@ namespace Tracker.ViewModels
             {
                 Settings.DatabaseAddress.Value = selectFile.FileName;
                 _rs.SetConnectionString();
-                _ps.SetConnectionString();
+                //_ps.SetConnectionString();
                 _fs.SetConnectionString();
                 _cs.SetConnectionString();
                 _as.SetConnectionString();
-                _ss.SetConnectionString();
+                //_ss.SetConnectionString();
 
                 _cs.CompleteClientList = _cs.GetAllPartialClients();
-                _ps.CompletePeopleList = _ps.GetAllPartialPeople();
-                _ss.CompleteStaffList = _ss.GetAllStaff();
+                //_ps.CompletePeopleList = _ps.GetAllPartialPeople();
+                //_ss.CompleteStaffList = _ss.GetAllStaff();
             }
         }
 

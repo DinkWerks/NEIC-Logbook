@@ -18,6 +18,5 @@ namespace Tracker.Core.Services
         void RemoveRecordSearch(int id, int mailingAddressID, int billingAddressID, int feeID);
         int GetNextEnumeration(string prefix, string year);
         bool ConfirmDistinct(string prefix, string year, int enumeration, string suffix);
-
     }
 }

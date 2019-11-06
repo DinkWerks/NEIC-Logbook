@@ -59,7 +59,7 @@
                     <TextBox Grid.Column="3" Grid.Row="1" Text="{Binding Organization.OldPEID, StringFormat={}{0:D6}}" Width="100" HorizontalAlignment="Right"/>
 
                     <TextBlock Grid.Row="2" Text="Standing:" Style="{StaticResource Line Header}" Margin="0"/>
-                    <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding Source={x:Static static:OrganizationStandings.Values}}" 
+                    <ComboBox Grid.Row="2" Grid.Column="1" ItemsSource="{Binding OrganizationStandings}" 
                               SelectedItem="{Binding Organization.OrganizationStanding}" SelectedValue="{Binding Organization.OrganizationStanding}" SelectedValuePath="Name"
                               Validation.ErrorTemplate="{x:Null}"/>
                 </Grid>

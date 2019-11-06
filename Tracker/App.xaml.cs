@@ -34,12 +34,15 @@ namespace Tracker
             //Services
             containerRegistry.RegisterSingleton<IRecordSearchService, RecordSearchService>();
             containerRegistry.RegisterSingleton<IClientService, ClientService>();
-            containerRegistry.RegisterSingleton<IPersonService, PersonService>();
+            
             containerRegistry.RegisterSingleton<IAddressService, AddressService>();
             containerRegistry.RegisterSingleton<IFeeService, FeeService>();
             containerRegistry.RegisterSingleton<IStaffService, StaffService>();
+
             containerRegistry.RegisterSingleton<IEFService, EFService>();
             containerRegistry.RegisterSingleton<IOrganizationService, OrganizationService>();
+            containerRegistry.RegisterSingleton<IPersonService, PersonService>();
+            containerRegistry.RegisterSingleton<IProjectService, ProjectService>();
         }
 
         protected override void ConfigureModuleCatalog(IModuleCatalog moduleCatalog)

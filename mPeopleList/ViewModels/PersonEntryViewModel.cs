@@ -1,10 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Events;
 using Prism.Regions;
 using Prism.Services.Dialogs;
-using System.Collections.ObjectModel;
-using System.Linq;
+using System.Collections.Generic;
 using Tracker.Core;
 using Tracker.Core.BaseClasses;
 using Tracker.Core.CompositeCommands;
@@ -20,8 +18,10 @@ namespace mPeopleList.ViewModels
         private IRegionManager _rm;
         private IEventAggregator _ea;
         private Person _person;
-        private ObservableCollection<Organization> _orgList = new ObservableCollection<Organization>();
+        private List<Organization> _orgList = new List<Organization>();
         private IDialogService _ds;
+        private IPersonService _ps;
+        private IOrganizationService _os;
 
         public Person Person
         {
@@ -29,7 +29,7 @@ namespace mPeopleList.ViewModels
             set { SetProperty(ref _person, value); }
         }
 
-        public ObservableCollection<Organization> OrgList
+        public List<Organization> OrgList
         {
             get { return _orgList; }
             set { SetProperty(ref _orgList, value); }
@@ -38,11 +38,13 @@ namespace mPeopleList.ViewModels
         public DelegateCommand NavigateToOrganizationCommand { get; set; }
 
         public PersonEntryViewModel(IRegionManager regionManager, IEventAggregator eventAggregator,
-            IDialogService dialogService, IApplicationCommands applicationCommands) : base(applicationCommands)
+            IDialogService dialogService, IApplicationCommands applicationCommands, IPersonService personService, IOrganizationService organizationService) : base(applicationCommands)
         {
             _rm = regionManager;
             _ea = eventAggregator;
             _ds = dialogService;
+            _ps = personService;
+            _os = organizationService;
 
             NavigateToOrganizationCommand = new DelegateCommand(NavigateToOrganization);
 
@@ -52,13 +54,8 @@ namespace mPeopleList.ViewModels
         //Methods
         public override void SaveEntry()
         {
-            using (var context = new EFService())
-            {
-                var x = context.ChangeTracker.Entries();
-                context.Update(Person);
-                context.SaveChanges();
-                _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Person entry successfully saved.", Palette.AlertGreen));
-            }
+            _ps.UpdatePerson(Person);
+            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Person entry successfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()
@@ -69,14 +66,10 @@ namespace mPeopleList.ViewModels
                 {
                     if (r.Result == ButtonResult.OK)
                     {
-                        using (var context = new EFService())
-                        {
-                            context.Remove(Person);
-                            context.SaveChanges();
-                            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Person entry successfully deleted.", Palette.AlertGreen));
-                            _deleting = true;
-                            _rm.RequestNavigate("ContentRegion", "PeopleList");
-                        }
+                        _ps.DeletePerson(Person);
+                        _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Person entry successfully deleted.", Palette.AlertGreen));
+                        _deleting = true;
+                        _rm.RequestNavigate("ContentRegion", "PeopleList");
                     }
                 });
         }
@@ -106,18 +99,8 @@ namespace mPeopleList.ViewModels
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
             int personID = (int)navigationContext.Parameters["id"];
-
-            using (var context = new EFService())
-            {
-                Person = context.People
-                                .Where(p => p.ID == personID)
-                                .Include(o => o.Affiliation)
-                                .Include(p => p.RecentProjects)
-                                    .Take(10)
-                                .FirstOrDefault();
-                var x = context.ChangeTracker.Entries();
-                OrgList = new ObservableCollection<Organization>(context.Organizations.ToList());
-           }
+            Person = _ps.GetPersonFull(personID);
+            OrgList = _os.GetAllOrganizations();
         }
     }
 }

@@ -1,10 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tracker.Core.Models;
 
 namespace Tracker.Core.Services
@@ -12,8 +8,10 @@ namespace Tracker.Core.Services
     public interface IOrganizationService
     {
         Organization GetOrganization(int id);
-        ObservableCollection<Organization> GetAllOrganizations();
-        Organization UpdateOrganization(Organization organization);
+        List<Organization> GetAllOrganizations();
+        void AddOrganization(Organization organization);
+        void UpdateOrganization(Organization organization);
+        void DeleteOrganization(Organization organization);
     }
 
     public class OrganizationService : IOrganizationService
@@ -34,17 +32,27 @@ namespace Tracker.Core.Services
                         .FirstOrDefault();
         }
 
-        public ObservableCollection<Organization> GetAllOrganizations()
+        public List<Organization> GetAllOrganizations()
         {
-            return new ObservableCollection<Organization>(_context.Organizations.AsNoTracking().ToList());
+            return _context.Organizations.Include(o => o.OrganizationStanding).ToList();
         }
 
-        public Organization UpdateOrganization(Organization organization)
+        public void AddOrganization(Organization organization)
         {
-            var org = _context.Organizations.Find(organization.ID);
-            org.OrganizationName = organization.OrganizationName;
+            _context.Organizations.Add(organization);
             _context.SaveChanges();
-            return org;
+        }
+
+        public void UpdateOrganization(Organization organization)
+        {
+            _context.Organizations.Update(organization);
+            _context.SaveChanges();
+        }
+
+        public void DeleteOrganization(Organization organization)
+        {
+            _context.Organizations.Remove(organization);
+            _context.SaveChanges();
         }
     }
 }

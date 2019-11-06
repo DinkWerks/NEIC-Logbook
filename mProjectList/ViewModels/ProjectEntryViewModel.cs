@@ -24,6 +24,10 @@ namespace mProjectList.ViewModels
         private readonly IEventAggregator _ea;
         private readonly IRegionManager _rm;
         private readonly IDialogService _ds;
+        private readonly IProjectService _ps;
+        private readonly IPersonService _pes;
+        private readonly IStaffService _ss;
+        private readonly IOrganizationService _os;
         private readonly IContainerExtension _container;
         private Project _project;
         private List<Person> _requestorList;
@@ -89,11 +93,16 @@ namespace mProjectList.ViewModels
 
         //Constructor
         public ProjectEntryViewModel(IEventAggregator eventAggregator, IDialogService dialogService, IRegionManager regionManager,
-            IApplicationCommands applicationCommands, IContainerExtension container) : base(applicationCommands)
+            IApplicationCommands applicationCommands, IProjectService projectService, IOrganizationService organizationService, 
+            IPersonService personService, IStaffService staffService, IContainerExtension container) : base(applicationCommands)
         {
             _ea = eventAggregator;
             _rm = regionManager;
             _ds = dialogService;
+            _ps = projectService;
+            _os = organizationService;
+            _pes = personService;
+            _ss = staffService;
             _container = container;
 
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
@@ -190,13 +199,9 @@ namespace mProjectList.ViewModels
         //IO Methods
         public override void SaveEntry()
         {
-            using (var context = new EFService())
-            {
-                Project.FeeData = ((CalculatorViewModel)_calc.DataContext).Fee.FeeData;
-                context.Update(Project);
-                context.SaveChanges();
-                _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));
-            }
+            Project.FeeData = ((CalculatorViewModel)_calc.DataContext).Fee.FeeData;
+            _ps.UpdateProject(Project);
+            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));
         }
 
         public override void DeleteEntry()
@@ -205,15 +210,11 @@ namespace mProjectList.ViewModels
             {
                 if (r.Result == ButtonResult.OK)
                 {
-                    using (var context = new EFService())
-                    {
-                        context.Remove(Project);
-                        context.SaveChanges();
+                    _ps.DeleteProject(Project);
 
-                        _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Project entry succesfully deleted.", Palette.AlertGreen));
-                        _deleting = true;
-                        _rm.RequestNavigate("ContentRegion", "ProjectList");
-                    }
+                    _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Project entry succesfully deleted.", Palette.AlertGreen));
+                    _deleting = true;
+                    _rm.RequestNavigate("ContentRegion", "ProjectList");
                 }
             });
         }
@@ -227,25 +228,14 @@ namespace mProjectList.ViewModels
                 region.Add(_calc);
                 _firstRun = false;
             }
-            
-            using (var context = new EFService())
-            {
-                Project = context.Projects
-                    .Where(p => p.Id == (int)navigationContext.Parameters["id"])
-                    .Include(p => p.Requestor)
-                        .ThenInclude(r => r.Affiliation)
-                    .Include(p => p.Client)
-                    .Include(p => p.Processor)
-                    .Include(p => p.FeeData)
-                    .FirstOrDefault();
 
-                FeeX projectFee = new FeeX(Project.FeeVersion, Project.FeeData ?? new FeeData());
-                _ea.GetEvent<ProjectEntryChangedEvent>().Publish(projectFee);
+            Project = _ps.GetProject((int)navigationContext.Parameters["id"], fullLoad: true);
+            FeeX projectFee = new FeeX(Project.FeeVersion, Project.FeeData ?? new FeeData());
+            _ea.GetEvent<ProjectEntryChangedEvent>().Publish(projectFee);
 
-                RequestorList = context.People.OrderBy(s => s.LastName).ToList();
-                ClientList = context.Organizations.OrderBy(s => s.OrganizationName).ToList();
-                StaffList = context.Staff.OrderBy(s => s.Name).ToList();
-            }
+            RequestorList = _pes.GetPeople();
+            ClientList = _os.GetAllOrganizations();
+            StaffList = _ss.GetAllStaff();
         }
     }
 }

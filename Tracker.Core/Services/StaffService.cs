@@ -1,119 +1,70 @@
-﻿using Prism.Mvvm;
-using System;
+﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Data.OleDb;
-using Tracker.Core.Extensions;
+using System.Linq;
 using Tracker.Core.Models;
 
 namespace Tracker.Core.Services
 {
-    public class StaffService : BindableBase, IStaffService
+    public interface IStaffService
     {
-        private string _connectionString;
+        Staff GetStaff(int id, bool fullLoad = false);
+        List<Staff> GetAllStaff(bool fullLoad = false);
+        void AddStaff(Staff staff);
+        void UpdateStaff(Staff staff);
+        void DeleteStaff(Staff staff);
+    }
 
-        public string ConnectionString
+    public class StaffService : IStaffService
+    {
+        public readonly IEFService _context;
+
+        public StaffService(IEFService eFService)
         {
-            get { return _connectionString; }
-            set { SetProperty(ref _connectionString, value); }
+            _context = eFService;
         }
 
-        public List<Staff> CompleteStaffList { get; set; }
-
-        public StaffService()
+        public Staff GetStaff(int id, bool fullLoad = false)
         {
-            SetConnectionString();
-            CompleteStaffList = GetAllStaff();
-        }
-
-        public void SetConnectionString()
-        {
-            var dir = Settings.Settings.Instance.DatabaseAddress;
-            ConnectionString = @"Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" + dir;
-        }
-
-        public List<Staff> GetAllStaff()
-        {
-            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            if (fullLoad)
             {
-                using (OleDbCommand sqlCommand = connection.CreateCommand())
-                {
-                    sqlCommand.CommandText = "SELECT ID, PersonName, IsActive FROM tblStaff";
-                    connection.Open();
-
-                    OleDbDataReader reader = sqlCommand.ExecuteReader();
-                    List<Staff> returnCollection = new List<Staff>();
-
-                    while (reader.Read())
-                    {
-                        int index = 0;
-                        Staff returnValue = new Staff()
-                        {
-                            ID = reader.GetInt32Safe(index++),
-                            Name = reader.GetStringSafe(index++),
-                            IsActive = reader.GetBooleanSafe(index++)
-                        };
-                        returnCollection.Add(returnValue);
-                    }
-
-                    return returnCollection;
-                }
+                return _context.Staff
+                    .Where(s => s.ID == id)
+                    .Include(s => s.StaffProjects)
+                    .FirstOrDefault();
             }
+            else
+                return _context.Staff.Find(id);
         }
 
-        public void DeleteStaffMember(int id)
+        public List<Staff> GetAllStaff(bool fullLoad = false)
         {
-            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
+            //TODO Make full load pull staff projects in a separate query that can limit the amount of projects pulled.
+            if (fullLoad)
             {
-                using (OleDbCommand sqlCommand = connection.CreateCommand())
-                {
-                    sqlCommand.CommandText = "DELETE FROM tblStaff WHERE ID = " + id;
-
-                    connection.Open();
-                    sqlCommand.ExecuteNonQuery();
-                }
+                return _context.Staff
+                    .Include(s => s.StaffProjects)
+                    .ToList();
             }
-            CompleteStaffList = GetAllStaff();
+            else
+                return _context.Staff.ToList();
         }
 
-        public int AddStaffMember(Staff newMember)
+        public void AddStaff(Staff staff)
         {
-            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
-            {
-                using (OleDbCommand sqlCommand = connection.CreateCommand())
-                {
-                    sqlCommand.CommandText = "INSERT INTO tblStaff (PersonName, IsActive) " +
-                        "VALUES (?,?)";
-                    sqlCommand.Parameters.AddWithValue("PersonName", newMember.Name ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("IsActive", newMember.IsActive);
-
-                    connection.Open();
-                    sqlCommand.ExecuteNonQuery();
-                    sqlCommand.CommandText = "SELECT @@identity";
-                    int newID = (int)sqlCommand.ExecuteScalar();
-
-                    CompleteStaffList = GetAllStaff();
-                    return newID;
-                }
-            }
+            _context.Staff.Add(staff);
+            _context.SaveChanges();
         }
 
-        public void UpdateStaffMember(Staff staff)
+        public void UpdateStaff(Staff staff)
         {
-            using (OleDbConnection connection = new OleDbConnection(ConnectionString))
-            {
-                using (OleDbCommand sqlCommand = connection.CreateCommand())
-                {
-                    sqlCommand.CommandText = "UPDATE tblStaff SET " +
-                        "PersonName=@pname, IsActive=@isactive WHERE ID = @id";
-                    sqlCommand.Parameters.AddWithValue("@pname", staff.Name ?? Convert.DBNull);
-                    sqlCommand.Parameters.AddWithValue("@isactive", staff.IsActive);
-                    sqlCommand.Parameters.AddWithValue("@id", staff.ID);
+            _context.Staff.Update(staff);
+            _context.SaveChanges();
+        }
 
-                    connection.Open();
-                    sqlCommand.ExecuteNonQuery();
-                }
-            }
-            CompleteStaffList = GetAllStaff();
+        public void DeleteStaff(Staff staff)
+        {
+            _context.Staff.Remove(staff);
+            _context.SaveChanges();
         }
     }
 }

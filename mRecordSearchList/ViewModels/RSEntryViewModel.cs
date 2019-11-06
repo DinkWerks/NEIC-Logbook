@@ -246,7 +246,7 @@ namespace mRecordSearchList.ViewModels
         {
             if (value > 0 && _isLoaded)
             {
-                RecordSearch.Requestor = _ps.GetPersonByID(value);
+                //RecordSearch.Requestor = _ps.GetPersonByID(value);
                 RecordSearch.RequestorID = RecordSearch.Requestor.ID;
                 SelectedClient = 0;
             }
@@ -297,9 +297,9 @@ namespace mRecordSearchList.ViewModels
                 RecordSearch.Status = RecordSearch.CalculateStatus();
 
                 //Set dropdown menus here
-                PeopleList = new ObservableCollection<Person>(_ps.CompletePeopleList);
+                //PeopleList = new ObservableCollection<Person>(_ps.CompletePeopleList);
                 ClientList = new ObservableCollection<Client>(_cs.CompleteClientList);
-                StaffList = new ObservableCollection<Staff>(_ss.CompleteStaffList.OrderBy(s => s.Name));
+                //StaffList = new ObservableCollection<Staff>(_ss.CompleteStaffList.OrderBy(s => s.Name));
                 ActiveProjectNumbers = new ObservableCollection<ProjectNumber>(ProjectNumbers.ActiveProjectNumbers);
 
                 //Sets the Dropdown menu selection for requestor and client

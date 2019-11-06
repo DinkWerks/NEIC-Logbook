@@ -18,6 +18,7 @@ namespace mPeopleList.ViewModels
     {
         private readonly IRegionManager _rm;
         private readonly IDialogService _ds;
+        private readonly IPersonService _ps;
         private List<Person> _people = new List<Person>();
         private ICollectionView _peopleView;
         private string _personNameSearchText;
@@ -58,17 +59,13 @@ namespace mPeopleList.ViewModels
         public DelegateCommand NewPersonCommand { get; private set; }
 
         //Constructor
-        public PeopleListViewModel(IRegionManager regionManager, IDialogService dialogService, IEventAggregator eventAggregator)
+        public PeopleListViewModel(IRegionManager regionManager, IDialogService dialogService, IEventAggregator eventAggregator, IPersonService personService)
         {
             _rm = regionManager;
             _ds = dialogService;
+            _ps = personService;
 
-            using (var context = new EFService())
-            {
-                People = context.People
-                    .Include(o => o.Affiliation)
-                    .ToList();
-            }
+            People = _ps.GetPeople();
 
             PeopleView = CollectionViewSource.GetDefaultView(People);
 
@@ -102,11 +99,7 @@ namespace mPeopleList.ViewModels
                         Address = new Address()
                     };
 
-                    using (var context = new EFService())
-                    {
-                        context.Add(newPerson);
-                        context.SaveChanges();
-                    }
+                    _ps.AddPerson(newPerson);
 
                     NavigateToPeopleEntry(newPerson.ID);
                 }
@@ -155,12 +148,7 @@ namespace mPeopleList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            using (var context = new EFService())
-            {
-                People = context.People
-                    .Include(o => o.Affiliation)
-                    .ToList();
-            }
+            People = _ps.GetPeople(tracking: false);
 
             PeopleView = CollectionViewSource.GetDefaultView(People);
         }

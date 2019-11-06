@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Prism.Events;
+﻿using Prism.Events;
 using Prism.Regions;
 using Prism.Services.Dialogs;
+using System.Collections.Generic;
 using System.Linq;
 using Tracker.Core;
 using Tracker.Core.BaseClasses;
@@ -10,6 +10,7 @@ using Tracker.Core.Events;
 using Tracker.Core.Events.Payloads;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
+using Tracker.Core.StaticTypes;
 
 namespace mOrganizationList.ViewModels
 {
@@ -19,7 +20,9 @@ namespace mOrganizationList.ViewModels
         private readonly IDialogService _ds;
         private readonly IRegionManager _rm;
         private readonly IOrganizationService _os;
+        private readonly IEFService _ef;
         private Organization _organization;
+        private List<OrganizationStanding> _organizationStandings = new List<OrganizationStanding>();
 
         public Organization Organization
         {
@@ -27,15 +30,24 @@ namespace mOrganizationList.ViewModels
             set { SetProperty(ref _organization, value); }
         }
 
+        public List<OrganizationStanding> OrganizationStandings
+        {
+            get { return _organizationStandings; }
+            set { SetProperty(ref _organizationStandings, value); }
+        }
+
         //Constructor
         public OrganizationEntryViewModel(IEventAggregator eventAggregator, IDialogService dialogService,
-            IRegionManager regionManager, IApplicationCommands applicationCommands, IOrganizationService organizationService) : base(applicationCommands)
+            IRegionManager regionManager, IApplicationCommands applicationCommands, IOrganizationService organizationService,
+            IEFService eFService) : base(applicationCommands)
         {
             _ea = eventAggregator;
             _ds = dialogService;
             _rm = regionManager;
             _os = organizationService;
+            _ef = eFService;
 
+            OrganizationStandings = _ef.OrganizationStandings.ToList();
             eventAggregator.GetEvent<PersonListSelectEvent>().Subscribe(NavigateToPersonEntry);
         }
 
@@ -44,16 +56,6 @@ namespace mOrganizationList.ViewModels
         {
             _os.UpdateOrganization(Organization);
             _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Organization entry successfully saved.", Palette.AlertGreen));
-            /*
-            using (var context = new EFService())
-            {
-                //context.Entry(Organization).State = EntityState.Detached;
-                var x = context.ChangeTracker.Entries();
-                context.Update(Organization);
-                context.SaveChanges();
-
-                _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Organization entry successfully saved.", Palette.AlertGreen));
-            }*/
         }
 
         public override void DeleteEntry()
@@ -64,14 +66,10 @@ namespace mOrganizationList.ViewModels
                 {
                     if (r.Result == ButtonResult.OK)
                     {
-                        using (var context = new EFService())
-                        {
-                            context.Remove(Organization);
-                            context.SaveChanges();
-                            _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Client entry successfully deleted.", Palette.AlertGreen));
-                            _deleting = true;
-                            _rm.RequestNavigate("ContentRegion", "OrganizationList");
-                        }
+                        _os.DeleteOrganization(Organization);
+                        _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Client entry successfully deleted.", Palette.AlertGreen));
+                        _deleting = true;
+                        _rm.RequestNavigate("ContentRegion", "OrganizationList");
                     }
                 });
         }
@@ -91,20 +89,6 @@ namespace mOrganizationList.ViewModels
         {
             int id = (int)navigationContext.Parameters["id"];
             Organization = _os.GetOrganization(id);
-            /*
-            using (var context = new EFService())
-            {
-                Organization = context.Organizations
-                    //.Find(id);
-                    //.Include(s => s.OrganizationStanding)
-                    .Include(e => e.Employees)
-                    .Where(o => o.ID == id)
-                    .AsNoTracking()
-                    .FirstOrDefault();
-                var x = context.ChangeTracker.Entries();
-                //context.Entry(Organization).Reference(s => s.OrganizationStanding).Load();
-                //context.Entry(Organization.OrganizationStanding).State = EntityState.Detached;
-            }*/
         }
 
         public new void OnNavigatedFrom(NavigationContext navigationContext)

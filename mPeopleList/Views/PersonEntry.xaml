@@ -64,7 +64,7 @@
                     <Image Source="/Tracker.Core;component/Resources/Icons/link_go.png"/>
                 </Button>
                 <ComboBox ItemsSource="{Binding OrgList, UpdateSourceTrigger=PropertyChanged}"
-                          SelectedItem="{Binding Person.Affiliation}"
+                          SelectedItem="{Binding Person.Affiliation}" IsEditable="True" IsTextSearchEnabled="True"
                           Margin="0,0,5,0"/>
             </DockPanel>
 
@@ -122,7 +122,7 @@
 
             <!--Projects-->
             <GroupBox Grid.Row="2" Grid.Column="3" Grid.RowSpan="5" Header="Previous Record Searches" Height="200" VerticalAlignment="Top">
-                <ListBox x:Name="RSListBox" ItemsSource="{Binding Person.RecentProjects}" HorizontalContentAlignment="Stretch">
+                <ListBox x:Name="RSListBox" ItemsSource="{Binding Person.RecentProjects, UpdateSourceTrigger=PropertyChanged}" HorizontalContentAlignment="Stretch">
                     <ListBox.ItemContainerStyle>
                         <Style TargetType="ListBoxItem">
                             <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>

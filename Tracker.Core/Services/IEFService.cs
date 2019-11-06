@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Tracker.Core.Models;
 using Tracker.Core.StaticTypes;
 
@@ -14,6 +15,7 @@ namespace Tracker.Core.Services
         DbSet<FeeData> FeeData { get; set; }
         DbSet<OrganizationStanding> OrganizationStandings { get; set; }
 
+        ChangeTracker ChangeTracker { get; }
         int SaveChanges();
     }
 }

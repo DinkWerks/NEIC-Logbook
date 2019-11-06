@@ -21,14 +21,14 @@ namespace mOrganizationList.ViewModels
         private IRegionManager _rm;
         private IDialogService _ds;
         private IOrganizationService _os;
-        private ObservableCollection<Organization> _organizations = new ObservableCollection<Organization>();
+        private List<Organization> _organizations = new List<Organization>();
         private ICollectionView _orgView;
         private string _orgNameSearchText;
         private string _peidSearchText;
         private string _oldPEIDSearchText;
         private int counter;
 
-        public ObservableCollection<Organization> Organizations
+        public List<Organization> Organizations
         {
             get { return _organizations; }
             set { SetProperty(ref _organizations, value); }
@@ -106,11 +106,7 @@ namespace mOrganizationList.ViewModels
                         Address = new Address()
                     };
 
-                    using (var context = new EFService())
-                    {
-                        context.Add(newOrg);
-                        context.SaveChanges();
-                    }
+                    _os.AddOrganization(newOrg);
                     NavigateToOrgEntry(newOrg.ID);
                 }
             });

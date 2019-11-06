@@ -73,7 +73,7 @@ namespace Tracker.Core.Services
                         DatePaid = reader.GetDateTimeSafe(index++),
                         LastUpdated = reader.GetDateTimeSafe(index++), //10
                         RequestorID = reader.GetInt32Safe(index),
-                        Requestor = _ps.GetPersonByID(reader.GetInt32Safe(index++)),
+                        //Requestor = _ps.GetPersonByID(reader.GetInt32Safe(index++)),
                         AdditionalRequestors = reader.GetStringSafe(index++),
                         ClientID = reader.GetInt32Safe(index),
                         ClientModel = _cs.GetClientByID(reader.GetInt32Safe(index++)), //15
@@ -156,7 +156,7 @@ namespace Tracker.Core.Services
                             DatePaid = reader.GetDateTimeSafe(index++),
                             LastUpdated = reader.GetDateTimeSafe(index++), //10
                             RequestorID = reader.GetInt32Safe(index),
-                            Requestor = _ps.GetPersonByID(reader.GetInt32Safe(index++)),
+                            //Requestor = _ps.GetPersonByID(reader.GetInt32Safe(index++)),
                             AdditionalRequestors = reader.GetStringSafe(index++),
                             ClientID = reader.GetInt32Safe(index),
                             ClientModel = _cs.GetClientByID(reader.GetInt32Safe(index++)), //15

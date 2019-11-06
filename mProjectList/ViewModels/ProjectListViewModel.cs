@@ -28,6 +28,7 @@ namespace mProjectList.ViewModels
         private IEventAggregator _ea;
         private IRegionManager _rm;
         private IDialogService _ds;
+        private IProjectService _ps;
         private bool _firstRun = false;
 
         public List<Project> Projects
@@ -89,20 +90,15 @@ namespace mProjectList.ViewModels
         public bool KeepAlive => false;
 
         //Constructor
-        public ProjectListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IDialogService dialogService)
+        public ProjectListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IProjectService projectService, IDialogService dialogService)
         {
             _ea = eventAggregator;
             _rm = regionManager;
             _ds = dialogService;
+            _ps = projectService;
             PrefixChoices = new List<Prefix>(ProjectPrefixes.Values);
 
-            using (var context = new EFService())
-            {
-                Projects = context.Projects
-                    .Include(p => p.Requestor)
-                    .Include(o => o.Client)
-                    .ToList();
-            }
+            Projects = _ps.GetAllProjects();
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             ProjectView.Filter = ProjectViewFilter;
 
@@ -128,23 +124,19 @@ namespace mProjectList.ViewModels
             {
                 if (r.Result == ButtonResult.OK)
                 {
-                    using (var context = new EFService())
+                    Project newProject = new Project()
                     {
-                        Project newProject = new Project()
-                        {
-                            ICTypePrefix = r.Parameters.GetValue<Prefix>("prefix").ToString(),
-                            ICYear = r.Parameters.GetValue<string>("year"),
-                            ICEnumeration = r.Parameters.GetValue<int>("enumeration"),
-                            ICSuffix = r.Parameters.GetValue<string>("suffix"),
-                            ProjectName = r.Parameters.GetValue<string>("pname"),
-                            MailingAddress = new Address(),
-                            BillingAddress = new Address(),
-                        };
-                        context.Add(newProject);
-                        context.SaveChanges();
+                        ICTypePrefix = r.Parameters.GetValue<Prefix>("prefix").ToString(),
+                        ICYear = r.Parameters.GetValue<string>("year"),
+                        ICEnumeration = r.Parameters.GetValue<int>("enumeration"),
+                        ICSuffix = r.Parameters.GetValue<string>("suffix"),
+                        ProjectName = r.Parameters.GetValue<string>("pname"),
+                        MailingAddress = new Address(),
+                        BillingAddress = new Address(),
+                    };
 
-                        NavigateToProjectEntry(newProject.Id);
-                    }
+                    _ps.AddProject(newProject);
+                    NavigateToProjectEntry(newProject.Id);
                 }
             });
         }
@@ -210,14 +202,9 @@ namespace mProjectList.ViewModels
             }
             else
             {
-                using (var context = new EFService())
-                {
-                    Projects = context.Projects
-                        .Include(p => p.Requestor)
-                        .Include(o => o.Client)
-                        .ToList();
-                }
+                Projects = _ps.GetAllProjects();
                 ProjectView = CollectionViewSource.GetDefaultView(Projects);
+                ProjectView.Filter = ProjectViewFilter;
             }
         }
 
