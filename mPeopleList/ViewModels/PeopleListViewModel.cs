@@ -1,12 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Data;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
@@ -23,6 +21,7 @@ namespace mPeopleList.ViewModels
         private ICollectionView _peopleView;
         private string _personNameSearchText;
         private string _affilliationSearchText;
+        private bool _firstRun = true;
 
         public List<Person> People
         {
@@ -66,10 +65,9 @@ namespace mPeopleList.ViewModels
             _ps = personService;
 
             People = _ps.GetPeople();
-
             PeopleView = CollectionViewSource.GetDefaultView(People);
-
             PeopleView.Filter = PersonNameSearchFilter;
+
             NewPersonCommand = new DelegateCommand(CreateNewPerson);
             eventAggregator.GetEvent<PersonListSelectEvent>().Subscribe(NavigateToPeopleEntry);
         }
@@ -148,9 +146,16 @@ namespace mPeopleList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            People = _ps.GetPeople(tracking: false);
-
-            PeopleView = CollectionViewSource.GetDefaultView(People);
+            if (_firstRun)
+            {
+                _firstRun = false;
+            }
+            else
+            {
+                People = _ps.GetPeople(tracking: false);
+                PeopleView = CollectionViewSource.GetDefaultView(People);
+                PeopleView.Filter = PersonNameSearchFilter;
+            }
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

@@ -211,6 +211,10 @@
     <Compile Include="Migrations\20191030201742_OrgStanding2.designer.cs">
       <DependentUpon>20191030201742_OrgStanding2.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\20191106204829_OrgStandingChange.cs" />
+    <Compile Include="Migrations\20191106204829_OrgStandingChange.designer.cs">
+      <DependentUpon>20191106204829_OrgStandingChange.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\EFServiceModelSnapshot.cs" />
     <Compile Include="Models\Address.cs" />
     <Compile Include="Models\Client.cs" />

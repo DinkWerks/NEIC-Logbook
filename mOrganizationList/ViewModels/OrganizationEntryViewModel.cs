@@ -23,6 +23,7 @@ namespace mOrganizationList.ViewModels
         private readonly IEFService _ef;
         private Organization _organization;
         private List<OrganizationStanding> _organizationStandings = new List<OrganizationStanding>();
+        
 
         public Organization Organization
         {

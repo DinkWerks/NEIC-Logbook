@@ -36,12 +36,8 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
-
-            <TextBlock Text="Database Location:" Style="{StaticResource LineHeader}"/>
-            <TextBlock Grid.Column="1" Text="{Binding Settings.DatabaseAddress.Value}"/>
-            <Button Grid.Column="2" Command="{Binding LocateDatabaseCommand}">
-                <Image Source="/Tracker.Core;component/Resources/Icons/database_wrench.png" Width="16" Margin="5,0"/>
-            </Button>
+            
+            
         </Grid>
 
         <Separator Margin="5,20"/>

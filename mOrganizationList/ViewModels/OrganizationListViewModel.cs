@@ -27,6 +27,7 @@ namespace mOrganizationList.ViewModels
         private string _peidSearchText;
         private string _oldPEIDSearchText;
         private int counter;
+        private bool _firstRun = true;
 
         public List<Organization> Organizations
         {
@@ -167,8 +168,16 @@ namespace mOrganizationList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            Organizations = _os.GetAllOrganizations();
-            OrgView = CollectionViewSource.GetDefaultView(Organizations);
+            if (_firstRun)
+            {
+                _firstRun = false;
+            }
+            else
+            {
+                Organizations = _os.GetAllOrganizations();
+                OrgView = CollectionViewSource.GetDefaultView(Organizations);
+                OrgView.Filter = OrgNameSearchFilter;
+            }
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)

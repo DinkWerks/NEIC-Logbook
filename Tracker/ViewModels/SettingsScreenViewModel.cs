@@ -20,12 +20,6 @@ namespace Tracker.ViewModels
     {
         private List<string> _feeStructures = new List<string>();
         private readonly IEventAggregator _ea;
-        private readonly IRecordSearchService _rs;
-        private readonly IPersonService _ps;
-        private readonly IFeeService _fs;
-        private readonly IClientService _cs;
-        private readonly IAddressService _as;
-        private readonly IStaffService _ss;
         private bool _isActive;
         
 
@@ -47,55 +41,22 @@ namespace Tracker.ViewModels
             }
         }
 
-        public DelegateCommand LocateDatabaseCommand { get; private set; }
         public DelegateCommand SaveSettingsCommand { get; private set; }
         
 
         public event EventHandler IsActiveChanged;
         //Constructor
-        public SettingsScreenViewModel(IEventAggregator eventAggregator, IRecordSearchService recordSearchService, IPersonService personService,
-            IFeeService feeService, IClientService clientService, IAddressService addressService, IApplicationCommands applicationCommands,
-            IStaffService staffService)
+        public SettingsScreenViewModel(IEventAggregator eventAggregator, IApplicationCommands applicationCommands)
         {
             _ea = eventAggregator;
-            _rs = recordSearchService;
-            _ps = personService;
-            _fs = feeService;
-            _cs = clientService;
-            _as = addressService;
-            _ss = staffService;
             Settings = Settings.Instance;
             ListFeeStructures();
 
-            LocateDatabaseCommand = new DelegateCommand(LocateDatabase);
             SaveSettingsCommand = new DelegateCommand(SaveSettings);
             applicationCommands.SaveCompCommand.RegisterCommand(SaveSettingsCommand);
         }
 
         //Methods
-        private void LocateDatabase()
-        {
-            OpenFileDialog selectFile = new OpenFileDialog
-            {
-                Filter = "Access databases (*.mdb;*.accdb)|*.mdb;*.accdb|All files (*.*)|*.*",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyComputer)
-            };
-
-            if (selectFile.ShowDialog() == true)
-            {
-                Settings.DatabaseAddress.Value = selectFile.FileName;
-                _rs.SetConnectionString();
-                //_ps.SetConnectionString();
-                _fs.SetConnectionString();
-                _cs.SetConnectionString();
-                _as.SetConnectionString();
-                //_ss.SetConnectionString();
-
-                _cs.CompleteClientList = _cs.GetAllPartialClients();
-                //_ps.CompletePeopleList = _ps.GetAllPartialPeople();
-                //_ss.CompleteStaffList = _ss.GetAllStaff();
-            }
-        }
 
         private void ListFeeStructures()
         {

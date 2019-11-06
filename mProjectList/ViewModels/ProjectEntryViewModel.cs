@@ -113,7 +113,7 @@ namespace mProjectList.ViewModels
             RequestorChangedCommand = new DelegateCommand(RequestorChanged);
             NavigateCommand = new DelegateCommand<string>(Navigate);
             CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
-            CopyClientCommand = new DelegateCommand<string>(CopyAffiliation);
+            CopyClientCommand = new DelegateCommand<string>(CopyClient);
         }
 
         //Methods
@@ -144,20 +144,20 @@ namespace mProjectList.ViewModels
             if (Project.Requestor != null)
             {
                 if (destination == "Mailing")
-                    Project.MailingAddress = Project.Requestor.Address;
+                    Project.MailingAddress = new Address(Project.Requestor.Address);
                 else if (destination == "Billing")
-                    Project.BillingAddress = Project.Requestor.Address;
+                    Project.BillingAddress = new Address(Project.Requestor.Address);
             }
         }
 
-        private void CopyAffiliation(string destination)
+        private void CopyClient(string destination)
         {
             if (Project.Client != null)
             {
                 if (destination == "Mailing")
-                    Project.MailingAddress = Project.Client.Address;
+                    Project.MailingAddress = new Address(Project.Client.Address);
                 else if (destination == "Billing")
-                    Project.BillingAddress = Project.Client.Address;
+                    Project.BillingAddress = new Address(Project.Client.Address);
             }
         }
 
@@ -234,8 +234,8 @@ namespace mProjectList.ViewModels
             _ea.GetEvent<ProjectEntryChangedEvent>().Publish(projectFee);
 
             RequestorList = _pes.GetPeople();
-            ClientList = _os.GetAllOrganizations();
-            StaffList = _ss.GetAllStaff();
+            ClientList = _os.GetAllOrganizations().OrderBy(s => s.OrganizationName).ToList();
+            StaffList = _ss.GetAllStaff().OrderBy(s => s.Name).ToList();
         }
     }
 }

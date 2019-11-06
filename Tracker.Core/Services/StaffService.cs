@@ -43,10 +43,11 @@ namespace Tracker.Core.Services
             {
                 return _context.Staff
                     .Include(s => s.StaffProjects)
+                    .OrderBy(s => s.Name)
                     .ToList();
             }
             else
-                return _context.Staff.ToList();
+                return _context.Staff.OrderBy(s => s.Name).ToList();
         }
 
         public void AddStaff(Staff staff)

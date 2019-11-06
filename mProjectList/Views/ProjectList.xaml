@@ -47,38 +47,56 @@
 			<TextBlock Grid.Row="1" Grid.Column="3" Text="Last Updated" HorizontalAlignment="Right" Style="{StaticResource ColumnTitle}"/>
 		</Grid>
 
-		<ListBox x:Name="ProjectListBox" Grid.Row="2" ItemsSource="{Binding ProjectView}" HorizontalContentAlignment="Stretch">
-			<ListBox.ItemContainerStyle>
-				<Style TargetType="ListBoxItem">
-					<EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
-				</Style>
-			</ListBox.ItemContainerStyle>
-			<ListBox.ItemTemplate>
-				<DataTemplate>
-					<Grid>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="200"/>
-							<ColumnDefinition Width="1*"/>
-							<ColumnDefinition Width="Auto"/>
-							<ColumnDefinition Width="100"/>
-						</Grid.ColumnDefinitions>
-						<TextBlock>
-							<TextBlock.Text>
-								<MultiBinding Converter="{StaticResource ICFileNumberConverter}">
-									<Binding Path="ICTypePrefix"/>
-									<Binding Path="ICYear"/>
-									<Binding Path="ICEnumeration"/>
-									<Binding Path="ICSuffix"/>
-								</MultiBinding>
-							</TextBlock.Text>
-						</TextBlock>
-						<TextBlock Grid.Column="1" Text="{Binding ProjectName}"/>
-						<TextBlock Grid.Column="2" Text="{Binding Status}"/>
-						<Image Grid.Column="2"/>
-						<TextBlock Grid.Column="3" Text="{Binding LastUpdated, StringFormat=d}" HorizontalAlignment="Right"/>
-					</Grid>
-				</DataTemplate>
-			</ListBox.ItemTemplate>
-		</ListBox>
-	</Grid>
+        <TabControl Grid.Row="2" >
+            <TabItem Header="Project List">
+                <ListBox x:Name="ProjectListBox" ItemsSource="{Binding ProjectView}" HorizontalContentAlignment="Stretch">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <EventSetter Event="MouseDoubleClick" Handler="ListBoxItem_MouseDoubleClick"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="200"/>
+                                    <ColumnDefinition Width="1*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock>
+                                    <TextBlock.Text>
+                                        <MultiBinding Converter="{StaticResource ICFileNumberConverter}">
+                                            <Binding Path="ICTypePrefix"/>
+                                            <Binding Path="ICYear"/>
+                                            <Binding Path="ICEnumeration"/>
+                                            <Binding Path="ICSuffix"/>
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <TextBlock Grid.Column="1" Text="{Binding ProjectName}"/>
+                                <TextBlock Grid.Column="2" Text="{Binding Status}"/>
+                                <Image Grid.Column="2"/>
+                                <TextBlock Grid.Column="3" Text="{Binding LastUpdated, StringFormat=d}" HorizontalAlignment="Right"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+
+            <TabItem Header="Sheet View" VerticalContentAlignment="Stretch">
+                <Grid VerticalAlignment="Stretch">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="1*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <DataGrid x:Name="SheetGrid" ItemsSource="{Binding Projects}"
+                              IsReadOnly="True" AutoGenerateColumns="True" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
+                    <CheckBox x:Name="ShowAllCheck" Grid.Row="1" Content="Show All"  HorizontalAlignment="Right" Margin="0,5"
+                              IsChecked="False" Checked="ShowAllCheck_Changed" Unchecked="ShowAllCheck_Changed"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
 </UserControl>

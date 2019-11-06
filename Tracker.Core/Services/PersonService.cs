@@ -44,10 +44,12 @@ namespace Tracker.Core.Services
             if (tracking)
                 return _context.People
                     .Include(p => p.Affiliation)
+                    .OrderBy(s => s.LastName)
                     .ToList();
             else
                 return _context.People
                     .Include(p => p.Affiliation)
+                    .OrderBy(s => s.LastName)
                     .AsNoTracking()
                     .ToList();
         }

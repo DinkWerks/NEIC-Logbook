@@ -1,4 +1,5 @@
 ﻿using Prism.Events;
+using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Tracker.Core.Events;
@@ -55,6 +56,23 @@ namespace mProjectList.Views
                 ICFileEnum.Focus();
                 e.Handled = true;
             }
+        }
+
+        private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
+        {
+            if (this.ShowAllCheck.IsChecked == false)
+            {
+                List<string> viewableColumns = new List<string>() { "ICTypePrefix", "ICYear", "ICEnumeration", "ICSuffix" , "ProjectName", "MainCounty", "PLSS" };
+                if (!viewableColumns.Contains(e.PropertyName))
+                    e.Cancel = true;
+            }
+
+        }
+
+        private void ShowAllCheck_Changed(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.SheetGrid.AutoGenerateColumns = false;
+            this.SheetGrid.AutoGenerateColumns = true;
         }
     }
 }
