@@ -10,8 +10,8 @@ using Tracker.Core.Services;
 namespace Tracker.Core.Migrations
 {
     [DbContext(typeof(EFService))]
-    [Migration("20191014051003_B1")]
-    partial class B1
+    [Migration("20191114201140_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,59 @@ namespace Tracker.Core.Migrations
                 .HasAnnotation("ProductVersion", "2.2.6-servicing-10079")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("Tracker.Core.Models.FeeData", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<decimal>("Adjustment")
+                        .HasColumnType("decimal(10, 2)");
+
+                    b.Property<string>("AdjustmentExplanation");
+
+                    b.Property<decimal>("DBRows");
+
+                    b.Property<decimal>("GISFeatures");
+
+                    b.Property<decimal>("HalfStaffTime")
+                        .HasColumnType("decimal(9, 3)");
+
+                    b.Property<decimal>("InHouseTime")
+                        .HasColumnType("decimal(9, 3)");
+
+                    b.Property<bool>("IsAddressMappedFee");
+
+                    b.Property<bool>("IsEmergency");
+
+                    b.Property<bool>("IsPDFFee");
+
+                    b.Property<bool>("IsPriority");
+
+                    b.Property<bool>("IsRapidResponse");
+
+                    b.Property<decimal>("PDFPages");
+
+                    b.Property<decimal>("PrintedPages");
+
+                    b.Property<int>("ProjectID");
+
+                    b.Property<decimal>("QuadsEntered");
+
+                    b.Property<decimal>("StaffAssistanceTime")
+                        .HasColumnType("decimal(9, 3)");
+
+                    b.Property<decimal>("StaffTime")
+                        .HasColumnType("decimal(9, 3)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProjectID")
+                        .IsUnique();
+
+                    b.ToTable("FeeData");
+                });
 
             modelBuilder.Entity("Tracker.Core.Models.Organization", b =>
                 {
@@ -43,7 +96,7 @@ namespace Tracker.Core.Migrations
                     b.Property<string>("OrganizationName")
                         .HasMaxLength(200);
 
-                    b.Property<string>("OrganizationStandingName");
+                    b.Property<int?>("OrganizationStandingId");
 
                     b.Property<string>("Phone")
                         .HasMaxLength(15);
@@ -53,7 +106,7 @@ namespace Tracker.Core.Migrations
 
                     b.HasKey("ID");
 
-                    b.HasIndex("OrganizationStandingName");
+                    b.HasIndex("OrganizationStandingId");
 
                     b.ToTable("Organizations");
                 });
@@ -156,7 +209,7 @@ namespace Tracker.Core.Migrations
 
                     b.Property<string>("PLSS");
 
-                    b.Property<string>("Processor");
+                    b.Property<int?>("ProcessorID");
 
                     b.Property<string>("ProjectName");
 
@@ -181,6 +234,8 @@ namespace Tracker.Core.Migrations
 
                     b.HasIndex("ClientID");
 
+                    b.HasIndex("ProcessorID");
+
                     b.HasIndex("RequestorID");
 
                     b.ToTable("Projects");
@@ -198,28 +253,39 @@ namespace Tracker.Core.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Staffs");
+                    b.ToTable("Staff");
                 });
 
             modelBuilder.Entity("Tracker.Core.StaticTypes.OrganizationStanding", b =>
                 {
-                    b.Property<string>("Name")
-                        .ValueGeneratedOnAdd();
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Icon");
 
+                    b.Property<string>("Name");
+
                     b.Property<int>("Severity");
 
-                    b.HasKey("Name");
+                    b.HasKey("Id");
 
                     b.ToTable("OrganizationStandings");
+                });
+
+            modelBuilder.Entity("Tracker.Core.Models.FeeData", b =>
+                {
+                    b.HasOne("Tracker.Core.Models.Project", "Project")
+                        .WithOne("FeeData")
+                        .HasForeignKey("Tracker.Core.Models.FeeData", "ProjectID")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Tracker.Core.Models.Organization", b =>
                 {
                     b.HasOne("Tracker.Core.StaticTypes.OrganizationStanding", "OrganizationStanding")
                         .WithMany("Organizations")
-                        .HasForeignKey("OrganizationStandingName");
+                        .HasForeignKey("OrganizationStandingId");
 
                     b.OwnsOne("Tracker.Core.Models.Address", "Address", b1 =>
                         {
@@ -299,8 +365,12 @@ namespace Tracker.Core.Migrations
                         .WithMany()
                         .HasForeignKey("ClientID");
 
+                    b.HasOne("Tracker.Core.Models.Staff", "Processor")
+                        .WithMany("StaffProjects")
+                        .HasForeignKey("ProcessorID");
+
                     b.HasOne("Tracker.Core.Models.Person", "Requestor")
-                        .WithMany()
+                        .WithMany("RecentProjects")
                         .HasForeignKey("RequestorID");
 
                     b.OwnsOne("Tracker.Core.Models.Address", "BillingAddress", b1 =>

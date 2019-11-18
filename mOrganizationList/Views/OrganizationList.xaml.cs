@@ -29,7 +29,8 @@ namespace mOrganizationList.Views
         private void ListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Organization selectedOrg = (Organization)OrgListBox.SelectedItem;
-            _ea.GetEvent<OrgListSelectEvent>().Publish(selectedOrg.ID);
+            if (selectedOrg != null)
+                _ea.GetEvent<OrgListSelectEvent>().Publish(selectedOrg.ID);
         }
     }
 }

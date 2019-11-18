@@ -93,7 +93,7 @@ namespace mProjectList.ViewModels
 
         //Constructor
         public ProjectEntryViewModel(IEventAggregator eventAggregator, IDialogService dialogService, IRegionManager regionManager,
-            IApplicationCommands applicationCommands, IProjectService projectService, IOrganizationService organizationService, 
+            IApplicationCommands applicationCommands, IProjectService projectService, IOrganizationService organizationService,
             IPersonService personService, IStaffService staffService, IContainerExtension container) : base(applicationCommands)
         {
             _ea = eventAggregator;
@@ -107,7 +107,7 @@ namespace mProjectList.ViewModels
 
             regionManager.RegisterViewWithRegion("RequestorAddress", typeof(AddressEntry));
             regionManager.RegisterViewWithRegion("BillingAddress", typeof(AddressEntry));
-            
+
             ChangeFileNumCommand = new DelegateCommand(ChangeFileNum);
             ChangeAdditionalCountiesCommand = new DelegateCommand(ChangeAdditionalCounties);
             RequestorChangedCommand = new DelegateCommand(RequestorChanged);
@@ -145,7 +145,7 @@ namespace mProjectList.ViewModels
             {
                 if (destination == "Mailing")
                     Project.MailingAddress = new Address(Project.Requestor.Address);
-                else if (destination == "Billing")
+                else if (destination == "Billing") ;
                     Project.BillingAddress = new Address(Project.Requestor.Address);
             }
         }
@@ -156,14 +156,14 @@ namespace mProjectList.ViewModels
             {
                 if (destination == "Mailing")
                     Project.MailingAddress = new Address(Project.Client.Address);
-                else if (destination == "Billing")
+                else if (destination == "Billing") ;
                     Project.BillingAddress = new Address(Project.Client.Address);
             }
         }
 
         private void RequestorChanged()
         {
-            if (Project.Requestor != null && Project.Client == null)
+            if (Project != null && Project.Requestor != null && Project.Client == null)
                 Project.Client = Project.Requestor.Affiliation;
         }
 
@@ -236,6 +236,13 @@ namespace mProjectList.ViewModels
             RequestorList = _pes.GetPeople();
             ClientList = _os.GetAllOrganizations().OrderBy(s => s.OrganizationName).ToList();
             StaffList = _ss.GetAllStaff().OrderBy(s => s.Name).ToList();
+        }
+
+        public new void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            if (!_deleting)
+                SaveCommand.Execute();
+            Project = null;
         }
     }
 }

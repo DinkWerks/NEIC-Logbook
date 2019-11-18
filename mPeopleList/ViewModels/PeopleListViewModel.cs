@@ -165,7 +165,7 @@ namespace mPeopleList.ViewModels
 
         public void OnNavigatedFrom(NavigationContext navigationContext)
         {
-            
+
         }
     }
 }

@@ -10,13 +10,13 @@ namespace Tracker.Core.Models
         private decimal _halfStaffTime;
         private decimal _inHouseTime;
         private decimal _staffAssistanceTime;
-        private int _gisFeatures;
+        private decimal _gisFeatures;
         private bool _isAddressedMappedFee;
-        private int _DBRows;
-        private int _quadsEntered;
+        private decimal _DBRows;
+        private decimal _quadsEntered;
         private bool _isPDFFee;
-        private int _pdfPages;
-        private int _printedPages;
+        private decimal _pdfPages;
+        private decimal _printedPages;
         private decimal _adjustment;
         private string _adjustmentExplanation;
         private bool _isPriority;
@@ -57,7 +57,7 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _staffAssistanceTime, value); }
         }
 
-        public int GISFeatures
+        public decimal GISFeatures
         {
             get { return _gisFeatures; }
             set { SetProperty(ref _gisFeatures, value); }
@@ -69,13 +69,13 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _isAddressedMappedFee, value); }
         }
 
-        public int DBRows
+        public decimal DBRows
         {
             get { return _DBRows; }
             set { SetProperty(ref _DBRows, value); }
         }
 
-        public int QuadsEntered
+        public decimal QuadsEntered
         {
             get { return _quadsEntered; }
             set { SetProperty(ref _quadsEntered, value); }
@@ -87,13 +87,13 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _isPDFFee, value); }
         }
 
-        public int PDFPages
+        public decimal PDFPages
         {
             get { return _pdfPages; }
             set { SetProperty(ref _pdfPages, value); }
         }
 
-        public int PrintedPages
+        public decimal PrintedPages
         {
             get { return _printedPages; }
             set { SetProperty(ref _printedPages, value); }

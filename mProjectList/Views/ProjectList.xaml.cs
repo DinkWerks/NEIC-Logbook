@@ -23,7 +23,8 @@ namespace mProjectList.Views
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Project selectedRS = (Project)ProjectListBox.SelectedItem;
-            _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.Id);
+            if(selectedRS != null)
+                _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.Id);
         }
 
         private void ICFilePrefix_PreviewKeyDown(object sender, KeyEventArgs e)

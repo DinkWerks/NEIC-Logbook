@@ -31,12 +31,11 @@ namespace Tracker.Core.Services
 
         public Person GetPersonFull(int id)
         {
-            var rv = _context.People
+            return _context.People
                 .Include(p => p.Affiliation)
                 .Include(p => p.RecentProjects)
-                .SingleOrDefault(p => p.ID == id);
-            var x = _context.ChangeTracker.Entries();
-            return rv;
+                .Where(p => p.ID == id)
+                .FirstOrDefault();
         }
 
         public List<Person> GetPeople(bool tracking = true)

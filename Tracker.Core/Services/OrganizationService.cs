@@ -34,7 +34,10 @@ namespace Tracker.Core.Services
 
         public List<Organization> GetAllOrganizations()
         {
-            return _context.Organizations.Include(o => o.OrganizationStanding).OrderBy(o => o.OrganizationName).ToList();
+            return _context.Organizations
+                .Include(o => o.OrganizationStanding)
+                .OrderBy(o => o.OrganizationName)
+                .ToList();
         }
 
         public void AddOrganization(Organization organization)

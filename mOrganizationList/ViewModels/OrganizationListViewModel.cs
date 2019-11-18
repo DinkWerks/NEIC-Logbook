@@ -26,7 +26,6 @@ namespace mOrganizationList.ViewModels
         private string _orgNameSearchText;
         private string _peidSearchText;
         private string _oldPEIDSearchText;
-        private int counter;
         private bool _firstRun = true;
 
         public List<Organization> Organizations
@@ -83,14 +82,8 @@ namespace mOrganizationList.ViewModels
             OrgView = CollectionViewSource.GetDefaultView(Organizations);
             OrgView.Filter = OrgNameSearchFilter;
 
-            Interlocked.Increment(ref counter);
             NewOrganizationCommand = new DelegateCommand(CreateNewOrganization);
             eventAggregator.GetEvent<OrgListSelectEvent>().Subscribe(NavigateToOrgEntry);
-        }
-
-        ~OrganizationListViewModel()
-        {
-            Interlocked.Decrement(ref counter);
         }
 
         //Methods

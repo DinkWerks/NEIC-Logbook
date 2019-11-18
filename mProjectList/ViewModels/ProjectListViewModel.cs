@@ -1,14 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Events;
 using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Services.Dialogs;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Windows.Data;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
@@ -17,7 +13,7 @@ using Tracker.Core.StaticTypes;
 
 namespace mProjectList.ViewModels
 {
-    public class ProjectListViewModel : BindableBase, INavigationAware, IRegionMemberLifetime
+    public class ProjectListViewModel : BindableBase, INavigationAware
     {
         private List<Project> _projects = new List<Project>();
         private ICollectionView _projectView;
@@ -87,8 +83,6 @@ namespace mProjectList.ViewModels
 
         public DelegateCommand CreateNewProjectCommand { get; set; }
 
-        public bool KeepAlive => false;
-
         //Constructor
         public ProjectListViewModel(IEventAggregator eventAggregator, IRegionManager regionManager, IProjectService projectService, IDialogService dialogService)
         {
@@ -98,7 +92,7 @@ namespace mProjectList.ViewModels
             _ps = projectService;
             PrefixChoices = new List<Prefix>(ProjectPrefixes.Values);
 
-            Projects = _ps.GetAllProjects();
+            Projects = _ps.GetAllProjects(tracking: false);
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             ProjectView.Filter = ProjectViewFilter;
 
@@ -202,7 +196,7 @@ namespace mProjectList.ViewModels
             }
             else
             {
-                Projects = _ps.GetAllProjects();
+                Projects = _ps.GetAllProjects(tracking: false);
                 ProjectView = CollectionViewSource.GetDefaultView(Projects);
                 ProjectView.Filter = ProjectViewFilter;
             }

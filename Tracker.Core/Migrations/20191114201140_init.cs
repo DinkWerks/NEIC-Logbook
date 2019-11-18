@@ -4,25 +4,27 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Tracker.Core.Migrations
 {
-    public partial class Test1 : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ClientStandings",
+                name: "OrganizationStandings",
                 columns: table => new
                 {
-                    Name = table.Column<string>(nullable: false),
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Name = table.Column<string>(nullable: true),
                     Icon = table.Column<string>(nullable: true),
                     Severity = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClientStandings", x => x.Name);
+                    table.PrimaryKey("PK_OrganizationStandings", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Staffs",
+                name: "Staff",
                 columns: table => new
                 {
                     ID = table.Column<int>(nullable: false)
@@ -32,7 +34,7 @@ namespace Tracker.Core.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Staffs", x => x.ID);
+                    table.PrimaryKey("PK_Staff", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
@@ -41,14 +43,13 @@ namespace Tracker.Core.Migrations
                 {
                     ID = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    OldPEID = table.Column<string>(nullable: true),
-                    NewPEID = table.Column<string>(nullable: true),
-                    ClientName = table.Column<string>(nullable: true),
-                    OfficeName = table.Column<string>(nullable: true),
-                    Phone = table.Column<string>(nullable: true),
-                    Email = table.Column<string>(nullable: true),
-                    Website = table.Column<string>(nullable: true),
-                    OrganizationStandingName = table.Column<string>(nullable: true),
+                    OldPEID = table.Column<string>(maxLength: 10, nullable: true),
+                    NewPEID = table.Column<string>(maxLength: 10, nullable: true),
+                    OrganizationName = table.Column<string>(maxLength: 200, nullable: true),
+                    Phone = table.Column<string>(maxLength: 15, nullable: true),
+                    Email = table.Column<string>(maxLength: 200, nullable: true),
+                    Website = table.Column<string>(maxLength: 200, nullable: true),
+                    OrganizationStandingId = table.Column<int>(nullable: true),
                     AddressID = table.Column<int>(nullable: false),
                     Address_AddressName = table.Column<string>(nullable: true),
                     Address_AttentionTo = table.Column<string>(nullable: true),
@@ -64,10 +65,10 @@ namespace Tracker.Core.Migrations
                 {
                     table.PrimaryKey("PK_Organizations", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_Organizations_ClientStandings_OrganizationStandingName",
-                        column: x => x.OrganizationStandingName,
-                        principalTable: "ClientStandings",
-                        principalColumn: "Name",
+                        name: "FK_Organizations_OrganizationStandings_OrganizationStandingId",
+                        column: x => x.OrganizationStandingId,
+                        principalTable: "OrganizationStandings",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -155,7 +156,7 @@ namespace Tracker.Core.Migrations
                     Recommendation = table.Column<string>(maxLength: 1000, nullable: true),
                     IsReportReceived = table.Column<bool>(nullable: false),
                     EncryptionPassword = table.Column<string>(nullable: true),
-                    Processor = table.Column<string>(nullable: true),
+                    ProcessorID = table.Column<int>(nullable: true),
                     FeeVersion = table.Column<string>(maxLength: 50, nullable: true),
                     FeeID = table.Column<int>(nullable: false),
                     IsPrePaid = table.Column<bool>(nullable: false),
@@ -175,6 +176,12 @@ namespace Tracker.Core.Migrations
                         principalColumn: "ID",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
+                        name: "FK_Projects_Staff_ProcessorID",
+                        column: x => x.ProcessorID,
+                        principalTable: "Staff",
+                        principalColumn: "ID",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_Projects_People_RequestorID",
                         column: x => x.RequestorID,
                         principalTable: "People",
@@ -182,10 +189,51 @@ namespace Tracker.Core.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "FeeData",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    StaffTime = table.Column<decimal>(type: "decimal(9, 3)", nullable: false),
+                    HalfStaffTime = table.Column<decimal>(type: "decimal(9, 3)", nullable: false),
+                    InHouseTime = table.Column<decimal>(type: "decimal(9, 3)", nullable: false),
+                    StaffAssistanceTime = table.Column<decimal>(type: "decimal(9, 3)", nullable: false),
+                    GISFeatures = table.Column<decimal>(nullable: false),
+                    IsAddressMappedFee = table.Column<bool>(nullable: false),
+                    DBRows = table.Column<decimal>(nullable: false),
+                    QuadsEntered = table.Column<decimal>(nullable: false),
+                    IsPDFFee = table.Column<bool>(nullable: false),
+                    PDFPages = table.Column<decimal>(nullable: false),
+                    PrintedPages = table.Column<decimal>(nullable: false),
+                    Adjustment = table.Column<decimal>(type: "decimal(10, 2)", nullable: false),
+                    AdjustmentExplanation = table.Column<string>(nullable: true),
+                    IsPriority = table.Column<bool>(nullable: false),
+                    IsEmergency = table.Column<bool>(nullable: false),
+                    IsRapidResponse = table.Column<bool>(nullable: false),
+                    ProjectID = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FeeData", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_FeeData_Projects_ProjectID",
+                        column: x => x.ProjectID,
+                        principalTable: "Projects",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Organizations_OrganizationStandingName",
+                name: "IX_FeeData_ProjectID",
+                table: "FeeData",
+                column: "ProjectID",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Organizations_OrganizationStandingId",
                 table: "Organizations",
-                column: "OrganizationStandingName");
+                column: "OrganizationStandingId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_People_AffiliationID",
@@ -198,6 +246,11 @@ namespace Tracker.Core.Migrations
                 column: "ClientID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Projects_ProcessorID",
+                table: "Projects",
+                column: "ProcessorID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Projects_RequestorID",
                 table: "Projects",
                 column: "RequestorID");
@@ -206,10 +259,13 @@ namespace Tracker.Core.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "FeeData");
+
+            migrationBuilder.DropTable(
                 name: "Projects");
 
             migrationBuilder.DropTable(
-                name: "Staffs");
+                name: "Staff");
 
             migrationBuilder.DropTable(
                 name: "People");
@@ -218,7 +274,7 @@ namespace Tracker.Core.Migrations
                 name: "Organizations");
 
             migrationBuilder.DropTable(
-                name: "ClientStandings");
+                name: "OrganizationStandings");
         }
     }
 }

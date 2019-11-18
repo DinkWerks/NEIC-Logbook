@@ -182,11 +182,10 @@ namespace Tracker.Core.Models
             {
                 SetProperty(ref _mailingAddress, value);
                 if (IsMailingSameAsBilling)
-                    BillingAddress = value;
+                    BillingAddress = new Address(value);
             }
         }
 
-        //Gets Converted to Individual Fields in DB
         public Address BillingAddress
         {
             get { return _billingAddress; }
@@ -200,7 +199,7 @@ namespace Tracker.Core.Models
             {
                 SetProperty(ref _isRequestorSameAsBilling, value);
                 if (value)
-                    BillingAddress = MailingAddress;
+                    BillingAddress = new Address(MailingAddress);
                 else
                     BillingAddress = new Address();
             }

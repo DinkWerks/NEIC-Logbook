@@ -53,7 +53,7 @@ namespace Tracker.Core.Services
 
             modelBuilder.Entity<Organization>().OwnsOne(o => o.Address);
             modelBuilder.Entity<Organization>()
-                .HasOne<OrganizationStanding>(o => o.OrganizationStanding)
+                .HasOne(o => o.OrganizationStanding)
                 .WithMany(os => os.Organizations)
                 .HasForeignKey(o => o.OrganizationStandingId);
 

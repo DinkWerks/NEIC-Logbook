@@ -20,7 +20,8 @@ namespace mPeopleList.Views
         private void ListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             Person selectedPerson = (Person)PersonListBox.SelectedItem;
-            _ea.GetEvent<PersonListSelectEvent>().Publish(selectedPerson.ID);
+            if(selectedPerson != null)
+                _ea.GetEvent<PersonListSelectEvent>().Publish(selectedPerson.ID);
         }
     }
 }

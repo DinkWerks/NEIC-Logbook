@@ -102,5 +102,14 @@ namespace mPeopleList.ViewModels
             Person = _ps.GetPersonFull(personID);
             OrgList = _os.GetAllOrganizations();
         }
+
+
+        public new void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+            if (!_deleting)
+                SaveCommand.Execute();
+            Person = null;
+            OrgList = null;
+        }
     }
 }

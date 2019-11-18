@@ -183,37 +183,9 @@
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\OleDbDataReaderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Migrations\20191013000449_Test1.cs" />
-    <Compile Include="Migrations\20191013000449_Test1.designer.cs">
-      <DependentUpon>20191013000449_Test1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20191014051003_B1.cs" />
-    <Compile Include="Migrations\20191014051003_B1.designer.cs">
-      <DependentUpon>20191014051003_B1.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20191023205517_StaffTableCorrection.cs" />
-    <Compile Include="Migrations\20191023205517_StaffTableCorrection.designer.cs">
-      <DependentUpon>20191023205517_StaffTableCorrection.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20191023214227_SPRelate.cs" />
-    <Compile Include="Migrations\20191023214227_SPRelate.designer.cs">
-      <DependentUpon>20191023214227_SPRelate.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20191029060120_FeeDataTable.cs" />
-    <Compile Include="Migrations\20191029060120_FeeDataTable.designer.cs">
-      <DependentUpon>20191029060120_FeeDataTable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20191030191507_OrgStanding.cs" />
-    <Compile Include="Migrations\20191030191507_OrgStanding.designer.cs">
-      <DependentUpon>20191030191507_OrgStanding.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20191030201742_OrgStanding2.cs" />
-    <Compile Include="Migrations\20191030201742_OrgStanding2.designer.cs">
-      <DependentUpon>20191030201742_OrgStanding2.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Migrations\20191106204829_OrgStandingChange.cs" />
-    <Compile Include="Migrations\20191106204829_OrgStandingChange.designer.cs">
-      <DependentUpon>20191106204829_OrgStandingChange.cs</DependentUpon>
+    <Compile Include="Migrations\20191114201140_init.cs" />
+    <Compile Include="Migrations\20191114201140_init.designer.cs">
+      <DependentUpon>20191114201140_init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\EFServiceModelSnapshot.cs" />
     <Compile Include="Models\Address.cs" />

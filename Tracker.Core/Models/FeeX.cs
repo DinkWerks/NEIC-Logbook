@@ -70,7 +70,7 @@ namespace Tracker.Core.Models
         {
             //TODO make resistant to unlocated filenames, try and default
             XElement xmlFile = XElement.Load($"{@"Resources\FeeStructures\" + fileName + ".xml"}");
-            var t = (decimal)(int)FeeData.GetType().GetProperty("GISFeatures").GetValue(FeeData);
+            //var t = (decimal)(int)FeeData.GetType().GetProperty("GISFeatures").GetValue(FeeData);
 
             //Gather list of charges for DB
             IEnumerable<FeeSeparator> separators = from item in xmlFile.Descendants("Fee")

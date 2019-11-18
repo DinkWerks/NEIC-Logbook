@@ -30,9 +30,9 @@ namespace Tracker.Core.Migrations
 
                     b.Property<string>("AdjustmentExplanation");
 
-                    b.Property<int>("DBRows");
+                    b.Property<decimal>("DBRows");
 
-                    b.Property<int>("GISFeatures");
+                    b.Property<decimal>("GISFeatures");
 
                     b.Property<decimal>("HalfStaffTime")
                         .HasColumnType("decimal(9, 3)");
@@ -50,13 +50,13 @@ namespace Tracker.Core.Migrations
 
                     b.Property<bool>("IsRapidResponse");
 
-                    b.Property<int>("PDFPages");
+                    b.Property<decimal>("PDFPages");
 
-                    b.Property<int>("PrintedPages");
+                    b.Property<decimal>("PrintedPages");
 
                     b.Property<int>("ProjectID");
 
-                    b.Property<int>("QuadsEntered");
+                    b.Property<decimal>("QuadsEntered");
 
                     b.Property<decimal>("StaffAssistanceTime")
                         .HasColumnType("decimal(9, 3)");

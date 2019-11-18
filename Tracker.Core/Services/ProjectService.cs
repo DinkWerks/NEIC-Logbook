@@ -11,7 +11,7 @@ namespace Tracker.Core.Services
     public interface IProjectService
     {
         Project GetProject(int id, bool fullLoad = false);
-        List<Project> GetAllProjects();
+        List<Project> GetAllProjects(bool tracking = true);
 
         void AddProject(Project project);
         void UpdateProject(Project project); 
@@ -44,12 +44,12 @@ namespace Tracker.Core.Services
                 return _context.Projects.Find(id);
         }
 
-        public List<Project> GetAllProjects()
+        public List<Project> GetAllProjects(bool tracking = true)
         {
-            return _context.Projects
-                .Include(p => p.Requestor)
-                .Include(p => p.Client)
-                .ToList();
+            if (tracking)
+                return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).ToList();
+            else
+                return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).AsNoTracking().ToList();
         }
 
         public void AddProject(Project project)

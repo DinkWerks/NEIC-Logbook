@@ -71,14 +71,17 @@ namespace Tracker.Core.Models
         
         public Address(Address address)
         {
-            AddressName = address.AddressName;
-            AttentionTo = address.AttentionTo;           
-            AddressLine1 = address.AddressLine1;
-            AddressLine2 = address.AddressLine2;
-            City = address.City;
-            State = address.State;
-            ZIP = address.ZIP;
-            Notes = address.Notes;
+            if(address != null)
+            {
+                AddressName = address.AddressName;
+                AttentionTo = address.AttentionTo;
+                AddressLine1 = address.AddressLine1;
+                AddressLine2 = address.AddressLine2;
+                City = address.City;
+                State = address.State;
+                ZIP = address.ZIP;
+                Notes = address.Notes;
+            }
         }
 
         public bool ValidateMinimalCompleteness()
