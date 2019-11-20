@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Tracker.Core.Models;
 
 namespace Tracker.Core.Services
@@ -12,9 +10,9 @@ namespace Tracker.Core.Services
     {
         Project GetProject(int id, bool fullLoad = false);
         List<Project> GetAllProjects(bool tracking = true);
-
+        List<Project> GetProjectsDateRange(DateTime startDate, DateTime endDate, bool tracking = true, bool fullLoad = false);
         void AddProject(Project project);
-        void UpdateProject(Project project); 
+        void UpdateProject(Project project);
         void DeleteProject(Project project);
     }
 
@@ -31,17 +29,25 @@ namespace Tracker.Core.Services
         {
             if (fullLoad)
             {
-                return _context.Projects
-                    .Where(p => p.Id == id)
-                    .Include(p => p.Requestor)
-                        .ThenInclude(r => r.Affiliation)
-                    .Include(p => p.Client)
-                    .Include(p => p.Processor)
-                    .Include(p => p.FeeData)                   
-                    .FirstOrDefault();
+                Project project = _context.Projects
+                                    .Where(p => p.Id == id)
+                                    .Include(p => p.Requestor)
+                                        .ThenInclude(r => r.Affiliation)
+                                    .Include(p => p.Client)
+                                    .Include(p => p.Processor)
+                                    .Include(p => p.FeeData)
+                                    .FirstOrDefault();
+                project.MailingAddress.Updated = false;
+                project.BillingAddress.Updated = false;
+                return project;
             }
             else
-                return _context.Projects.Find(id);
+            {
+                Project project = _context.Projects.Find(id);
+                project.MailingAddress.Updated = false;
+                project.BillingAddress.Updated = false;
+                return project;
+            }
         }
 
         public List<Project> GetAllProjects(bool tracking = true)
@@ -50,6 +56,25 @@ namespace Tracker.Core.Services
                 return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).ToList();
             else
                 return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).AsNoTracking().ToList();
+        }
+
+        public List<Project> GetProjectsDateRange(DateTime startDate, DateTime endDate, bool tracking = true, bool fullLoad = false)
+        {
+            if (tracking)
+                return _context.Projects
+                        .Include(p => p.Requestor)
+                        .Include(p => p.Client)
+                        .Include(p => p.FeeData)
+                        .Where(p => startDate > p.DateReceived && p.DateReceived < endDate)
+                        .ToList();
+            else
+                return _context.Projects
+                        .Include(p => p.Requestor)
+                        .Include(p => p.Client)
+                        .Include(p => p.FeeData)
+                        .Where(p => startDate > p.DateReceived && p.DateReceived < endDate)
+                        .AsNoTracking()
+                        .ToList();
         }
 
         public void AddProject(Project project)

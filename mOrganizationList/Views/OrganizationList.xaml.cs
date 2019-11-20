@@ -1,5 +1,4 @@
 ﻿using Prism.Events;
-using System.Threading;
 using System.Windows.Controls;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
@@ -18,12 +17,6 @@ namespace mOrganizationList.Views
         {
             InitializeComponent();
             _ea = eventAggregator;
-            Interlocked.Increment(ref count);
-        }
-
-        ~OrganizationList()
-        {
-            Interlocked.Decrement(ref count);
         }
 
         private void ListBoxItem_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

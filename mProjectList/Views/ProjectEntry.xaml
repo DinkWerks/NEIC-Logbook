@@ -268,7 +268,7 @@
                         </Grid>
 
                         <!--Address Information-->
-                        <TabControl Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,10">
+                        <TabControl x:Name="AddressTabControl" Grid.Row="1" Grid.ColumnSpan="2" Margin="0,0,0,10" SelectedIndex="{Binding CurrentTab}">
                             <TabItem Header="Mailing Address">
                                 <Grid>
                                     <Grid.ColumnDefinitions>

@@ -63,6 +63,7 @@ namespace Tracker.Core.Models
             FeeData = feeData;
 
             StructureCharges(FeeStructure.Version);
+            CalculateProjectCost();
         }
 
         //Methods

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Prism.Mvvm;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Tracker.Core.Models
 {
@@ -14,64 +15,103 @@ namespace Tracker.Core.Models
         private string _state;
         private string _zip;
         private string _notes;
-
+        private bool _updated;
 
         public string AddressName
         {
             get { return _addressName; }
-            set { SetProperty(ref _addressName, value); }
+            set
+            {
+                SetProperty(ref _addressName, value);
+                Updated = true;
+            }
         }
 
         public string AttentionTo
         {
             get { return _attentionTo; }
-            set { SetProperty(ref _attentionTo, value); }
+            set
+            {
+                SetProperty(ref _attentionTo, value);
+                Updated = true;
+            }
         }
 
         public string AddressLine1
         {
             get { return _addressLine1; }
-            set { SetProperty(ref _addressLine1, value); }
+            set
+            {
+                SetProperty(ref _addressLine1, value);
+                Updated = true;
+            }
         }
 
         public string AddressLine2
         {
             get { return _addressLine2; }
-            set { SetProperty(ref _addressLine2, value); }
+            set
+            {
+                SetProperty(ref _addressLine2, value);
+                Updated = true;
+            }
         }
 
         public string City
         {
             get { return _city; }
-            set { SetProperty(ref _city, value); }
+            set
+            {
+                SetProperty(ref _city, value);
+                Updated = true;
+            }
         }
 
         public string State
         {
             get { return _state; }
-            set { SetProperty(ref _state, value); }
+            set
+            {
+                SetProperty(ref _state, value);
+                Updated = true;
+            }
         }
 
         public string ZIP
         {
             get { return _zip; }
-            set { SetProperty(ref _zip, value); }
+            set
+            {
+                SetProperty(ref _zip, value);
+                Updated = true;
+            }
         }
 
         public string Notes
         {
             get { return _notes; }
-            set { SetProperty(ref _notes, value); }
+            set
+            {
+                SetProperty(ref _notes, value);
+                Updated = true;
+            }
         }
 
+        [NotMapped]
+        public bool Updated
+        {
+            get { return _updated; }
+            set { SetProperty(ref _updated, value); }
+        }
+        
         public Address()
         {
 
         }
-        
+
         public Address(Address address)
         {
-            if(address != null)
+            if (address != null)
             {
                 AddressName = address.AddressName;
                 AttentionTo = address.AttentionTo;
@@ -89,7 +129,8 @@ namespace Tracker.Core.Models
             return !(string.IsNullOrWhiteSpace(AddressLine1) &&
                 string.IsNullOrWhiteSpace(City) &&
                 string.IsNullOrWhiteSpace(State) &&
-                string.IsNullOrWhiteSpace(ZIP));
+                string.IsNullOrWhiteSpace(ZIP)
+                );
         }
     }
 }

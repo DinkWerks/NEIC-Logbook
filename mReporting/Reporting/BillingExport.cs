@@ -15,8 +15,8 @@ namespace mReporting.Reporting
 {
     public class BillingExport : IReport
     {
-        private IRecordSearchService _rss;
-        private List<RecordSearch> _recordSearches;
+        private IProjectService _ps;
+        private List<Project> _projects;
 
         private object missing;
         private Word.Document document;
@@ -36,9 +36,9 @@ namespace mReporting.Reporting
         }
 
         //Constructor
-        public BillingExport(IRecordSearchService recordSearchService)
+        public BillingExport(IProjectService projectService)
         {
-            _rss = recordSearchService;
+            _ps = projectService;
 
             Name = "Research Foundation Billing Export";
             Description = "Exports a detailed list of every project to be billed by the Research Foundation. The list will open up in a word document that the user can edit, print, and save.";
@@ -53,10 +53,8 @@ namespace mReporting.Reporting
 
             if (VerifyParameters())
             {
-                _recordSearches = _rss.GetRecordSearchesByCriteria(
-                    string.Format("WHERE DateOfResponse BETWEEN #{0}# AND #{1}# AND Status = 'Awaiting Billing'",
-                    StartDate.ToShortDateString(), EndDate.ToShortDateString()
-                    ));
+                _projects = _ps.GetProjectsDateRange(StartDate, EndDate, tracking: false);
+
                 try
                 {
                     Word.Application wordApp = new Word.Application
@@ -99,20 +97,21 @@ namespace mReporting.Reporting
 
         private void GenerateAccountReport(string account)
         {
-            List<RecordSearch> recordSearchSelection = _recordSearches.Where(r => r.ProjectNumber.ProjectID == account).ToList();
+            List<Project> projectSelection = _projects.Where(r => r.ProjectNumber != null && r.ProjectNumber.ProjectID == account).ToList();
 
             //Skip if no entries with that 
-            if (recordSearchSelection.Count <= 0)
+            if (projectSelection.Count <= 0)
                 return;
 
             decimal total = 0;
-            foreach (RecordSearch record in recordSearchSelection)
-                total += record.TotalFee;
+            foreach (Project project in projectSelection)
+                total += project.TotalFee;
 
             AddHeader(account, total);
-            foreach (RecordSearch record in recordSearchSelection)
+            foreach (Project project in projectSelection)
             {
-                AddEntry(record);
+                project.GenerateFee();
+                AddEntry(project);
             }
             document.Words.Last.InsertBreak(Word.WdBreakType.wdPageBreak);
         }
@@ -140,14 +139,17 @@ namespace mReporting.Reporting
             line.HorizontalLineFormat.Alignment = Word.WdHorizontalLineAlignment.wdHorizontalLineAlignCenter;
         }
 
-        private void AddEntry(RecordSearch record)
+        private void AddEntry(Project project)
         {
+            if (!project.ValidateCompleteness())
+                return;
+
             //Date
             Word.Paragraph dateHeader = document.Content.Paragraphs.Add(ref missing);
             dateHeader.Range.Paragraphs.SpaceAfter = 0;
             try
             {
-                dateHeader.Range.Text = record.DateOfResponse.ToDateString() + "\n";
+                dateHeader.Range.Text = project.DateOfResponse.ToDateString() + "\n";
             }
             catch
             {
@@ -169,14 +171,14 @@ namespace mReporting.Reporting
             iTable.Columns[2].PreferredWidth = 30;
 
             //--Address
-            if (record.BillingAddress.ValidateMinimalCompleteness())
+            if (project.BillingAddress.ValidateMinimalCompleteness())
             {
-                if (string.IsNullOrWhiteSpace(record.BillingAddress.AddressLine2))
+                if (string.IsNullOrWhiteSpace(project.BillingAddress.AddressLine2))
                     iTable.Rows[1].Cells[1].Range.Text = string.Format("{0}\r\n{1}\r\n{2}, {3} {4}",
-                       record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
+                       project.BillingAddress.AddressName, project.BillingAddress.AddressLine1, project.BillingAddress.City, project.BillingAddress.State, project.BillingAddress.ZIP);
                 else
                     iTable.Rows[1].Cells[1].Range.Text = string.Format("{0}\r\n{1}\r\n{2}\r\n{3}, {4} {5}",
-                       record.BillingAddress.AddressName, record.BillingAddress.AddressLine1, record.BillingAddress.AddressLine2, record.BillingAddress.City, record.BillingAddress.State, record.BillingAddress.ZIP);
+                       project.BillingAddress.AddressName, project.BillingAddress.AddressLine1, project.BillingAddress.AddressLine2, project.BillingAddress.City, project.BillingAddress.State, project.BillingAddress.ZIP);
             }
             else
             {
@@ -187,10 +189,10 @@ namespace mReporting.Reporting
             }
 
             //--PEID
-            if (!string.IsNullOrWhiteSpace(record.ClientModel.NewPEID))
-                iTable.Rows[1].Cells[2].Range.Text = string.Format("PEID # " + record.ClientModel.NewPEID);
-            else if (!string.IsNullOrWhiteSpace(record.ClientModel.OldPEID))
-                iTable.Rows[1].Cells[2].Range.Text = string.Format("PEID # " + record.ClientModel.OldPEID);
+            if (!string.IsNullOrWhiteSpace(project.Client.NewPEID))
+                iTable.Rows[1].Cells[2].Range.Text = string.Format("PEID # " + project.Client.NewPEID);
+            else if (!string.IsNullOrWhiteSpace(project.Client.OldPEID))
+                iTable.Rows[1].Cells[2].Range.Text = string.Format("PEID # " + project.Client.OldPEID);
             else
             {
                 iTable.Rows[1].Cells[2].Range.Text = "Missing PEID.";
@@ -212,18 +214,18 @@ namespace mReporting.Reporting
             Word.Paragraph projectInfo = document.Content.Paragraphs.Add(ref missing);
 
             string attentionTo;
-            if (string.IsNullOrWhiteSpace(record.BillingAddress.AttentionTo))
+            if (string.IsNullOrWhiteSpace(project.BillingAddress.AttentionTo))
                 attentionTo = "";
             else
-                attentionTo = "\r\nATTN: " + record.BillingAddress.AttentionTo;
-            string fileNumber = "IC File # " + record.GetFileNumberFormatted();
+                attentionTo = "\r\nATTN: " + project.BillingAddress.AttentionTo;
+            string fileNumber = "IC File # " + project.GetFileNumberFormatted();
 
-            if (string.IsNullOrWhiteSpace(record.Requestor.FirstName))
+            if (string.IsNullOrWhiteSpace(project.Requestor.FirstName))
                 projectInfo.Range.Text = string.Format("{0}\r\nRE: {1}; {2}\r\n",
-                    attentionTo, record.ProjectName, fileNumber);
+                    attentionTo, project.ProjectName, fileNumber);
             else
                 projectInfo.Range.Text = string.Format("{0}\r\nRE: {1} (Requested By: {2} {3}); {4}\r\n",
-                    attentionTo, record.ProjectName, record.Requestor.FirstName, record.Requestor.LastName, fileNumber);
+                    attentionTo, project.ProjectName, project.Requestor.FirstName, project.Requestor.LastName, fileNumber);
 
             object startRange = projectInfo.Range.End - (fileNumber.Length + 4);
             object endRange = projectInfo.Range.End - 3;
@@ -242,7 +244,7 @@ namespace mReporting.Reporting
             //--Total
             try
             {
-                bTable.Rows[1].Cells[1].Range.Text = "Amount Due: $" + record.Fee.TotalProjectCost;
+                bTable.Rows[1].Cells[1].Range.Text = "Amount Due: $" + project.Fee.TotalProjectCost;
             }
             catch
             {
@@ -255,7 +257,7 @@ namespace mReporting.Reporting
             //--Fees & Surcharge
             string chargeInformation = "";
             decimal runningTotal = 0;
-            foreach (ICharge charge in record.Fee.Charges)
+            foreach (ICharge charge in project.Fee.Charges)
             {
                 if (charge.TotalCost <= 0)
                     continue;
@@ -283,10 +285,10 @@ namespace mReporting.Reporting
             }
 
             string surcharge = "";
-            if (record.Fee.IsPriority)
-                surcharge += "  Priority Surcharge Fee: $" + (record.Fee.TotalProjectCost - runningTotal) + "\n";
-            if (record.Fee.IsEmergency)
-                surcharge += "  Emergency Surcharge Fee: $" + record.Fee.TotalProjectCost + "\n";
+            if (project.FeeData.IsPriority)
+                surcharge += "  Priority Surcharge Fee: $" + (project.Fee.TotalProjectCost - runningTotal) + "\n";
+            if (project.FeeData.IsEmergency)
+                surcharge += "  Emergency Surcharge Fee: $" + project.Fee.TotalProjectCost + "\n";
 
             bTable.Rows[1].Cells[2].Range.Text = "Information\n" + chargeInformation + surcharge + "Please include the invoice number on your remittance";
             bTable.Range.InsertParagraphAfter();

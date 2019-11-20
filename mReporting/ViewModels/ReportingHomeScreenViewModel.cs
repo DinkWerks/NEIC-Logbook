@@ -17,7 +17,8 @@ namespace mReporting.ViewModels
         private List<IReport> _billingReport = new List<IReport>();
         private ObservableCollection<object> _parameterPayload = new ObservableCollection<object>();
         private IReport _report;
-        private IRecordSearchService _rss;
+        //private IRecordSearchService _rss;
+        private IProjectService _ps;
         private IRegionManager _rm;
 
         public List<IReport> OHPReports
@@ -53,9 +54,10 @@ namespace mReporting.ViewModels
         public bool KeepAlive => false;
 
         //Constructor
-        public ReportingHomeScreenViewModel(IRecordSearchService recordSearchService, IRegionManager regionManager)
+        public ReportingHomeScreenViewModel(IProjectService projectService, IRegionManager regionManager)
         {
-            _rss = recordSearchService;
+            //_rss = recordSearchService;
+            _ps = projectService;
             _rm = regionManager;
 
             ExecuteReportCommand = new DelegateCommand(ExecuteReport);
@@ -66,7 +68,7 @@ namespace mReporting.ViewModels
         private void GetReportsFromNamespace(Assembly assembly, string nameSpace)
         {
             List<Type> reportTypes = assembly.GetTypes().Where(t => t.IsClass && string.Equals(t.Namespace, nameSpace, StringComparison.Ordinal)).ToList();
-            object[] repParams = new object[] { _rss };
+            object[] repParams = new object[] { _ps };
             foreach (Type t in reportTypes)
             {
                 if (t.IsPublic)

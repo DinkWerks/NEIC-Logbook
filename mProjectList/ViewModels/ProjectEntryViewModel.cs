@@ -36,6 +36,7 @@ namespace mProjectList.ViewModels
         private int _selectedRequestor;
         private int _selectedClient;
         private bool _firstRun = true;
+        private int _currentTab;
         private Calculator _calc;
 
         public Project Project
@@ -65,21 +66,22 @@ namespace mProjectList.ViewModels
         public int SelectedRequestor
         {
             get { return _selectedRequestor; }
-            set
-            {
-                //LoadNewRequestor(value);
-                SetProperty(ref _selectedRequestor, value);
-
-            }
+            set { SetProperty(ref _selectedRequestor, value); }
         }
 
         public int SelectedClient
         {
             get { return _selectedClient; }
-            set
+            set { SetProperty(ref _selectedClient, value); }
+        }
+
+        public int CurrentTab
+        {
+            get { return _currentTab; }
+            set 
             {
-                //LoadNewClient(value);
-                SetProperty(ref _selectedClient, value);
+                AddressChanged(CurrentTab);
+                _currentTab = value;
             }
         }
 
@@ -114,6 +116,8 @@ namespace mProjectList.ViewModels
             NavigateCommand = new DelegateCommand<string>(Navigate);
             CopyRequestorCommand = new DelegateCommand<string>(CopyRequestor);
             CopyClientCommand = new DelegateCommand<string>(CopyClient);
+
+            //eventAggregator.GetEvent<AddressChangedEvent>().Subscribe(AddressChanged);
         }
 
         //Methods
@@ -145,7 +149,7 @@ namespace mProjectList.ViewModels
             {
                 if (destination == "Mailing")
                     Project.MailingAddress = new Address(Project.Requestor.Address);
-                else if (destination == "Billing") ;
+                else if (destination == "Billing")
                     Project.BillingAddress = new Address(Project.Requestor.Address);
             }
         }
@@ -156,7 +160,7 @@ namespace mProjectList.ViewModels
             {
                 if (destination == "Mailing")
                     Project.MailingAddress = new Address(Project.Client.Address);
-                else if (destination == "Billing") ;
+                else if (destination == "Billing")
                     Project.BillingAddress = new Address(Project.Client.Address);
             }
         }
@@ -165,6 +169,14 @@ namespace mProjectList.ViewModels
         {
             if (Project != null && Project.Requestor != null && Project.Client == null)
                 Project.Client = Project.Requestor.Affiliation;
+        }
+
+        private void AddressChanged(int source)
+        {
+            if (Project.IsMailingSameAsBilling && source == 0 && Project.MailingAddress.Updated)
+                Project.BillingAddress = new Address(Project.MailingAddress);
+            else if (Project.IsMailingSameAsBilling && source == 1 && Project.BillingAddress.Updated)
+                Project.MailingAddress = new Address(Project.BillingAddress);
         }
 
         //Popups
@@ -230,8 +242,8 @@ namespace mProjectList.ViewModels
             }
 
             Project = _ps.GetProject((int)navigationContext.Parameters["id"], fullLoad: true);
-            FeeX projectFee = new FeeX(Project.FeeVersion, Project.FeeData ?? new FeeData());
-            _ea.GetEvent<ProjectEntryChangedEvent>().Publish(projectFee);
+            Project.GenerateFee();
+            _ea.GetEvent<ProjectEntryChangedEvent>().Publish(Project.Fee);
 
             RequestorList = _pes.GetPeople();
             ClientList = _os.GetAllOrganizations().OrderBy(s => s.OrganizationName).ToList();

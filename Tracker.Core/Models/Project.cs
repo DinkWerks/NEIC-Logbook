@@ -2,6 +2,7 @@
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Tracker.Core.StaticTypes;
 
 namespace Tracker.Core.Models
@@ -49,6 +50,7 @@ namespace Tracker.Core.Models
         private string _feeVersion;
         private int _feeID;
         private FeeData _feeData;
+        private FeeX _fee;
         private bool _isPrePaid;
         private decimal _totalFee;
         // Billing Information
@@ -320,6 +322,13 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _feeData, value); }
         }
 
+        [NotMapped]
+        public FeeX Fee
+        {
+            get { return _fee; }
+            set { SetProperty(ref _fee, value); }
+        }
+
         public bool IsPrePaid
         {
             get { return _isPrePaid; }
@@ -409,6 +418,21 @@ namespace Tracker.Core.Models
                 return ICTypePrefix + ICYear + "-" + ICEnumeration;
             else
                 return ICTypePrefix + ICYear + "-" + ICEnumeration + ICSuffix;
+        }
+
+        public void GenerateFee()
+        {
+            if (!string.IsNullOrEmpty(FeeVersion))
+                Fee = new FeeX(FeeVersion, FeeData ?? new FeeData());
+        }
+
+        public bool ValidateCompleteness()
+        {
+            if (Requestor != null && Client != null)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

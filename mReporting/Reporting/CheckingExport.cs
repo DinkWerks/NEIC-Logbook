@@ -11,7 +11,8 @@ namespace mReporting.Reporting
 {
     public class CheckingExport : IReport
     {
-        private IRecordSearchService _rss;
+        //private IRecordSearchService _rss;
+        private IProjectService _ps;
         private object missing;
         private Word.Document document;
         private Word.Table table;
@@ -29,9 +30,9 @@ namespace mReporting.Reporting
         }
 
         //Constructor
-        public CheckingExport(IRecordSearchService recordSearchService)
+        public CheckingExport(IProjectService projectService)
         {
-            _rss = recordSearchService;
+            _ps = projectService;
             Name = "Checks to Deposit Export";
             Description = "This exported view will list any check recieved as payments within a specific date range.";
         }
@@ -45,8 +46,8 @@ namespace mReporting.Reporting
 
             if (VerifyParameters())
             {
-                List<RecordSearch> recordSearches = _rss.GetRecordSearchesByCriteria(string.Format("WHERE DatePaid BETWEEN #{0}# AND #{1}# AND CheckNumber IS NOT NULL OR CheckNumber <> ''", 
-                    StartDate.ToShortDateString(), EndDate.ToShortDateString()));
+                List<Project> projects = _ps.GetProjectsDateRange(StartDate, EndDate, tracking: false);
+
                 try
                 {
                     Word.Application wordApp = new Word.Application
@@ -63,7 +64,7 @@ namespace mReporting.Reporting
 
                     //Create table
                     Word.Paragraph tableSection = document.Content.Paragraphs.Add(ref missing);
-                    table = document.Tables.Add(tableSection.Range, recordSearches.Count + 1, 5, ref missing, ref missing);
+                    table = document.Tables.Add(tableSection.Range, projects.Count + 1, 5, ref missing, ref missing);
 
                     table.AllowAutoFit = true;
                     table.AutoFitBehavior(Word.WdAutoFitBehavior.wdAutoFitWindow);
@@ -85,9 +86,9 @@ namespace mReporting.Reporting
 
                     //Start Index at 2 to skip header row.
                     int index = 2;
-                    foreach (RecordSearch rs in recordSearches)
+                    foreach (Project project in projects)
                     {
-                        AddEntry(index, rs);
+                        AddEntry(index, project);
                         index++;
                     }
                 }
@@ -128,14 +129,14 @@ namespace mReporting.Reporting
             header.Range.InsertParagraphAfter();
         }
 
-        private void AddEntry(int index, RecordSearch rs)
+        private void AddEntry(int index, Project project)
         {
-            table.Rows[index].Cells[1].Range.Text = rs.DateReceived.Value.ToShortDateString();
-            table.Rows[index].Cells[2].Range.Text = rs.GetFileNumberFormatted();
-            table.Rows[index].Cells[3].Range.Text = rs.ProjectName;
-            table.Rows[index].Cells[4].Range.Text = rs.TotalFee.ToString();
+            table.Rows[index].Cells[1].Range.Text = project.DateReceived.Value.ToShortDateString();
+            table.Rows[index].Cells[2].Range.Text = project.GetFileNumberFormatted();
+            table.Rows[index].Cells[3].Range.Text = project.ProjectName;
+            table.Rows[index].Cells[4].Range.Text = project.TotalFee.ToString();
             table.Rows[index].Cells[4].Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
-            table.Rows[index].Cells[5].Range.Text = rs.CheckNumber;
+            table.Rows[index].Cells[5].Range.Text = project.CheckNumber;
             table.Rows[index].Cells[5].Range.ParagraphFormat.Alignment = Word.WdParagraphAlignment.wdAlignParagraphRight;
             table.Rows[index].Cells[5].Range.ParagraphFormat.LineSpacing = 16;
         }

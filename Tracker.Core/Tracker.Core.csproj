@@ -166,6 +166,7 @@
     <Compile Include="Converters\StringToIcon.cs" />
     <Compile Include="Events\AdditionalCountySelectionEvent.cs" />
     <Compile Include="Events\AdditionalCountySelectionOpenedEvent.cs" />
+    <Compile Include="Events\AddressChangedEvent.cs" />
     <Compile Include="Events\CalculatorCostChangedEvent.cs" />
     <Compile Include="Events\CalculatorModifierChangedEvent.cs" />
     <Compile Include="Events\OrgListSelectEvent.cs" />
