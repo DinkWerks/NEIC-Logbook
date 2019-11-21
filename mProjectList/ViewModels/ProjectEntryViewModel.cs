@@ -212,6 +212,7 @@ namespace mProjectList.ViewModels
         public override void SaveEntry()
         {
             Project.FeeData = ((CalculatorViewModel)_calc.DataContext).Fee.FeeData;
+            Project.TotalFee = Project.Fee.TotalProjectCost;
             _ps.UpdateProject(Project);
             _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));
         }
@@ -233,6 +234,14 @@ namespace mProjectList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            Project = _ps.GetProject((int)navigationContext.Parameters["id"], fullLoad: true);
+            Project.GenerateFee();
+            
+
+            RequestorList = _pes.GetPeople();
+            ClientList = _os.GetAllOrganizations().OrderBy(s => s.OrganizationName).ToList();
+            StaffList = _ss.GetAllStaff().OrderBy(s => s.Name).ToList();
+
             if (_firstRun)
             {
                 _calc = _container.Resolve<Calculator>();
@@ -240,14 +249,7 @@ namespace mProjectList.ViewModels
                 region.Add(_calc);
                 _firstRun = false;
             }
-
-            Project = _ps.GetProject((int)navigationContext.Parameters["id"], fullLoad: true);
-            Project.GenerateFee();
             _ea.GetEvent<ProjectEntryChangedEvent>().Publish(Project.Fee);
-
-            RequestorList = _pes.GetPeople();
-            ClientList = _os.GetAllOrganizations().OrderBy(s => s.OrganizationName).ToList();
-            StaffList = _ss.GetAllStaff().OrderBy(s => s.Name).ToList();
         }
 
         public new void OnNavigatedFrom(NavigationContext navigationContext)

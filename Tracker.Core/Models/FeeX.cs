@@ -55,7 +55,7 @@ namespace Tracker.Core.Models
         //Constructor
         public FeeX(string version, FeeData feeData)
         {
-            if (string.IsNullOrEmpty(version))
+            if (string.IsNullOrWhiteSpace(version))
                 FeeStructure = FeeStructures.Structures[Settings.Settings.Instance.DefaultFeeStructure.Value];
             else
                 FeeStructure = FeeStructures.Structures[version];

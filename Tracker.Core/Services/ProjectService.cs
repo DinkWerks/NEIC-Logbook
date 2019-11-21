@@ -53,9 +53,9 @@ namespace Tracker.Core.Services
         public List<Project> GetAllProjects(bool tracking = true)
         {
             if (tracking)
-                return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).ToList();
+                return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).OrderBy(p => p.ICTypePrefix).ThenBy(p => p.ICYear).ThenBy(p => p.ICEnumeration).ThenBy(p => p.ICSuffix).ToList();
             else
-                return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).AsNoTracking().ToList();
+                return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).OrderBy(p => p.ICTypePrefix).ThenBy(p => p.ICYear).ThenBy(p => p.ICEnumeration).ThenBy(p => p.ICSuffix).AsNoTracking().ToList();
         }
 
         public List<Project> GetProjectsDateRange(DateTime startDate, DateTime endDate, bool tracking = true, bool fullLoad = false)
@@ -65,14 +65,14 @@ namespace Tracker.Core.Services
                         .Include(p => p.Requestor)
                         .Include(p => p.Client)
                         .Include(p => p.FeeData)
-                        .Where(p => startDate > p.DateReceived && p.DateReceived < endDate)
+                        .Where(p => startDate < p.DateReceived && p.DateReceived < endDate)
                         .ToList();
             else
                 return _context.Projects
                         .Include(p => p.Requestor)
                         .Include(p => p.Client)
                         .Include(p => p.FeeData)
-                        .Where(p => startDate > p.DateReceived && p.DateReceived < endDate)
+                        .Where(p => startDate < p.DateReceived && p.DateReceived < endDate)
                         .AsNoTracking()
                         .ToList();
         }

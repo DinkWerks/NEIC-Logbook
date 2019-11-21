@@ -16,6 +16,7 @@
 			<RowDefinition Height="Auto"/>
 			<RowDefinition Height="Auto"/>
 			<RowDefinition/>
+            <RowDefinition Height="Auto"/>
 		</Grid.RowDefinitions>
 
 		<ToolBar Margin="0,0,0,10" HorizontalAlignment="Stretch" HorizontalContentAlignment="Right">
@@ -30,7 +31,7 @@
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="200"/>
 				<ColumnDefinition Width="1*"/>
-				<ColumnDefinition Width="50"/>
+				<ColumnDefinition Width="100"/>
 				<ColumnDefinition Width="100"/>
 			</Grid.ColumnDefinitions>
 
@@ -39,9 +40,10 @@
 				<TextBox x:Name="ICFileYear" Text="{Binding ICFileYearSearch, UpdateSourceTrigger=PropertyChanged}" MaxLength="2" Width="30" Margin="0,0,2,0" KeyUp="ICFileYear_KeyUp"/>
 				<TextBox x:Name="ICFileEnum" Text="{Binding ICFileEnumerationSearch, UpdateSourceTrigger=PropertyChanged}" Width="75" HorizontalAlignment="Left"/>
 			</DockPanel>
-			<TextBox Grid.Column="1" Text="{Binding ProjectNameSearchText, UpdateSourceTrigger=PropertyChanged}"/>
+			<TextBox Grid.Column="1" Text="{Binding ProjectNameSearchText, UpdateSourceTrigger=PropertyChanged}" Margin="0,0,5,0"/>
+            <ComboBox Grid.Column="2" ItemsSource="{Binding Statuses}" SelectedItem="{Binding StatusSearch}"/>
 
-			<TextBlock Grid.Row="1" Text="RS ID" Style="{StaticResource ColumnTitle}"/>
+            <TextBlock Grid.Row="1" Text="RS ID" Style="{StaticResource ColumnTitle}"/>
 			<TextBlock Grid.Row="1" Grid.Column="1" Text="Project Name" Style="{StaticResource ColumnTitle}"/>
 			<TextBlock Grid.Row="1" Grid.Column="2" Text="Status" HorizontalAlignment="Center" Style="{StaticResource ColumnTitle}"/>
 			<TextBlock Grid.Row="1" Grid.Column="3" Text="Last Updated" HorizontalAlignment="Right" Style="{StaticResource ColumnTitle}"/>
@@ -98,5 +100,7 @@
                 </Grid>
             </TabItem>
         </TabControl>
+
+        <TextBlock Grid.Row="3" Text="{Binding FilterCount, StringFormat={}{0} Project(s)}" HorizontalAlignment="Right"/>
     </Grid>
 </UserControl>

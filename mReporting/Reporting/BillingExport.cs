@@ -54,6 +54,7 @@ namespace mReporting.Reporting
             if (VerifyParameters())
             {
                 _projects = _ps.GetProjectsDateRange(StartDate, EndDate, tracking: false);
+                _projects = _projects.Where(r => r.Status == "Awaiting Billing").ToList();
 
                 try
                 {
@@ -142,8 +143,14 @@ namespace mReporting.Reporting
         private void AddEntry(Project project)
         {
             if (!project.ValidateCompleteness())
+            {
+                Word.Paragraph errorMessage = document.Content.Paragraphs.Add(ref missing);
+                errorMessage.Range.Text = project.GetFileNumberFormatted() + " lacks a requestor or a client and was subsequently skipped. Please correct before exporting again.";
+                _errorCount++;
+                InsertLine();
                 return;
-
+            }
+               
             //Date
             Word.Paragraph dateHeader = document.Content.Paragraphs.Add(ref missing);
             dateHeader.Range.Paragraphs.SpaceAfter = 0;

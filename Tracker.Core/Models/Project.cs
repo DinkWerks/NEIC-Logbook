@@ -422,8 +422,7 @@ namespace Tracker.Core.Models
 
         public void GenerateFee()
         {
-            if (!string.IsNullOrEmpty(FeeVersion))
-                Fee = new FeeX(FeeVersion, FeeData ?? new FeeData());
+            Fee = new FeeX(FeeVersion, FeeData ?? new FeeData());
         }
 
         public bool ValidateCompleteness()

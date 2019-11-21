@@ -5,6 +5,7 @@ using Prism.Regions;
 using Prism.Services.Dialogs;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Windows.Data;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
@@ -26,6 +27,8 @@ namespace mProjectList.ViewModels
         private IDialogService _ds;
         private IProjectService _ps;
         private bool _firstRun = false;
+        private string _statusSearch;
+        private int _filterCount;
 
         public List<Project> Projects
         {
@@ -46,6 +49,7 @@ namespace mProjectList.ViewModels
             {
                 SetProperty(ref _icFilePrefix, value);
                 ProjectView.Refresh();
+                UpdateFilterCount();
             }
         }
 
@@ -56,6 +60,7 @@ namespace mProjectList.ViewModels
             {
                 SetProperty(ref _icFileYear, value);
                 ProjectView.Refresh();
+                UpdateFilterCount();
             }
         }
 
@@ -66,6 +71,7 @@ namespace mProjectList.ViewModels
             {
                 SetProperty(ref _icFileEnumeration, value);
                 ProjectView.Refresh();
+                UpdateFilterCount();
             }
         }
 
@@ -76,11 +82,29 @@ namespace mProjectList.ViewModels
             {
                 SetProperty(ref _projectNameSearchText, value);
                 ProjectView.Refresh();
+                UpdateFilterCount();
             }
         }
 
-        public List<Prefix> PrefixChoices { get; private set; }
+        public string StatusSearch
+        {
+            get { return _statusSearch; }
+            set
+            {
+                SetProperty(ref _statusSearch, value);
+                ProjectView.Refresh();
+                UpdateFilterCount();
+            }
+        }
 
+        public int FilterCount
+        {
+            get { return _filterCount; }
+            set { SetProperty(ref _filterCount, value); }
+        }
+
+        public List<Prefix> PrefixChoices { get; private set; }
+        public string[] Statuses {get; private set;}
         public DelegateCommand CreateNewProjectCommand { get; set; }
 
         //Constructor
@@ -95,6 +119,18 @@ namespace mProjectList.ViewModels
             Projects = _ps.GetAllProjects(tracking: false);
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             ProjectView.Filter = ProjectViewFilter;
+
+            Statuses = new string[]
+            {
+                "",
+                "Complete",
+                "Awaiting Payment",
+                "Overdue Payment",
+                "Awaiting Billing",
+                "Awaiting Response",
+                "Overdue Response",
+                "Entered"
+            };
 
             CreateNewProjectCommand = new DelegateCommand(CreateNewProject);
             eventAggregator.GetEvent<ProjectListSelectEvent>().Subscribe(NavigateToProjectEntry);
@@ -127,6 +163,7 @@ namespace mProjectList.ViewModels
                         ProjectName = r.Parameters.GetValue<string>("pname"),
                         MailingAddress = new Address(),
                         BillingAddress = new Address(),
+                        FeeData = new FeeData()
                     };
 
                     _ps.AddProject(newProject);
@@ -185,7 +222,22 @@ namespace mProjectList.ViewModels
             }
             else passedTests++;
 
-            return passedTests >= 4;
+            if (!string.IsNullOrWhiteSpace(StatusSearch))
+            {
+                if (project.Status == StatusSearch)
+                {
+                    passedTests++;
+                }
+                else return false;
+            }
+            else passedTests++;
+
+            return passedTests >= 5;
+        }
+
+        public void UpdateFilterCount()
+        {
+            FilterCount = ProjectView.Cast<object>().Count();
         }
 
         public void OnNavigatedTo(NavigationContext navigationContext)
@@ -200,6 +252,7 @@ namespace mProjectList.ViewModels
                 ProjectView = CollectionViewSource.GetDefaultView(Projects);
                 ProjectView.Filter = ProjectViewFilter;
             }
+            FilterCount = Projects.Count();
         }
 
         public bool IsNavigationTarget(NavigationContext navigationContext)
