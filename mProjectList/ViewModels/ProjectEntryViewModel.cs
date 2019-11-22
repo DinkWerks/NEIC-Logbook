@@ -234,13 +234,12 @@ namespace mProjectList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
-            Project = _ps.GetProject((int)navigationContext.Parameters["id"], fullLoad: true);
-            Project.GenerateFee();
-            
-
             RequestorList = _pes.GetPeople();
             ClientList = _os.GetAllOrganizations().OrderBy(s => s.OrganizationName).ToList();
             StaffList = _ss.GetAllStaff().OrderBy(s => s.Name).ToList();
+
+            Project = _ps.GetProject((int)navigationContext.Parameters["id"], fullLoad: true);
+            Project.GenerateFee();
 
             if (_firstRun)
             {

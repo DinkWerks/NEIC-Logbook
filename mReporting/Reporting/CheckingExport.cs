@@ -6,6 +6,7 @@ using Tracker.Core.Services;
 using System.Reflection;
 using System.Windows;
 using System.Collections.ObjectModel;
+using System.Linq;
 
 namespace mReporting.Reporting
 {
@@ -47,6 +48,7 @@ namespace mReporting.Reporting
             if (VerifyParameters())
             {
                 List<Project> projects = _ps.GetProjectsDateRange(StartDate, EndDate, tracking: false);
+                projects = projects.Where(p => !string.IsNullOrEmpty(p.CheckName)).ToList();
 
                 try
                 {

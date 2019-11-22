@@ -388,7 +388,7 @@
                                 <!--Processor Information-->
                                 <TextBlock Text="Processor:" Style="{StaticResource Line Header}"/>
                                 <ComboBox Grid.Column="1" ItemsSource="{Binding Source={StaticResource StaffGrouped}}" 
-                                          SelectedItem="{Binding Project.Processor}">
+                                          SelectedItem="{Binding Project.Processor}" SelectedValue="{Binding Project.Processor}">
                                     <ComboBox.GroupStyle>
                                         <GroupStyle>
                                             <GroupStyle.HeaderTemplate>

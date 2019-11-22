@@ -235,7 +235,7 @@ namespace mReporting.Reporting
                     attentionTo, project.ProjectName, project.Requestor.FirstName, project.Requestor.LastName, fileNumber);
 
             object startRange = projectInfo.Range.End - (fileNumber.Length + 4);
-            object endRange = projectInfo.Range.End - 3;
+            object endRange = projectInfo.Range.End - 2;
             Word.Range toBold = document.Range(ref startRange, ref endRange);
             toBold.Bold = 1;
             projectInfo.Range.InsertParagraphAfter();
