@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Tracker.Core.DTO;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
 
@@ -22,7 +23,7 @@ namespace mProjectList.Views
 
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            Project selectedRS = (Project)ProjectListBox.SelectedItem;
+            ProjectListDTO selectedRS = (ProjectListDTO)ProjectListBox.SelectedItem;
             if(selectedRS != null)
                 _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.Id);
         }

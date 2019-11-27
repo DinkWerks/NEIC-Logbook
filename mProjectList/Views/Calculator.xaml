@@ -160,9 +160,9 @@
             <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Text="Adjustment Explanation:"/>
             <TextBox Grid.Row="2" Grid.ColumnSpan="2" Text="{Binding Fee.FeeData.AdjustmentExplanation}" TextChanged="ModifierChangedEvent"/>
 
-			<CheckBox Grid.Row="3" Content="Priority Response (50% surcharge)" IsChecked="{Binding Fee.FeeData.IsPriority}" 
+            <CheckBox Grid.Row="3" Content="Priority Response (50% surcharge)" IsChecked="{Binding Fee.FeeData.IsPriority}" 
                       Checked="ModifierChangedEvent" Unchecked="ModifierChangedEvent" Margin="0,5"/>
-			<CheckBox Grid.Row="4" Content="Rapid Response (50% surcharge on staff time)" IsChecked="{Binding Fee.FeeData.IsRapidResponse}"
+            <CheckBox Grid.Row="4" Content="Rapid Response (50% surcharge on staff time)" IsChecked="{Binding Fee.FeeData.IsRapidResponse}"
                       Checked="ModifierChangedEvent" Unchecked="ModifierChangedEvent" Margin="0,0,0,5"/>
 			<CheckBox Grid.Row="5" Content="Emergency Response (100% surcharge)" IsChecked="{Binding Fee.FeeData.IsEmergency}"
                       Checked="ModifierChangedEvent" Unchecked="ModifierChangedEvent"/>

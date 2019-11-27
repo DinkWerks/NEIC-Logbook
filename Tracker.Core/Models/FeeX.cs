@@ -71,7 +71,6 @@ namespace Tracker.Core.Models
         {
             //TODO make resistant to unlocated filenames, try and default
             XElement xmlFile = XElement.Load($"{@"Resources\FeeStructures\" + fileName + ".xml"}");
-            //var t = (decimal)(int)FeeData.GetType().GetProperty("GISFeatures").GetValue(FeeData);
 
             //Gather list of charges for DB
             IEnumerable<FeeSeparator> separators = from item in xmlFile.Descendants("Fee")
@@ -135,7 +134,7 @@ namespace Tracker.Core.Models
             foreach (ICharge charge in Charges)
             {
                 runningTotal += charge.TotalCost;
-                if (FeeData.IsRapidResponse && charge.Name == "Staff Time")
+                if (FeeData.IsRapidResponse && charge.DBField == "StaffTime")
                     surcharge += charge.TotalCost * 0.5m;
             }
 

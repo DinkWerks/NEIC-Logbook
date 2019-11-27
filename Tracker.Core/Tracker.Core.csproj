@@ -164,6 +164,7 @@
     <Compile Include="Converters\ICFileNumberConverter.cs" />
     <Compile Include="Converters\PresentToBoolConverter.cs" />
     <Compile Include="Converters\StringToIcon.cs" />
+    <Compile Include="DTO\ProjectListDTO.cs" />
     <Compile Include="Events\AdditionalCountySelectionEvent.cs" />
     <Compile Include="Events\AdditionalCountySelectionOpenedEvent.cs" />
     <Compile Include="Events\AddressChangedEvent.cs" />
@@ -184,9 +185,9 @@
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\OleDbDataReaderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
-    <Compile Include="Migrations\20191114201140_init.cs" />
-    <Compile Include="Migrations\20191114201140_init.designer.cs">
-      <DependentUpon>20191114201140_init.cs</DependentUpon>
+    <Compile Include="Migrations\init.cs" />
+    <Compile Include="Migrations\init.designer.cs">
+      <DependentUpon>init.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\EFServiceModelSnapshot.cs" />
     <Compile Include="Models\Address.cs" />

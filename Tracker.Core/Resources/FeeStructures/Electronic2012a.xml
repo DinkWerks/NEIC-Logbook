@@ -7,7 +7,7 @@
   </Meta>
   <Fee type="variable">
     <Index>1</Index>
-    <Name>Staff Time</Name>
+    <Name>Information Center Time</Name>
     <DBField>StaffTime</DBField>
     <UnitName>hour</UnitName>
     <UnitNamePlural>hours</UnitNamePlural>
@@ -27,7 +27,7 @@
   
   <Fee type="variable">
     <Index>3</Index>
-    <Name>InHouse Time</Name>
+    <Name>In House Time</Name>
     <DBField>InHouseTime</DBField>
     <UnitName>hour</UnitName>
     <UnitNamePlural>hours</UnitNamePlural>

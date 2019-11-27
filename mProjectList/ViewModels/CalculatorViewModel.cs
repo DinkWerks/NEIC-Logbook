@@ -14,9 +14,6 @@ namespace mProjectList.ViewModels
         private ObservableCollection<FeeStructure> _versions = new ObservableCollection<FeeStructure>();
         private FeeStructure _selectedVersion;
         private bool _isloaded = false;
-        private bool _isActive;
-
-
 
         public FeeX Fee
         {
@@ -73,8 +70,6 @@ namespace mProjectList.ViewModels
                     Fee.FeeData.GetType().GetProperty(payload.DBField).SetValue(Fee.FeeData, false);
             else
                 Fee.FeeData.SetFromDecimal(payload.DBField, payload.Count);
-                
-            //Add update to Project Total in Project?
         }
 
         public void OnParentNavigatedTo(FeeX fee)

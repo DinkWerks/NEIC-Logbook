@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
+using Tracker.Core.DTO;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
@@ -16,7 +17,7 @@ namespace mProjectList.ViewModels
 {
     public class ProjectListViewModel : BindableBase, INavigationAware
     {
-        private List<Project> _projects = new List<Project>();
+        private List<ProjectListDTO> _projects = new List<ProjectListDTO>();
         private ICollectionView _projectView;
         private string _icFilePrefix;
         private string _icFileYear;
@@ -30,7 +31,7 @@ namespace mProjectList.ViewModels
         private string _statusSearch;
         private int _filterCount;
 
-        public List<Project> Projects
+        public List<ProjectListDTO> Projects
         {
             get { return _projects; }
             set { SetProperty(ref _projects, value); }
@@ -116,7 +117,8 @@ namespace mProjectList.ViewModels
             _ps = projectService;
             PrefixChoices = new List<Prefix>(ProjectPrefixes.Values);
 
-            Projects = _ps.GetAllProjects(tracking: false);
+            //Projects = _ps.GetAllProjects(tracking: false);
+            Projects = _ps.GetProjectListDTOs();
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             ProjectView.Filter = ProjectViewFilter;
 
@@ -174,7 +176,7 @@ namespace mProjectList.ViewModels
 
         public bool ProjectViewFilter(object filterable)
         {
-            Project project = filterable as Project;
+            ProjectListDTO project = filterable as ProjectListDTO;
             if (project == null)
             {
                 return false;
@@ -248,7 +250,8 @@ namespace mProjectList.ViewModels
             }
             else
             {
-                Projects = _ps.GetAllProjects(tracking: false);
+                //Projects = _ps.GetAllProjects(tracking: false);
+                Projects = _ps.GetProjectListDTOs();
                 ProjectView = CollectionViewSource.GetDefaultView(Projects);
                 ProjectView.Filter = ProjectViewFilter;
             }

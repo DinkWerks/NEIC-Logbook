@@ -93,7 +93,7 @@
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
-                    <DataGrid x:Name="SheetGrid" ItemsSource="{Binding Projects}"
+                    <DataGrid x:Name="SheetGrid"
                               IsReadOnly="True" AutoGenerateColumns="True" AutoGeneratingColumn="DataGrid_AutoGeneratingColumn"/>
                     <CheckBox x:Name="ShowAllCheck" Grid.Row="1" Content="Show All"  HorizontalAlignment="Right" Margin="0,5"
                               IsChecked="False" Checked="ShowAllCheck_Changed" Unchecked="ShowAllCheck_Changed"/>

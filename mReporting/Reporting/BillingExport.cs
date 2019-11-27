@@ -251,7 +251,7 @@ namespace mReporting.Reporting
             //--Total
             try
             {
-                bTable.Rows[1].Cells[1].Range.Text = "Amount Due: $" + project.Fee.TotalProjectCost;
+                bTable.Rows[1].Cells[1].Range.Text = "Amount Due: " + project.Fee.TotalProjectCost.ToString("C");
             }
             catch
             {
@@ -272,9 +272,18 @@ namespace mReporting.Reporting
                 {
                     case "variable":
                         VariableCharge vCharge = (VariableCharge)charge;
-                        chargeInformation += string.Format("  {0} - {1} {2} @ ${3} per {4}\n",
-                            vCharge.Name, vCharge.Count, vCharge.UnitNamePlural, vCharge.Cost, vCharge.UnitName);
-                        runningTotal += vCharge.TotalCost;
+                        if (project.Fee.FeeData.IsRapidResponse && charge.DBField == "StaffTime")
+                        {
+                            chargeInformation += string.Format("  {0} - {1} {2} @ ${3} per {4}\n",
+                            vCharge.Name, vCharge.Count.ToString("G29"), vCharge.UnitNamePlural, vCharge.Cost * 1.5m, vCharge.UnitName);
+                            runningTotal += vCharge.TotalCost;
+                        }
+                        else
+                        {
+                            chargeInformation += string.Format("  {0} - {1} {2} @ ${3} per {4}\n",
+                            vCharge.Name, vCharge.Count.ToString("G29"), vCharge.UnitNamePlural, vCharge.Cost, vCharge.UnitName);
+                            runningTotal += vCharge.TotalCost;
+                        }
                         break;
                     case "boolean":
                         BooleanCharge bCharge = (BooleanCharge)charge;
@@ -283,7 +292,7 @@ namespace mReporting.Reporting
                         break;
                     case "categorical":
                         CategoricalCharge cCharge = (CategoricalCharge)charge;
-                        chargeInformation += string.Format("  {0} - {1} {2} - ${3}\n", cCharge.Name, cCharge.Count, cCharge.UnitNamePlural, cCharge.TotalCost);
+                        chargeInformation += string.Format("  {0} - {1} {2} - ${3}\n", cCharge.Name, cCharge.Count.ToString("G29"), cCharge.UnitNamePlural, cCharge.TotalCost);
                         runningTotal += cCharge.TotalCost;
                         break;
                     default:
@@ -293,9 +302,9 @@ namespace mReporting.Reporting
 
             string surcharge = "";
             if (project.FeeData.IsPriority)
-                surcharge += "  Priority Surcharge Fee: $" + (project.Fee.TotalProjectCost - runningTotal) + "\n";
+                surcharge += "  Subtotal = " + project.Fee.Subtotal + "\n  --------- +\n  Priority Surcharge Fee: $" + (project.Fee.TotalProjectCost - runningTotal) + "\n";
             if (project.FeeData.IsEmergency)
-                surcharge += "  Emergency Surcharge Fee: $" + project.Fee.TotalProjectCost + "\n";
+                surcharge += "  Subtotal = " + project.Fee.Subtotal + "\n  --------- +\n  Emergency Surcharge Fee: $" + project.Fee.TotalProjectCost + "\n";
 
             bTable.Rows[1].Cells[2].Range.Text = "Information\n" + chargeInformation + surcharge + "Please include the invoice number on your remittance";
             bTable.Range.InsertParagraphAfter();
