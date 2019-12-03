@@ -185,6 +185,10 @@
     <Compile Include="Extensions\DateTimeExtensions.cs" />
     <Compile Include="Extensions\OleDbDataReaderExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
+    <Compile Include="Migrations\20191203192157_adding-cancel.cs" />
+    <Compile Include="Migrations\20191203192157_adding-cancel.designer.cs">
+      <DependentUpon>20191203192157_adding-cancel.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\init.cs" />
     <Compile Include="Migrations\init.designer.cs">
       <DependentUpon>init.cs</DependentUpon>

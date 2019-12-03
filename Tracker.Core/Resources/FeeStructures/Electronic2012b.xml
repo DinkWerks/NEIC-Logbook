@@ -17,7 +17,7 @@
 
   <Fee type="variable">
     <Index>2</Index>
-    <Name>Discounted Staff Time</Name>
+    <Name>Discounted Information Center Time</Name>
     <DBField>HalfStaffTime</DBField>
     <UnitName>hour</UnitName>
     <UnitNamePlural>hours</UnitNamePlural>

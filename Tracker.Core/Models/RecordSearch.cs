@@ -32,6 +32,7 @@ namespace Tracker.Core.Models
         // Meta
         private string _projectName;
         private string _rsType;
+        private bool _isCancelled;
         private string _status;
         private string _specialDetails;
         // Location
@@ -231,6 +232,12 @@ namespace Tracker.Core.Models
             set { SetProperty(ref _rsType, value); }
         }
 
+        public bool IsCancelled
+        {
+            get { return _isCancelled; }
+            set { SetProperty(ref _isCancelled, value); }
+        }
+
         public string Status
         {
             get { return _status; }
@@ -398,6 +405,11 @@ namespace Tracker.Core.Models
         {
             DateTime today = DateTime.Now;
 
+            if (IsCancelled)
+            {
+                return "Cancelled";
+            }
+
             if (DatePaid != null)
             {
                 return "Complete";
@@ -435,7 +447,5 @@ namespace Tracker.Core.Models
             else
                 return ICTypePrefix + ICYear + "-" + ICEnumeration + ICSuffix;
         }
-
-
     }
 }

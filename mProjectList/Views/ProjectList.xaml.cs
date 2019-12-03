@@ -23,10 +23,26 @@ namespace mProjectList.Views
 
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            Project selectedProject = (Project)ProjectListBox.SelectedItem;
+            if (selectedProject != null)
+                _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedProject.Id);
+        }
+
+        private void SheetGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            Project selectedProject = (Project)SheetGrid.SelectedItem;
+            if (selectedProject != null)
+                _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedProject.Id);
+        }
+
+        /*
+        private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
             ProjectListDTO selectedRS = (ProjectListDTO)ProjectListBox.SelectedItem;
             if(selectedRS != null)
                 _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.Id);
         }
+        */
 
         private void ICFilePrefix_PreviewKeyDown(object sender, KeyEventArgs e)
         {
@@ -76,5 +92,7 @@ namespace mProjectList.Views
             this.SheetGrid.AutoGenerateColumns = false;
             this.SheetGrid.AutoGenerateColumns = true;
         }
+
+        
     }
 }

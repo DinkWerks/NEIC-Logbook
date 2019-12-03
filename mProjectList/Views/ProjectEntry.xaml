@@ -142,6 +142,7 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
@@ -330,7 +331,7 @@
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="80"/>
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition/>
@@ -428,6 +429,16 @@
                                 <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Project.CheckNumber}"/>
                             </Grid>
                         </GroupBox>
+
+                        <Grid Grid.Row="3" Margin="6,5,5,5" Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <TextBlock Text="Notes:" Style="{StaticResource Line Header}"/>
+                            <TextBox Grid.Column="1" Text="{Binding Project.SpecialDetails}"  AcceptsReturn="True" MaxLines="2" MinLines="2"/>
+                        </Grid>
                     </Grid>
                 </ScrollViewer>
             </Border>
@@ -442,6 +453,7 @@
             <!--Date Information-->
             <Grid>
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -467,6 +479,10 @@
 
                 <TextBlock Grid.Row="4" Text="Date Paid:" Style="{StaticResource Line Header}"/>
                 <DatePicker SelectedDate="{Binding Project.DatePaid}" Grid.Row="4" Grid.Column="1"/>
+
+                <CheckBox Grid.Row="5" IsChecked="{Binding Project.IsCancelled}">
+                    <TextBlock Style="{StaticResource Line Header}" Text="Cancelled"/>
+                </CheckBox>
             </Grid>
 
             <!--Fee/Billing-->

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-using Tracker.Core.DTO;
+//using Tracker.Core.DTO;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
@@ -17,7 +17,7 @@ namespace mProjectList.ViewModels
 {
     public class ProjectListViewModel : BindableBase, INavigationAware
     {
-        private List<ProjectListDTO> _projects = new List<ProjectListDTO>();
+        private List<Project> _projects = new List<Project>();
         private ICollectionView _projectView;
         private string _icFilePrefix;
         private string _icFileYear;
@@ -31,7 +31,7 @@ namespace mProjectList.ViewModels
         private string _statusSearch;
         private int _filterCount;
 
-        public List<ProjectListDTO> Projects
+        public List<Project> Projects
         {
             get { return _projects; }
             set { SetProperty(ref _projects, value); }
@@ -117,8 +117,8 @@ namespace mProjectList.ViewModels
             _ps = projectService;
             PrefixChoices = new List<Prefix>(ProjectPrefixes.Values);
 
-            //Projects = _ps.GetAllProjects(tracking: false);
-            Projects = _ps.GetProjectListDTOs();
+            Projects = _ps.GetAllProjects(tracking: false);
+            //Projects = _ps.GetProjectListDTOs();
             ProjectView = CollectionViewSource.GetDefaultView(Projects);
             ProjectView.Filter = ProjectViewFilter;
 
@@ -131,7 +131,8 @@ namespace mProjectList.ViewModels
                 "Awaiting Billing",
                 "Awaiting Response",
                 "Overdue Response",
-                "Entered"
+                "Entered",
+                "Cancelled"
             };
 
             CreateNewProjectCommand = new DelegateCommand(CreateNewProject);
@@ -176,7 +177,7 @@ namespace mProjectList.ViewModels
 
         public bool ProjectViewFilter(object filterable)
         {
-            ProjectListDTO project = filterable as ProjectListDTO;
+            Project project = filterable as Project;
             if (project == null)
             {
                 return false;
@@ -250,8 +251,8 @@ namespace mProjectList.ViewModels
             }
             else
             {
-                //Projects = _ps.GetAllProjects(tracking: false);
-                Projects = _ps.GetProjectListDTOs();
+                Projects = _ps.GetAllProjects(tracking: false);
+                //Projects = _ps.GetProjectListDTOs();
                 ProjectView = CollectionViewSource.GetDefaultView(Projects);
                 ProjectView.Filter = ProjectViewFilter;
             }
