@@ -37,6 +37,7 @@ namespace mProjectList.ViewModels
                 {
                     foreach (ICharge c in Fee.Charges)
                         c.Reset();
+                    Fee.StructureCharges(SelectedVersion.Version);
                     Fee.CalculateProjectCost();
                     Fee.FeeStructure = value;
                 }

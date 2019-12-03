@@ -69,6 +69,7 @@ namespace Tracker.Core.Models
         //Methods
         public void StructureCharges(string fileName)
         {
+            Charges.Clear();
             //TODO make resistant to unlocated filenames, try and default
             XElement xmlFile = XElement.Load($"{@"Resources\FeeStructures\" + fileName + ".xml"}");
 
