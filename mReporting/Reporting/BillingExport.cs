@@ -54,7 +54,12 @@ namespace mReporting.Reporting
             if (VerifyParameters())
             {
                 _projects = _ps.GetProjectsDateRange(StartDate, EndDate, tracking: false);
-                _projects = _projects.Where(r => r.Status == "Awaiting Billing").ToList();
+                _projects = _projects.Where(r => r.Status == "Awaiting Billing")
+                    .OrderBy(r => r.ICTypePrefix)
+                        .ThenBy(r => r.ICYear)
+                        .ThenBy(r => r.ICEnumeration)
+                        .ThenBy(r => r.ICSuffix)
+                    .ToList();
 
                 try
                 {
@@ -298,6 +303,11 @@ namespace mReporting.Reporting
                     default:
                         break;
                 }
+            }
+
+            if (project.FeeData.Adjustment > 0)
+            {
+                chargeInformation += "  " + project.FeeData.AdjustmentExplanation + " - " + project.FeeData.Adjustment.ToString("C");
             }
 
             string surcharge = "";
