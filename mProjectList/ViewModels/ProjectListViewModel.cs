@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
-//using Tracker.Core.DTO;
+using Tracker.Core.DTO;
 using Tracker.Core.Events;
 using Tracker.Core.Models;
 using Tracker.Core.Services;
@@ -18,6 +18,7 @@ namespace mProjectList.ViewModels
     public class ProjectListViewModel : BindableBase, INavigationAware
     {
         private List<Project> _projects = new List<Project>();
+        private List<ProjectListDTO> _projectDTOs = new List<ProjeProjectListDTOct>();
         private ICollectionView _projectView;
         private string _icFilePrefix;
         private string _icFileYear;
@@ -30,6 +31,12 @@ namespace mProjectList.ViewModels
         private bool _firstRun = false;
         private string _statusSearch;
         private int _filterCount;
+
+        public List<ProjectListDTO> ProjectDTOs
+        {
+            get { return _projectDTOs; }
+            set { SetProperty(ref _projectDTOs, value); }
+        }
 
         public List<Project> Projects
         {

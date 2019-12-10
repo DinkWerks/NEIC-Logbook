@@ -72,10 +72,7 @@ namespace Tracker.Core.Services
                 ProjectName = p.ProjectName,
                 Status = p.Status,
                 LastUpdated = p.LastUpdated
-            }).OrderBy(p => p.ICTypePrefix)
-                .ThenBy(p => p.ICYear)
-                .ThenBy(p => p.ICEnumeration)
-                .ThenBy(p => p.ICSuffix)
+            }).OrderProjectListDTOsBy(ProjectOrderOptions.FileNumber)
             .AsNoTracking()
             .ToList();
         }
@@ -99,6 +96,12 @@ namespace Tracker.Core.Services
                         .ToList();
         }
 
+        //Ordering
+        
+
+        
+
+        //CUD
         public void AddProject(Project project)
         {
             _context.Projects.Add(project);
@@ -115,6 +118,37 @@ namespace Tracker.Core.Services
         {
             _context.Projects.Remove(project);
             _context.SaveChanges();
+        }
+    }
+    public enum ProjectOrderOptions
+    {
+        FileNumber, ProjectNumber
+    }
+
+    public static class ProjectServiceExtensions
+    {
+        public static IQueryable<Project> OrderProjectsBy(this IQueryable<Project> projects, ProjectOrderOptions orderOption)
+        {
+            switch (orderOption)
+            {
+                case ProjectOrderOptions.FileNumber:
+                    return projects.OrderBy(p => p.ICTypePrefix).ThenBy(p => p.ICYear).ThenBy(p => p.ICEnumeration).ThenBy(p => p.ICSuffix);
+                case ProjectOrderOptions.ProjectNumber:
+                    return projects.OrderBy(p => p.ProjectNumber);
+                default:
+                    return projects.OrderBy(p => p.Id);
+            }
+        }
+
+        public static IQueryable<ProjectListDTO> OrderProjectListDTOsBy(this IQueryable<ProjectListDTO> projects, ProjectOrderOptions orderOption)
+        {
+            switch (orderOption)
+            {
+                case ProjectOrderOptions.FileNumber:
+                    return projects.OrderBy(p => p.ICTypePrefix).ThenBy(p => p.ICYear).ThenBy(p => p.ICEnumeration).ThenBy(p => p.ICSuffix);
+                default:
+                    return projects.OrderBy(p => p.Id);
+            }
         }
     }
 }
