@@ -22,7 +22,7 @@ namespace mPeopleList.Views
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Project selectedRS = (Project)RSListBox.SelectedItem;
-            _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.Id);
+            _ea.GetEvent<PersonProjectListSelectEvent>().Publish(selectedRS.Id);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace Tracker.Core.Events
 {
-    public class ProjectListSelectEvent : PubSubEvent<int>
+    public class PersonProjectListSelectEvent : PubSubEvent<int>
     {
     }
 }

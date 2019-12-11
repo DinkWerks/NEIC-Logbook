@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using mProjectList.Views;
+﻿using mProjectList.Views;
 using Prism.Commands;
 using Prism.Events;
 using Prism.Ioc;
@@ -21,6 +20,7 @@ namespace mProjectList.ViewModels
 {
     public class ProjectEntryViewModel : RecordEntryBindableBase, INavigationAware
     {
+        private bool _loading = true;
         private readonly IEventAggregator _ea;
         private readonly IRegionManager _rm;
         private readonly IDialogService _ds;
@@ -167,7 +167,7 @@ namespace mProjectList.ViewModels
 
         private void RequestorChanged()
         {
-            if (Project != null && Project.Requestor != null && Project.Client == null)
+            if (Project != null && Project.Requestor != null && !_loading)
                 Project.Client = Project.Requestor.Affiliation;
         }
 
@@ -234,6 +234,7 @@ namespace mProjectList.ViewModels
 
         public void OnNavigatedTo(NavigationContext navigationContext)
         {
+            _loading = true;
             RequestorList = _pes.GetPeople();
             ClientList = _os.GetAllOrganizations().OrderBy(s => s.OrganizationName).ToList();
             StaffList = _ss.GetAllStaff().OrderBy(s => s.Name).ToList();
@@ -249,6 +250,7 @@ namespace mProjectList.ViewModels
                 _firstRun = false;
             }
             _ea.GetEvent<ProjectEntryChangedEvent>().Publish(Project.Fee);
+            _loading = false;
         }
 
         public new void OnNavigatedFrom(NavigationContext navigationContext)

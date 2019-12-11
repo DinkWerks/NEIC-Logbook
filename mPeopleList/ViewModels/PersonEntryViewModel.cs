@@ -48,7 +48,7 @@ namespace mPeopleList.ViewModels
 
             NavigateToOrganizationCommand = new DelegateCommand(NavigateToOrganization);
 
-            _ea.GetEvent<ProjectListSelectEvent>().Subscribe(NavigateToProject);
+            _ea.GetEvent<PersonProjectListSelectEvent>().Subscribe(NavigateToProject);
         }
 
         //Methods

@@ -177,6 +177,7 @@
     <Compile Include="Events\Payloads\RSListModificationPayload.cs" />
     <Compile Include="Events\Payloads\StatusPayload.cs" />
     <Compile Include="Events\PersonListSelectEvent.cs" />
+    <Compile Include="Events\PersonProjectListSelectEvent.cs" />
     <Compile Include="Events\ProjectListSelectEvent.cs" />
     <Compile Include="Events\ProjectEntryChangedEvent.cs" />
     <Compile Include="Events\RSListModifiedEvent.cs" />
