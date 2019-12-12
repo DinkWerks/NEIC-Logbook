@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Tracker.Core.DTO;
 using Tracker.Core.Models;
 
@@ -12,6 +13,7 @@ namespace Tracker.Core.Services
         Project GetProject(int id, bool fullLoad = false);
         List<Project> GetAllProjects(bool tracking = true);
         List<ProjectListDTO> GetProjectListDTOs();
+        Task<List<ProjectListDTO>> GetProjectListDTOsAsync();
         List<Project> GetProjectsDateRange(DateTime startDate, DateTime endDate, bool tracking = true, bool fullLoad = false);
         void AddProject(Project project);
         void UpdateProject(Project project);
@@ -55,9 +57,9 @@ namespace Tracker.Core.Services
         public List<Project> GetAllProjects(bool tracking = true)
         {
             if (tracking)
-                return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).OrderBy(p => p.ICTypePrefix).ThenBy(p => p.ICYear).ThenBy(p => p.ICEnumeration).ThenBy(p => p.ICSuffix).ToList();
+                return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).OrderProjectsBy(ProjectOrderOptions.FileNumber).ToList();
             else
-                return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).OrderBy(p => p.ICTypePrefix).ThenBy(p => p.ICYear).ThenBy(p => p.ICEnumeration).ThenBy(p => p.ICSuffix).AsNoTracking().ToList();
+                return _context.Projects.Include(p => p.Requestor).Include(p => p.Client).OrderProjectsBy(ProjectOrderOptions.FileNumber).AsNoTracking().ToList();
         }
 
         public List<ProjectListDTO> GetProjectListDTOs()
@@ -71,10 +73,31 @@ namespace Tracker.Core.Services
                 ICSuffix = p.ICSuffix,
                 ProjectName = p.ProjectName,
                 Status = p.Status,
+                MainCounty = p.MainCounty,
+                PLSS = p.PLSS,
                 LastUpdated = p.LastUpdated
             }).OrderProjectListDTOsBy(ProjectOrderOptions.FileNumber)
             .AsNoTracking()
             .ToList();
+        }
+
+        public async Task<List<ProjectListDTO>> GetProjectListDTOsAsync()
+        {
+            return await _context.Projects.Select(p => new ProjectListDTO
+            {
+                Id = p.Id,
+                ICTypePrefix = p.ICTypePrefix,
+                ICYear = p.ICYear,
+                ICEnumeration = p.ICEnumeration,
+                ICSuffix = p.ICSuffix,
+                ProjectName = p.ProjectName,
+                Status = p.Status,
+                MainCounty = p.MainCounty,
+                PLSS = p.PLSS,
+                LastUpdated = p.LastUpdated
+            }).OrderProjectListDTOsBy(ProjectOrderOptions.FileNumber)
+            .AsNoTracking()
+            .ToListAsync();
         }
 
         public List<Project> GetProjectsDateRange(DateTime startDate, DateTime endDate, bool tracking = true, bool fullLoad = false)
@@ -95,12 +118,7 @@ namespace Tracker.Core.Services
                         .AsNoTracking()
                         .ToList();
         }
-
-        //Ordering
         
-
-        
-
         //CUD
         public void AddProject(Project project)
         {

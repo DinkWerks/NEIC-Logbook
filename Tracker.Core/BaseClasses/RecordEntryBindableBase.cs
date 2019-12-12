@@ -7,7 +7,6 @@ using Tracker.Core.CompositeCommands;
 
 namespace Tracker.Core.BaseClasses
 {
-    // TODO Verify that this should be abstract.
     public abstract class RecordEntryBindableBase : BindableBase, IActiveAware, IRegionMemberLifetime
     {
         private bool _isActive;

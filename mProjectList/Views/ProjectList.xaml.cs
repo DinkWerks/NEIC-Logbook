@@ -21,29 +21,6 @@ namespace mProjectList.Views
             InitializeComponent();
         }
 
-        private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            Project selectedProject = (Project)ProjectListBox.SelectedItem;
-            if (selectedProject != null)
-                _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedProject.Id);
-        }
-
-        private void SheetGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            Project selectedProject = (Project)SheetGrid.SelectedItem;
-            if (selectedProject != null)
-                _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedProject.Id);
-        }
-
-        /*
-        private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            ProjectListDTO selectedRS = (ProjectListDTO)ProjectListBox.SelectedItem;
-            if(selectedRS != null)
-                _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.Id);
-        }
-        */
-
         private void ICFilePrefix_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             {
@@ -76,15 +53,46 @@ namespace mProjectList.Views
             }
         }
 
+        private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if ((bool)this.ShowAllCheck.IsChecked)
+            {
+                Project selectedRS = (Project)ProjectListBox.SelectedItem;
+                if (selectedRS != null)
+                    _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.Id);
+            }
+            else
+            {
+                ProjectListDTO selectedRS = (ProjectListDTO)ProjectListBox.SelectedItem;
+                if (selectedRS != null)
+                    _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedRS.Id);
+            }
+        }
+
+        private void SheetGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if ((bool)this.ShowAllCheck.IsChecked)
+            {
+                Project selectedProject = (Project)SheetGrid.SelectedItem;
+                if (selectedProject != null)
+                    _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedProject.Id);
+            }
+            else
+            {
+                ProjectListDTO selectedProject = (ProjectListDTO)SheetGrid.SelectedItem;
+                if (selectedProject != null)
+                    _ea.GetEvent<ProjectListSelectEvent>().Publish(selectedProject.Id);
+            }
+        }
+
         private void DataGrid_AutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
         {
             if (this.ShowAllCheck.IsChecked == false)
             {
-                List<string> viewableColumns = new List<string>() { "ICTypePrefix", "ICYear", "ICEnumeration", "ICSuffix" , "ProjectName", "MainCounty", "PLSS" };
+                List<string> viewableColumns = new List<string>() { "ICTypePrefix", "ICYear", "ICEnumeration", "ICSuffix", "ProjectName", "MainCounty", "PLSS" };
                 if (!viewableColumns.Contains(e.PropertyName))
                     e.Cancel = true;
             }
-
         }
 
         private void ShowAllCheck_Changed(object sender, System.Windows.RoutedEventArgs e)
@@ -92,7 +100,5 @@ namespace mProjectList.Views
             this.SheetGrid.AutoGenerateColumns = false;
             this.SheetGrid.AutoGenerateColumns = true;
         }
-
-        
     }
 }

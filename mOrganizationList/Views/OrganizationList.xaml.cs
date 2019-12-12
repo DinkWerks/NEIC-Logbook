@@ -11,7 +11,6 @@ namespace mOrganizationList.Views
     public partial class OrganizationList : UserControl
     {
         private IEventAggregator _ea;
-        static int count = 0;
 
         public OrganizationList(IEventAggregator eventAggregator)
         {

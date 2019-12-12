@@ -6,6 +6,7 @@ using Prism.Services.Dialogs;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Data;
 using Tracker.Core.DTO;
 using Tracker.Core.Events;
@@ -17,18 +18,19 @@ namespace mProjectList.ViewModels
 {
     public class ProjectListViewModel : BindableBase, INavigationAware
     {
+        private IEventAggregator _ea;
+        private IRegionManager _rm;
+        private IDialogService _ds;
+        private IProjectService _ps;
+        private bool _firstRun = true;
+        private List<ProjectListDTO> _projectDTOs = new List<ProjectListDTO>();
         private List<Project> _projects = new List<Project>();
-        private List<ProjectListDTO> _projectDTOs = new List<ProjeProjectListDTOct>();
         private ICollectionView _projectView;
         private string _icFilePrefix;
         private string _icFileYear;
         private string _icFileEnumeration;
         private string _projectNameSearchText;
-        private IEventAggregator _ea;
-        private IRegionManager _rm;
-        private IDialogService _ds;
-        private IProjectService _ps;
-        private bool _firstRun = false;
+        private bool _isShowingAll;
         private string _statusSearch;
         private int _filterCount;
 
@@ -44,6 +46,12 @@ namespace mProjectList.ViewModels
             set { SetProperty(ref _projects, value); }
         }
 
+        public ICollectionView ProjectDTOView
+        {
+            get { return _projectView; }
+            set { SetProperty(ref _projectView, value); }
+        }
+
         public ICollectionView ProjectView
         {
             get { return _projectView; }
@@ -56,6 +64,7 @@ namespace mProjectList.ViewModels
             set
             {
                 SetProperty(ref _icFilePrefix, value);
+                ProjectDTOView.Refresh();
                 ProjectView.Refresh();
                 UpdateFilterCount();
             }
@@ -67,6 +76,7 @@ namespace mProjectList.ViewModels
             set
             {
                 SetProperty(ref _icFileYear, value);
+                ProjectDTOView.Refresh();
                 ProjectView.Refresh();
                 UpdateFilterCount();
             }
@@ -78,6 +88,7 @@ namespace mProjectList.ViewModels
             set
             {
                 SetProperty(ref _icFileEnumeration, value);
+                ProjectDTOView.Refresh(); 
                 ProjectView.Refresh();
                 UpdateFilterCount();
             }
@@ -89,7 +100,8 @@ namespace mProjectList.ViewModels
             set
             {
                 SetProperty(ref _projectNameSearchText, value);
-                ProjectView.Refresh();
+                ProjectDTOView.Refresh();
+                ProjectView.Refresh(); 
                 UpdateFilterCount();
             }
         }
@@ -100,8 +112,20 @@ namespace mProjectList.ViewModels
             set
             {
                 SetProperty(ref _statusSearch, value);
+                ProjectDTOView.Refresh();
                 ProjectView.Refresh();
                 UpdateFilterCount();
+            }
+        }
+
+        public bool IsShowingAll
+        {
+            get { return _isShowingAll; }
+            set 
+            {
+                if(value)
+                    LoadProjects();
+                SetProperty(ref _isShowingAll, value); 
             }
         }
 
@@ -124,10 +148,7 @@ namespace mProjectList.ViewModels
             _ps = projectService;
             PrefixChoices = new List<Prefix>(ProjectPrefixes.Values);
 
-            Projects = _ps.GetAllProjects(tracking: false);
-            //Projects = _ps.GetProjectListDTOs();
-            ProjectView = CollectionViewSource.GetDefaultView(Projects);
-            ProjectView.Filter = ProjectViewFilter;
+            LoadProjectDTOs();
 
             Statuses = new string[]
             {
@@ -147,6 +168,27 @@ namespace mProjectList.ViewModels
         }
 
         //Methods
+        public void LoadProjects()
+        {
+            Projects = _ps.GetAllProjects();
+            ProjectView = new CollectionViewSource { Source = Projects }.View;
+            ProjectView.Filter = ProjectViewFilter;
+        }
+
+        public void LoadProjectDTOs()
+        {
+            ProjectDTOs = _ps.GetProjectListDTOs();
+            ProjectDTOView = new CollectionViewSource { Source = ProjectDTOs }.View;
+            ProjectDTOView.Filter = ProjectDTOViewFilter;
+        }
+
+        public async Task LoadProjectDTOsAsync()
+        {
+            ProjectDTOs = await _ps.GetProjectListDTOsAsync();
+            ProjectDTOView = CollectionViewSource.GetDefaultView(ProjectDTOs);
+            ProjectDTOView.Filter = ProjectDTOViewFilter;
+        }
+
         public void NavigateToProjectEntry(int navTargetID)
         {
             var parameters = new NavigationParameters
@@ -155,7 +197,9 @@ namespace mProjectList.ViewModels
             };
 
             if (navTargetID >= 0)
+            {
                 _rm.RequestNavigate("ContentRegion", "ProjectEntry", parameters);
+            }
         }
 
         public void CreateNewProject()
@@ -182,9 +226,39 @@ namespace mProjectList.ViewModels
             });
         }
 
-        public bool ProjectViewFilter(object filterable)
+        
+        public void UpdateFilterCount()
         {
-            Project project = filterable as Project;
+            FilterCount = ProjectDTOView.Cast<object>().Count();
+        }
+
+        public void OnNavigatedTo(NavigationContext navigationContext)
+        {
+            if (_firstRun)
+            {
+                _firstRun = false;
+            }
+            else
+            {
+                LoadProjectDTOs();
+            }
+            FilterCount = ProjectDTOs.Count();
+        }
+
+        public bool IsNavigationTarget(NavigationContext navigationContext)
+        {
+            return true;
+        }
+
+        public void OnNavigatedFrom(NavigationContext navigationContext)
+        {
+
+        }
+
+        #region Filters
+        public bool ProjectDTOViewFilter(object filterable)
+        {
+            var project = filterable as ProjectListDTO;
             if (project == null)
             {
                 return false;
@@ -245,35 +319,68 @@ namespace mProjectList.ViewModels
             return passedTests >= 5;
         }
 
-        public void UpdateFilterCount()
+        public bool ProjectViewFilter(object filterable)
         {
-            FilterCount = ProjectView.Cast<object>().Count();
-        }
-
-        public void OnNavigatedTo(NavigationContext navigationContext)
-        {
-            if (_firstRun)
+            var project = filterable as Project;
+            if (project == null)
             {
-                _firstRun = false;
+                return false;
             }
-            else
+
+            int passedTests = 0;
+
+            if (ProjectNameSearchText != null)
             {
-                Projects = _ps.GetAllProjects(tracking: false);
-                //Projects = _ps.GetProjectListDTOs();
-                ProjectView = CollectionViewSource.GetDefaultView(Projects);
-                ProjectView.Filter = ProjectViewFilter;
+                if (project.ProjectName.ToLower().Contains(ProjectNameSearchText.ToLower()))
+                {
+                    passedTests++;
+                }
+                else return false;
             }
-            FilterCount = Projects.Count();
-        }
+            else passedTests++;
 
-        public bool IsNavigationTarget(NavigationContext navigationContext)
-        {
-            return true;
-        }
+            if (ICFilePrefixSearch != null)
+            {
+                if (project.ICTypePrefix.ToUpper() == ICFilePrefixSearch)
+                {
+                    passedTests++;
+                }
+                else return false;
+            }
+            else passedTests++;
 
-        public void OnNavigatedFrom(NavigationContext navigationContext)
-        {
+            if (ICFileYearSearch != null)
+            {
+                if (project.ICYear.ToLower().Contains(ICFileYearSearch))
+                {
+                    passedTests++;
+                }
+                else return false;
+            }
+            else passedTests++;
 
+            if (ICFileEnumerationSearch != null)
+            {
+                if (project.ICEnumeration.ToString().Contains(ICFileEnumerationSearch))
+                {
+                    passedTests++;
+                }
+                else return false;
+            }
+            else passedTests++;
+
+            if (!string.IsNullOrWhiteSpace(StatusSearch))
+            {
+                if (project.Status == StatusSearch)
+                {
+                    passedTests++;
+                }
+                else return false;
+            }
+            else passedTests++;
+
+            return passedTests >= 5;
         }
+        #endregion
     }
 }

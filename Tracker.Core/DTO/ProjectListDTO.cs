@@ -1,5 +1,6 @@
 ﻿using Prism.Mvvm;
 using System;
+using Tracker.Core.StaticTypes;
 
 namespace Tracker.Core.DTO
 {
@@ -12,6 +13,8 @@ namespace Tracker.Core.DTO
         public string ICSuffix { get; set; }
         public string ProjectName { get; set; }
         public string Status { get; set; }
+        public County MainCounty { get; set; }
+        public string PLSS { get; set; }
         public DateTime? LastUpdated { get; set; }
 
         public ProjectListDTO()
