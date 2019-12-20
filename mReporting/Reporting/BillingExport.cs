@@ -53,7 +53,7 @@ namespace mReporting.Reporting
 
             if (VerifyParameters())
             {
-                _projects = _ps.GetProjectsDateRange(StartDate, EndDate, tracking: false);
+                _projects = _ps.GetProjectsDateRange(StartDate, EndDate, tracking: false).ToList();
                 _projects = _projects.Where(r => r.Status == "Awaiting Billing")
                     .OrderBy(r => r.ICTypePrefix)
                         .ThenBy(r => r.ICYear)

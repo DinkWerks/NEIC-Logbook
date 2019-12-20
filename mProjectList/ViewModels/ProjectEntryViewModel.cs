@@ -211,7 +211,10 @@ namespace mProjectList.ViewModels
         //IO Methods
         public override void SaveEntry()
         {
-            Project.FeeData = ((CalculatorViewModel)_calc.DataContext).Fee.FeeData;
+            var calculator = ((CalculatorViewModel)_calc.DataContext);
+            Project.FeeData = calculator.Fee.FeeData;
+            Project.FeeVersion = calculator.Fee.FeeStructure.Version;
+            
             Project.TotalFee = Project.Fee.TotalProjectCost;
             _ps.UpdateProject(Project);
             _ea.GetEvent<StatusEvent>().Publish(new StatusPayload("Project entry succesfully saved.", Palette.AlertGreen));

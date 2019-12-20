@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using Tracker.Core.DTO;
 using Tracker.Core.Models;
 
 namespace Tracker.Core.Services
@@ -53,6 +54,17 @@ namespace Tracker.Core.Services
                     .ToList();
         }
 
+        public List<PersonListDTO> GetPeopleDTOs()
+        {
+            return _context.People.Select(p => new PersonListDTO
+            {
+                Id = p.ID,
+                FirstName = p.FirstName,
+                LastName = p.LastName,
+                Affiliation = p.Affiliation.OrganizationName
+            }).OrderPeopleDTOsByLastName().ToList();
+        }
+
         public void AddPerson(Person newPerson)
         {
             _context.People.Add(newPerson);
@@ -69,6 +81,19 @@ namespace Tracker.Core.Services
         {
             _context.People.Remove(person);
             _context.SaveChanges();
+        }
+    }
+
+    public static class PersonServiceExtensions
+    {
+        public static IQueryable<Person> OrderPeopleByLastName(this IQueryable<Person> people)
+        {
+            return people.OrderBy(p => p.LastName).ThenBy(p => p.FirstName);
+        }
+
+        public static IQueryable<PersonListDTO> OrderPeopleDTOsByLastName(this IQueryable<PersonListDTO> people)
+        {
+            return people.OrderBy(p => p.LastName).ThenBy(p => p.FirstName);
         }
     }
 }

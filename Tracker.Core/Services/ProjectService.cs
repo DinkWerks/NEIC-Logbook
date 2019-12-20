@@ -107,14 +107,14 @@ namespace Tracker.Core.Services
                         .Include(p => p.Requestor)
                         .Include(p => p.Client)
                         .Include(p => p.FeeData)
-                        .Where(p => startDate < p.DateOfResponse && p.DateOfResponse < endDate)
+                        .Where(p => startDate <= p.DateOfResponse && p.DateOfResponse <= endDate)
                         .ToList();
             else
                 return _context.Projects
                         .Include(p => p.Requestor)
                         .Include(p => p.Client)
                         .Include(p => p.FeeData)
-                        .Where(p => startDate < p.DateOfResponse && p.DateOfResponse < endDate)
+                        .Where(p => startDate <= p.DateOfResponse && p.DateOfResponse <= endDate)
                         .AsNoTracking()
                         .ToList();
         }

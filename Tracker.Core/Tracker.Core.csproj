@@ -164,6 +164,8 @@
     <Compile Include="Converters\ICFileNumberConverter.cs" />
     <Compile Include="Converters\PresentToBoolConverter.cs" />
     <Compile Include="Converters\StringToIcon.cs" />
+    <Compile Include="DTO\OrganizationListDTO.cs" />
+    <Compile Include="DTO\PersonListDTO.cs" />
     <Compile Include="DTO\ProjectListDTO.cs" />
     <Compile Include="Events\AdditionalCountySelectionEvent.cs" />
     <Compile Include="Events\AdditionalCountySelectionOpenedEvent.cs" />

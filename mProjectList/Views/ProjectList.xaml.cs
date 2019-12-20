@@ -55,7 +55,8 @@ namespace mProjectList.Views
 
         private void ListBoxItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if ((bool)this.ShowAllCheck.IsChecked)
+            bool overrideShowAll = true;
+            if ((bool)this.ShowAllCheck.IsChecked || overrideShowAll)
             {
                 Project selectedRS = (Project)ProjectListBox.SelectedItem;
                 if (selectedRS != null)
@@ -71,7 +72,8 @@ namespace mProjectList.Views
 
         private void SheetGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if ((bool)this.ShowAllCheck.IsChecked)
+            bool overrideShowAll = true;
+            if ((bool)this.ShowAllCheck.IsChecked || overrideShowAll)
             {
                 Project selectedProject = (Project)SheetGrid.SelectedItem;
                 if (selectedProject != null)

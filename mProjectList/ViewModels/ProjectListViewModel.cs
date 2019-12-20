@@ -148,7 +148,8 @@ namespace mProjectList.ViewModels
             _ps = projectService;
             PrefixChoices = new List<Prefix>(ProjectPrefixes.Values);
 
-            LoadProjectDTOs();
+            LoadProjects();
+            //LoadProjectDTOs();
 
             Statuses = new string[]
             {
@@ -178,7 +179,7 @@ namespace mProjectList.ViewModels
         public void LoadProjectDTOs()
         {
             ProjectDTOs = _ps.GetProjectListDTOs();
-            ProjectDTOView = new CollectionViewSource { Source = ProjectDTOs }.View;
+            ProjectDTOView = CollectionViewSource.GetDefaultView(ProjectDTOs);
             ProjectDTOView.Filter = ProjectDTOViewFilter;
         }
 
@@ -240,7 +241,8 @@ namespace mProjectList.ViewModels
             }
             else
             {
-                LoadProjectDTOs();
+                LoadProjects();
+                //LoadProjectDTOs();
             }
             FilterCount = ProjectDTOs.Count();
         }
