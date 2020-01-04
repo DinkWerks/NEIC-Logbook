@@ -9,6 +9,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
              mc:Ignorable="d"
              d:DesignHeight="720" d:DesignWidth="1280">
     
@@ -21,9 +22,6 @@
         <Style TargetType="DatePicker">
             <Setter Property="Margin" Value="0,0,0,4"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-        </Style>
-        <Style TargetType="TextBox">
-            <Setter Property="VerticalAlignment" Value="Top"/>
         </Style>
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="0,0,2,8"/>
@@ -55,10 +53,7 @@
             </Grid.RowDefinitions>
 
             <!--Project Title-->
-            <Border RenderOptions.EdgeMode="Aliased" BorderThickness="10" BorderBrush="SandyBrown" Background="SandyBrown" Panel.ZIndex="1">
-                <Border.Effect>
-                    <DropShadowEffect Direction="277" Color="#FF5A5A5A" Opacity="0.66" BlurRadius="10" ShadowDepth="3"/>
-                </Border.Effect>
+            <GroupBox Panel.ZIndex="1">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
@@ -129,11 +124,11 @@
                         </DockPanel>
                     </StackPanel>
                 </Grid>
-            </Border>
+            </GroupBox>
 
 
             <!--Content Area-->
-            <Border Grid.Row="1" BorderThickness="0,20,0,0" BorderBrush="Snow" Background="Snow">
+            <Border Grid.Row="1" BorderThickness="0,20,0,0" adonisExtensions:LayerExtension.Layer="1">
                 <ScrollViewer Padding="10,0">
                     <Grid>
                         <Grid.RowDefinitions>
@@ -322,7 +317,7 @@
                         </TabControl>
 
                         <!--Location Information-->
-                        <GroupBox  Header="Location" Grid.Row="2" Margin="0,0,5,0">
+                        <GroupBox  Header="Location" Grid.Row="2" Margin="0,0,5,0" adonisExtensions:LayerExtension.Layer="2">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -361,7 +356,7 @@
                                 <TextBlock Grid.Row="2" Text="PLSS:" Style="{StaticResource Line Header}"/>
                                 <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Project.PLSS}" Grid.ColumnSpan="3"/>
 
-                                <TextBlock Grid.Row="3" Text="Acres:" Style="{StaticResource Line Header}"/>
+                                <TextBlock Grid.Row="3" Text="Acres:" VerticalAlignment="Top"/>
                                 <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Project.Acres, StringFormat={}{0:0.###}}" Margin="0,0,4,0"/>
                                 <TextBlock Grid.Row="3" Grid.Column="2" Text="Linear Miles:" Style="{StaticResource Line Header}"/>
                                 <TextBox Grid.Row="3" Grid.Column="3" Text="{Binding Project.LinearMiles, StringFormat={}{0:0.###}}"/>
@@ -369,7 +364,7 @@
                         </GroupBox>
 
                         <!--Results Information-->
-                        <GroupBox Header="Results" Grid.Row="2" Grid.Column="1" Margin="5,0,0,0">
+                        <GroupBox Header="Results" Grid.Row="2" Grid.Column="1" Margin="5,0,0,0" adonisExtensions:LayerExtension.Layer="2">
                             <Grid>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
@@ -423,10 +418,10 @@
                                 <Separator Grid.ColumnSpan="2" Grid.Row="5" Margin="0,0,0,10"/>
 
                                 <TextBlock Grid.Row="6" Text="Check Name:" Style="{StaticResource Line Header}"/>
-                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Project.CheckName}"/>
+                                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Project.CheckName}" VerticalAlignment="Top"/>
 
                                 <TextBlock Grid.Row="7" Text="Check Number:" Style="{StaticResource Line Header}"/>
-                                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Project.CheckNumber}"/>
+                                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Project.CheckNumber}" VerticalAlignment="Top"/>
                             </Grid>
                         </GroupBox>
 
@@ -486,11 +481,11 @@
             </Grid>
 
             <!--Fee/Billing-->
-            <Border Margin="0,20,0,0" Grid.Row="1" Background="Snow">
+            <GroupBox Header="Fee Calculator" Margin="0,20,0,0" Grid.Row="1" adonisExtensions:LayerExtension.Layer="3">
                 <ScrollViewer>
                     <ContentControl prism:RegionManager.RegionName="CalculatorRegion"/>
                 </ScrollViewer>
-            </Border>
+            </GroupBox>
         </Grid>
     </Grid>
 </UserControl>

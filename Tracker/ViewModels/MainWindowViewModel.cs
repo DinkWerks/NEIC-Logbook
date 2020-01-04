@@ -1,7 +1,6 @@
 ﻿using Prism.Mvvm;
 using Prism.Regions;
 using Prism.Commands;
-using Prism.Interactivity.InteractionRequest;
 using System.Windows;
 using Tracker.Core.CompositeCommands;
 using Prism.Events;
@@ -15,8 +14,8 @@ namespace Tracker.ViewModels
     {
         private string _title = "NEIC Logbook";
         private string _version = "Version 0.6.0.2";
-        private IRegionManager _rm;
-        private IDialogService _ds;
+        private readonly IRegionManager _rm;
+        private readonly IDialogService _ds;
         private IApplicationCommands applicationCommands;
         private StatusPayload _status;
         private double _windowHeight;
@@ -67,8 +66,9 @@ namespace Tracker.ViewModels
         public MainWindowViewModel(IEventAggregator eventAggregator, IRegionManager regionManager,
             IApplicationCommands applicationCommands, IDialogService dialogService)
         {
+            AdonisUI.ResourceLocator.SetColorScheme(Application.Current.Resources, AdonisUI.ResourceLocator.DarkColorScheme);
             WindowWidth = SystemParameters.PrimaryScreenHeight;
-
+            
             _rm = regionManager;
             _ds = dialogService;
             

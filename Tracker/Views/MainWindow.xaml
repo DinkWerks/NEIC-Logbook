@@ -1,12 +1,19 @@
-﻿<Window x:Class="Tracker.Views.MainWindow"
+﻿<adonisControls:AdonisWindow x:Class="Tracker.Views.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:prism="http://prismlibrary.com/"
         xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        xmlns:adonisUi="clr-namespace:AdonisUI;assembly=AdonisUI"
+        xmlns:adonisControls="clr-namespace:AdonisUI.Controls;assembly=AdonisUI"
         prism:ViewModelLocator.AutoWireViewModel="True"
         Title="{Binding Title}" WindowStartupLocation="CenterScreen"
-        Background="FloralWhite" Foreground="Black" Icon="/Tracker;component/LogBookIcon.ico">
+        Icon="/Tracker;component/LogBookIcon.ico"
+        TitleBarBackground="#8C2332" TitleBarForeground="White" WindowButtonHighlightBrush="DarkGray">
 
+    <Window.Style>
+        <Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
+    </Window.Style>
+    
     <i:Interaction.Triggers>
         <prism:InteractionRequestTrigger SourceObject="{Binding ConfirmationRequest}">
             <prism:PopupWindowAction IsModal="True" CenterOverAssociatedObject="True" />
@@ -132,4 +139,4 @@
             </StatusBar>
         </Border>
     </Grid>
-</Window>
+</adonisControls:AdonisWindow>

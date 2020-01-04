@@ -5,6 +5,7 @@
              prism:ViewModelLocator.AutoWireViewModel="True"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:adonisExtensions="clr-namespace:AdonisUI.Extensions;assembly=AdonisUI"
              mc:Ignorable="d" 
              d:DesignHeight="720" d:DesignWidth="1280">
     <UserControl.Resources>
@@ -13,19 +14,37 @@
         </Style>
     </UserControl.Resources>
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-			<RowDefinition/>
+            <RowDefinition/>
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-		<Image Source="/Tracker.Core;component/Resources/Images/SmallTransparent.png" Stretch="None" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
-		<TextBlock Grid.Row="1" Text="NEIC Logbook" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,25" FontSize="36" FontWeight="SemiBold" Foreground="#8C2332"/>
-        <StackPanel  Grid.Row="2"  Width="300"  HorizontalAlignment="Center">
-            <Button Content="Projects" Command="{Binding NavigateCommand}" CommandParameter="ProjectList"/>
-            <Button Content="Organizations" Command="{Binding NavigateCommand}" CommandParameter="OrganizationList"/>
-            <Button Content="People" Command="{Binding NavigateCommand}" CommandParameter="PeopleList"/>
-            <Button Content="Staff" Command="{Binding NavigateCommand}" CommandParameter="StaffList"/>
-            <Button Content="Reporting" Command="{Binding NavigateCommand}" CommandParameter="ReportingHomeScreen"/>
-        </StackPanel>
+
+        <GroupBox Grid.Column="1" Grid.Row="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Image Source="/Tracker.Core;component/Resources/Images/SmallTransparent.png" Stretch="None" VerticalAlignment="Bottom" Margin="0,0,0,20"/>
+                <TextBlock Grid.Row="1" Text="NEIC Logbook" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,25" FontSize="36" FontWeight="SemiBold" Foreground="#8C2332"/>
+                <GroupBox Grid.Row="2" Width="300"  HorizontalAlignment="Center">
+                    <StackPanel>
+                        <Button Content="Projects" Command="{Binding NavigateCommand}" CommandParameter="ProjectList"/>
+                        <Button Content="Organizations" Command="{Binding NavigateCommand}" CommandParameter="OrganizationList"/>
+                        <Button Content="People" Command="{Binding NavigateCommand}" CommandParameter="PeopleList"/>
+                        <Button Content="Staff" Command="{Binding NavigateCommand}" CommandParameter="StaffList"/>
+                        <Button Content="Reporting" Command="{Binding NavigateCommand}" CommandParameter="ReportingHomeScreen"/>
+                    </StackPanel>
+                </GroupBox>
+            </Grid>
+        </GroupBox>
     </Grid>
+    
 </UserControl>

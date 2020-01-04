@@ -9,7 +9,7 @@
             <Setter Property="Margin" Value="0,0,2,8"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        <Style TargetType="TextBox">
+        <Style x:Key="TextInput" TargetType="TextBox">
             <Setter Property="VerticalAlignment" Value="Top"/>
         </Style>
     </UserControl.Resources>
@@ -35,13 +35,13 @@
         </Grid.RowDefinitions>
 
         <TextBlock Text="Name of Address:" Style="{StaticResource Line Header}"/>
-        <TextBox Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Address.AddressName}"/>
+        <TextBox Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Address.AddressName}"  Margin="0,0,0,5"/>
 
         <TextBlock Grid.Row="1" Text="Attention To:" Style="{StaticResource Line Header}"/>
-        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Address.AttentionTo}"/>
+        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Address.AttentionTo}"   VerticalAlignment="Top"/>
 
         <TextBlock Grid.Row="2" Text="Address Line 1:" Style="{StaticResource Line Header}"/>
-        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Address.AddressLine1}"/>
+        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Address.AddressLine1}"  VerticalAlignment="Top"/>
 
         <TextBlock Grid.Row="3" Text="Address Line 2:" Style="{StaticResource Line Header}"/>
         <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="5" Text="{Binding Address.AddressLine2}"/>
