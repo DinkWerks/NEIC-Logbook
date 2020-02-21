@@ -307,14 +307,14 @@ namespace mReporting.Reporting
 
             if (project.FeeData.Adjustment > 0)
             {
-                chargeInformation += "  " + project.FeeData.AdjustmentExplanation + " - " + project.FeeData.Adjustment.ToString("C");
+                chargeInformation += "  " + project.FeeData.AdjustmentExplanation + " - " + project.FeeData.Adjustment.ToString("C") + "\n";
             }
 
             string surcharge = "";
             if (project.FeeData.IsPriority)
-                surcharge += "  Subtotal = " + project.Fee.Subtotal + "\n  --------- +\n  Priority Surcharge Fee: $" + (project.Fee.TotalProjectCost - runningTotal) + "\n";
+                surcharge += "  Subtotal = " + project.Fee.Subtotal.ToString("C") + "\n  --------- +\n  Priority Surcharge Fee: " + (project.Fee.TotalProjectCost - project.FeeData.Adjustment - runningTotal).ToString("C") + "\n";
             if (project.FeeData.IsEmergency)
-                surcharge += "  Subtotal = " + project.Fee.Subtotal + "\n  --------- +\n  Emergency Surcharge Fee: $" + project.Fee.TotalProjectCost + "\n";
+                surcharge += "  Subtotal = " + project.Fee.Subtotal.ToString("C") + "\n  --------- +\n  Emergency Surcharge Fee: " + project.Fee.TotalProjectCost.ToString("C") + "\n";
 
             bTable.Rows[1].Cells[2].Range.Text = "Information\n" + chargeInformation + surcharge + "Please include the invoice number on your remittance";
             bTable.Range.InsertParagraphAfter();
